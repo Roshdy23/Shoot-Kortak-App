@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
+import { Link } from "react-router-dom";
 function Navbar() {
     return (
         <>
@@ -12,28 +13,28 @@ function Navbar() {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav mx-auto">
                             <li className="nav-item">
-                                <a className="nav-link text-light" aria-current="page" href="/#">Home</a>
+                                <Link className="nav-link text-light" aria-current="page" to="/">Home</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-light" href="/#">Matches</a>
+                                <Link className="nav-link text-light" to="/matches">Matches</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-light" href="/#">Stadiums</a>
+                                <Link className="nav-link text-light" to="/stadiums">Stadiums</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-light" href="/#">Stores</a>
+                                <Link className="nav-link text-light" to="/stores">Stores</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-light" href="/#">Clubs</a>
+                                <Link className="nav-link text-light" to="/clubs">Clubs</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-light" href="/#">Results</a>
+                                <Link className="nav-link text-light" to="/results">Results</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-light" href="/#">Quizzes</a>
+                                <Link className="nav-link text-light" href="/quizzes">Quizzes</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-light" href="/#" >Logout</a>
+                                <Link className="nav-link text-light" href="/logout" >Logout</Link>
                             </li>
                         </ul>
                         <div className="form-check form-switch">
