@@ -1,0 +1,4 @@
+.homeGrid{
+    display: grid;
+    grid-template-columns: 20vw 50vw 30vw;
+}

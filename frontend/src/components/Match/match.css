@@ -1,0 +1,23 @@
+.match-container{
+    display: flex;
+}
+.team-identifier{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.info{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: ;
+    justify-items: center;
+}
+.score{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+}

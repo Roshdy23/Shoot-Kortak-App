@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\20115\\Desktop\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj": {}
+    "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App-main\\Backend\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\20115\\Desktop\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj": {
+    "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App-main\\Backend\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\20115\\Desktop\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App-main\\Backend\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\20115\\Desktop\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
-        "packagesPath": "C:\\Users\\20115\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\20115\\Desktop\\Shoot-Kortak-App\\Backend\\Backend\\obj\\",
+        "projectPath": "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App-main\\Backend\\Backend\\Backend.csproj",
+        "packagesPath": "C:\\Users\\Mohamed\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App-main\\Backend\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\20115\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Mohamed\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -64,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
