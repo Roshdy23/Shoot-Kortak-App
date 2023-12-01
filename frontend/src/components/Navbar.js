@@ -34,7 +34,7 @@ function Navbar() {
                                 <Link className="nav-link text-light" href="/quizzes">Quizzes</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" href="/logout" >Logout</Link>
+                                <Link className="nav-link text-light" href="/logout" >Championships</Link>
                             </li>
                         </ul>
                         <div className="form-check form-switch">
