@@ -1,21 +1,21 @@
 import Home from "./pages/adminPages/Home";
 import Navbar from "./components/Navbar";
-import Matches from "./pages/adminPages/Matches";
+import Matches from "./pages/adminPages/matches/Matches";
 import { Route, Routes } from "react-router-dom";
-import UpdateMatch from "./pages/adminPages/UpdateMatch";
-import AddMatch from "./pages/adminPages/AddMatch";
-import Stadiums from "./pages/adminPages/Stadiums";
-import AddStadium from "./pages/adminPages/AddStadium";
-import UpdateStadium from "./pages/adminPages/UpdateStadium";
-import Stores from "./pages/adminPages/Stores";
-import ViewStore from "./pages/adminPages/ViewStore";
-import AddItems from "./pages/adminPages/AddItems";
-import UpdateItem from "./pages/adminPages/UpdateItem";
-import Clubs from "./pages/adminPages/Clubs";
-import AddClub from "./pages/adminPages/AddClub";
-import AddClubPlayers from "./pages/adminPages/AddClubPlayers";
-import AddClubCoach from "./pages/adminPages/AddClubCoach";
-import UpdateClub from "./pages/adminPages/UpdateClub";
+import UpdateMatch from "./pages/adminPages/matches/UpdateMatch";
+import AddMatch from "./pages/adminPages/matches/AddMatch";
+import Stadiums from "./pages/adminPages/stadiums/Stadiums";
+import AddStadium from "./pages/adminPages/stadiums/AddStadium";
+import UpdateStadium from "./pages/adminPages/stadiums/UpdateStadium";
+import Stores from "./pages/adminPages/stores/Stores";
+import ViewStore from "./pages/adminPages/stores/ViewStore";
+import AddItems from "./pages/adminPages/stores/AddItems";
+import UpdateItem from "./pages/adminPages/stores/UpdateItem";
+import Clubs from "./pages/adminPages/clubs/Clubs";
+import AddClub from "./pages/adminPages/clubs/AddClub";
+import AddClubPlayers from "./pages/adminPages/clubs/AddClubPlayers";
+import AddClubCoach from "./pages/adminPages/clubs/AddClubCoach";
+import UpdateClub from "./pages/adminPages/clubs/UpdateClub";
 
 function App() {
   return (

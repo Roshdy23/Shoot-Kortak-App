@@ -1,8 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import './Matches.css'
 import { Link } from "react-router-dom";
-import Dropdown from "../../components/Dropdown";
+import Dropdown from "../../../components/Dropdown";
 
 function Stadiums() {
     return (

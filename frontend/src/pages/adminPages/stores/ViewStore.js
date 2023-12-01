@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import Dropdown from "../../components/Dropdown";
+import Dropdown from "../../../components/Dropdown";
 
 function ViewStore() {
     let { viewstorename } = useParams();
