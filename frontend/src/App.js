@@ -4,6 +4,8 @@ import Matches from "./pages/adminPages/Matches";
 import { Route, Routes } from "react-router-dom";
 import UpdateMatch from "./pages/adminPages/UpdateMatch";
 import AddMatch from "./pages/adminPages/AddMatch";
+import Stadiums from "./pages/adminPages/Stadiums";
+import AddStadium from "./pages/adminPages/AddStadium";
 
 function App() {
   return (
@@ -12,8 +14,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/matches" element={<Matches />} />
-        <Route path="/matches/update" element={<UpdateMatch />} />
+        <Route path="/matches/:updatematchID" element={<UpdateMatch />} />
         <Route path="/matches/add" element={<AddMatch />} />
+        <Route path="/stadiums" element={<Stadiums />} />
+        {/* <Route path="/stadiums/:updatestadiumID" element={<UpdateMatch />} /> */}
+        <Route path="/stadiums/add" element={<AddStadium />} />
       </Routes>
     </div>
   );
