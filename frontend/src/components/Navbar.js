@@ -32,10 +32,10 @@ function Navbar() {
                                 <Link className="nav-link text-light" to="/results">Results</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" href="/quizzes">Quizzes</Link>
+                                <Link className="nav-link text-light" to="/quizzes">Quizzes</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" href="/logout" >Championships</Link>
+                                <Link className="nav-link text-light" to="/championships">Championships</Link>
                             </li>
                         </ul>
                         <div className="form-check form-switch">

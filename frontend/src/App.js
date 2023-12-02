@@ -19,6 +19,8 @@ import UpdateClub from "./pages/adminPages/clubs/UpdateClub";
 import Results from "./pages/adminPages/results/Results";
 import MatchResult from "./pages/adminPages/results/MatchResult";
 import AddStats from "./pages/adminPages/results/AddStats";
+import Quizzes from "./pages/adminPages/quizzes/Quizzes";
+import ViewQuizzes from "./pages/adminPages/quizzes/ViewQuiz";
 
 function App() {
   return (
@@ -45,6 +47,8 @@ function App() {
         <Route path="/results/addresults" element={<MatchResult />} />
         <Route path="/results/addresults/stats/team1" element={<AddStats nxt="1" />} />
         <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
+        <Route path="/quizzes" element={<Quizzes />} />
+        <Route path="/quizzes/view" element={<ViewQuizzes />} />
       </Routes>
     </div>
   );
