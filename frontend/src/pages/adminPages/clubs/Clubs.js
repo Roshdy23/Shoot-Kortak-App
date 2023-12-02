@@ -1,8 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import './Matches.css'
 import { Link } from "react-router-dom";
-import Dropdown from "../../components/Dropdown";
+import Dropdown from "../../../components/Dropdown";
 
 function Clubs() {
     return (
@@ -33,21 +32,21 @@ function Clubs() {
                                     <td>1907</td>
                                     <td>5</td>
                                     <td>90</td>
-                                    <td><Link class="btn btn-info" to="/Clubs/update">Update</Link></td>
+                                    <td><Link class="btn btn-info" to="/clubs/update">Update</Link></td>
                                 </tr>
                                 <tr>
                                     <td>Alahly</td>
                                     <td>1907</td>
                                     <td>5</td>
                                     <td>90</td>
-                                    <td><Link class="btn btn-info" to="/Clubs/update">Update</Link></td>
+                                    <td><Link class="btn btn-info" to="/clubs/update">Update</Link></td>
                                 </tr>
                                 <tr>
                                     <td>Alahly</td>
                                     <td>1907</td>
                                     <td>5</td>
                                     <td>90</td>
-                                    <td><Link class="btn btn-info" to="/Clubs/update">Update</Link></td>
+                                    <td><Link class="btn btn-info" to="/clubs/update">Update</Link></td>
                                 </tr>
                             </tbody>
                         </table>
