@@ -1,0 +1,28 @@
+.voteOption{
+    background-color: rgba(53, 176, 220, 0.253);
+    border-radius:15px;
+    cursor:pointer;
+    align-items:center;
+    display:flex;
+    flex-direction:column;
+}
+.voteOption:hover{
+    background-color:rgba(220, 53, 70, 0.781) ;
+    animation: fullcol 1s;
+    -webkit-animation: fullcol 1s;
+    -moz-animation: fullcol 1s;
+    -o-animation: fullcol 1s;
+    -ms-animation:fullcol 1s;
+}
+@keyframes fullcol {
+    0% {background-color: rgba(53, 176, 220, 0.253);}
+    100% {background-color: rgba(220, 53, 70, 0.781);}
+}
+
+.voted{
+    background-color: rgba(53, 176, 220, 0.253);
+    border-radius:15px;
+    align-items:center;
+    display:flex;
+    flex-direction:column;
+}
