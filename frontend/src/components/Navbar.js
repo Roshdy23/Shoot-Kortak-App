@@ -2,17 +2,16 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import { Link } from "react-router-dom";
 function Navbar() {
-
     let role = "admin";
     if (role === "admin")
         return (
-            <nav className="navbar navbar-expand-lg bg-black" style={{ position: "sticky", height: "10vh", top: "0", zIndex: "5" }}>
+            <nav className="navbar navbar-expand-lg bg-black">
                 <div className="container-fluid">
                     <a className="navbar-brand ms-5 text-light" href="/#"><h4 className="fst-italic">SHOOT KORTAK</h4></a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className="collapse navbar-collapse" style={{ backgroundColor: "black", width: "100%" }} id="navbarNav">
+                    <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav mx-auto">
                             <li className="nav-item">
                                 <Link className="nav-link text-light" aria-current="page" to="/">Home</Link>
@@ -34,6 +33,9 @@ function Navbar() {
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link text-light" href="/quizzes">Quizzes</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link text-light" href="/logout" >Championships</Link>
                             </li>
                         </ul>
                         <div className="form-check form-switch">
@@ -64,16 +66,16 @@ function Navbar() {
                                 <Link className="nav-link text-light" aria-current="page" to="/">Home</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" to="/matches">Matches</Link>
+                                <Link className="nav-link text-light" to="/">Matches</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" to="/stadiums">News</Link>
+                                <Link className="nav-link text-light" to="/">News</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" to="/stores">Stats</Link>
+                                <Link className="nav-link text-light" to="/">Stats</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" to="/clubs">Earn Points!</Link>
+                                <Link className="nav-link text-light" to="/">Earn Points!</Link>
                             </li>
                         </ul>
                         {(status === "loggedin") ?

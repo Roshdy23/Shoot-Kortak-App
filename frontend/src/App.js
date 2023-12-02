@@ -16,6 +16,9 @@ import AddClub from "./pages/adminPages/clubs/AddClub";
 import AddClubPlayers from "./pages/adminPages/clubs/AddClubPlayers";
 import AddClubCoach from "./pages/adminPages/clubs/AddClubCoach";
 import UpdateClub from "./pages/adminPages/clubs/UpdateClub";
+import Results from "./pages/adminPages/results/Results";
+import MatchResult from "./pages/adminPages/results/MatchResult";
+import AddStats from "./pages/adminPages/results/AddStats";
 
 function App() {
   return (
@@ -37,7 +40,11 @@ function App() {
         <Route path="/clubs/add" element={<AddClub />} />
         <Route path="/clubs/update" element={<UpdateClub />} />
         <Route path="/clubs/add/addplayers" element={<AddClubPlayers />} />
-        <Route path="//clubs/add/coach" element={<AddClubCoach />} />
+        <Route path="/clubs/add/coach" element={<AddClubCoach />} />
+        <Route path="/results" element={<Results />} />
+        <Route path="/results/addresults" element={<MatchResult />} />
+        <Route path="/results/addresults/stats/team1" element={<AddStats nxt="1" />} />
+        <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
       </Routes>
     </div>
   );
