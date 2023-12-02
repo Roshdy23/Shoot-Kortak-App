@@ -1,16 +1,17 @@
+import { Link } from "react-router-dom";
 import "./match.css"
 
 export default function MiniMatch(props)
 {
 const match = props.match;
-const currTime = new Date().toLocaleTimeString();
 
 return(
+    <Link style={{color:"black",textDecoration:"none"}} to="/match/5">
     <div>
         <hr/>
         <div className="match-container">
             <div className="team-identifier">
-                <img src={match.Home.pic} alt="home team logo"/>
+                <img style={{width:"75px",height:"75px"}} src={match.Home.pic} alt="home team logo"/>
                 <h6>{match.Home.name}</h6>
             </div>
             <div className="score">
@@ -27,11 +28,12 @@ return(
                 <h1>{match.score.away}</h1>
             </div>
             <div className="team-identifier">
-            <img src={match.Away.pic} alt="away team logo"/>
+            <img style={{width:"75px",height:"75px"}} src={match.Away.pic} alt="away team logo"/>
                 <h6>{match.Away.name}</h6>
             </div>
         </div>
         <hr/>
     </div>
+                </Link>
 )
 }

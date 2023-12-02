@@ -6,7 +6,6 @@ import 'react-clock/dist/Clock.css';
 import InputWithLabel from '../../components/InputWithLabel';
 import Dropdown from '../../components/Dropdown';
 import DropdownLabel from '../../components/DropdownWithLabel';
-import { Link } from 'react-router-dom';
 
 function AddMatch() {
     const [value, onChange] = useState(new Date());

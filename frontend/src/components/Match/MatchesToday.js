@@ -78,7 +78,7 @@ let matches = [{
 }];
 if(matches.length)
 {
-    return(<div style={{display:"flex",flexDirection:"column",borderLeft:"solid rgb(0,0,0,0.1) 1px",alignContent:"center",overflowY:"scroll"}}>
+    return(<div style={{display:"flex",flexDirection:"column",borderLeft:"solid rgb(0,0,0,0.1) 1px",borderBottom:"solid",height:"90vh",alignContent:"center",overflowY:"scroll"}}>
            {championships.map((championship)=>{
                 return(
                     <div>
