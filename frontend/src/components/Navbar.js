@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import { Link } from "react-router-dom";
 function Navbar() {
-    let role = "admin";
+    let role = "user";
     if (role === "admin")
         return (
             <nav className="navbar navbar-expand-lg bg-black">
@@ -66,7 +66,7 @@ function Navbar() {
                                 <Link className="nav-link text-light" aria-current="page" to="/">Home</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" to="/">Matches</Link>
+                                <Link className="nav-link text-light" to="/Matches">Matches</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link text-light" to="/">News</Link>
