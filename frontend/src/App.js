@@ -21,6 +21,9 @@ import MatchResult from "./pages/adminPages/results/MatchResult";
 import AddStats from "./pages/adminPages/results/AddStats";
 import Quizzes from "./pages/adminPages/quizzes/Quizzes";
 import ViewQuizzes from "./pages/adminPages/quizzes/ViewQuiz";
+import Championships from "./pages/adminPages/championships/Championships";
+import AddChampionship from "./pages/adminPages/championships/AddChampionship";
+import UpdateChampionship from "./pages/adminPages/championships/UpdateChampionship";
 
 function App() {
   return (
@@ -49,6 +52,9 @@ function App() {
         <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/quizzes/view" element={<ViewQuizzes />} />
+        <Route path="/championships" element={<Championships />} />
+        <Route path="championships/add" element={<AddChampionship />} />
+        <Route path="championships/update" element={<UpdateChampionship />} />
       </Routes>
     </div>
   );
