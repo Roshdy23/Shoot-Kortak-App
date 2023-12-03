@@ -14,17 +14,12 @@ import { useNavigate } from "react-router-dom";
 import PlayerCard from "../components/PlayerCard";
 
 function Matches(props) {
-<<<<<<< HEAD
       
     const [rating,setRating] = useState(0);
-=======
-
->>>>>>> refs/remotes/origin/main
     const navigate = useNavigate();
     useEffect(() => {
         //init tooltip
         Array.from(document.querySelectorAll('button[data-bs-toggle="tooltip"]'))
-<<<<<<< HEAD
         .forEach(tooltipNode => new Tooltip(tooltipNode))
         });
         const {matchId} = useParams();
@@ -87,23 +82,6 @@ function Matches(props) {
                                 </tr>
                             </tbody>
                         </table>
-=======
-            .forEach(tooltipNode => new Tooltip(tooltipNode))
-    });
-    const { matchId } = useParams();
-
-    const navback = () => {
-        navigate(`/match/${matchId}`);
-    }
-    let role = "admin";
-    if (role === "admin")
-        return (
-            <>
-                <div className="container mt-5">
-                    <div className="row">
-                        <div class="col-10"></div>
-                        <Link className="btn btn-success col col-lg-2" to="/matches/add">Add Match</Link>
->>>>>>> refs/remotes/origin/main
                     </div>
                     <div className="row">
                         <h3 className="col col-lg-3">UPDATE MATCHES</h3>
@@ -158,6 +136,7 @@ function Matches(props) {
                         </div>
                     </div>
                 </div>
+                </div>
             </>
         );
     else {
@@ -184,7 +163,6 @@ function Matches(props) {
                 </>
             );
         }
-<<<<<<< HEAD
         else if(window.location.pathname.includes("/RatePlayers")){
 //query to find by playerid handled up with useeffect
             let player = {
@@ -216,10 +194,6 @@ function Matches(props) {
             </div>
                 </div>
                     </>)
-=======
-        else if (window.location.pathname.includes("RatePlayer")) {
-
->>>>>>> refs/remotes/origin/main
         }
         else {
             return (
