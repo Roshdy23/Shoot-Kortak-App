@@ -1,12 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Backend",
     "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\components",
-    "\\frontend\\src\\components\\Match",
-    "\\frontend\\src\\pages\\adminPages"
+    "\\frontend\\src\\components\\Match"
   ],
-  "SelectedNode": "\\frontend\\src\\components\\Navbar.js",
+  "SelectedNode": "\\Backend\\Backend.sln",
   "PreviewInSolutionExplorer": false
 }

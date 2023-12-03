@@ -21,7 +21,10 @@ import MatchResult from "./pages/adminPages/results/MatchResult";
 import AddStats from "./pages/adminPages/results/AddStats";
 import Quizzes from "./pages/adminPages/quizzes/Quizzes";
 import ViewQuizzes from "./pages/adminPages/quizzes/ViewQuiz";
-
+import News from "./pages/News";
+import Stats from "./pages/fanPages/Stats";
+import SelectChamp from "./pages/fanPages/stats/SelectChamp";
+import ChampStats from "./pages/fanPages/stats/ChampStats";
 function App() {
   return (
     <div className="App">
@@ -34,10 +37,15 @@ function App() {
         <Route path="/matches/:updatematchID" element={<UpdateMatch />} />
         <Route path="/matches/add" element={<AddMatch />} />
         <Route path="/stadiums" element={<Stadiums />} />
-        <Route path="/RatePlayers/:id" element={<Matches/>}/>
+        <Route path="/RatePlayers/:matchId/:playerId" element={<Matches/>}/>
         <Route path="/stadiums/:updatestadiumID" element={<UpdateStadium />} />
         <Route path="/stadiums/add" element={<AddStadium />} />
         <Route path="/stores" element={<Stores />} />
+        <Route path ="/news" element={<News/>}/>
+        <Route path ="/article/:artId" element={<News/>}/>
+        <Route path="/stats" element={<Stats/>}/>
+        <Route path="/ChampionshipStats" element={<SelectChamp/>}/>
+        <Route path="/ChampionshipStats/:champId" element={<ChampStats/>}/>
         <Route path="/stores/view" element={<ViewStore />} />
         <Route path="/stores/:viewstorename/additem" element={<AddItems />} />
         <Route path="/stores/:viewstorename/update" element={<UpdateItem />} />

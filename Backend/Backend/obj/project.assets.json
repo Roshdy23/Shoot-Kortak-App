@@ -442,11 +442,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App-main\\Backend\\Backend\\Backend.csproj",
+      "projectUniqueName": "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
       "projectName": "Backend",
-      "projectPath": "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App-main\\Backend\\Backend\\Backend.csproj",
+      "projectPath": "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
       "packagesPath": "C:\\Users\\Mohamed\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App-main\\Backend\\Backend\\obj\\",
+      "outputPath": "C:\\Users\\Mohamed\\Desktop\\PROJECTS-UNI\\Shoot-Kortak-App\\Backend\\Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Mohamed\\AppData\\Roaming\\NuGet\\NuGet.Config",

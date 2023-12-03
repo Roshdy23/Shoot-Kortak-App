@@ -10,6 +10,9 @@ const navigate = useNavigate();
 const navup = () => {
     navigate(`/reservematch/${matchId}`,{replace:true});
 }
+const gorate = (playerId) => {
+    navigate(`/RatePlayers/${matchId}/${playerId}`,{replace:true});
+}
 const match = {
     matchId:5,
     Status:"over",
@@ -20,50 +23,61 @@ const match = {
         players:{
             goalkeeper:{
                 name:"Ali Lotfy",
-                pic:"https://egyptianproleague.com/players/9908.png", rating:5,
+                pic:"https://egyptianproleague.com/players/9908.png", rating:5.3,
+                id:9908
             },
             defenders:[
             {
                 name:"Mohamed Samir",
-                pic:"https://egyptianproleague.com/players/2785.png", rating:-1
+                pic:"https://egyptianproleague.com/players/2785.png", rating:-1,
+                id:2785
             },
             {
                 name:"Nader Ramadan",
                 pic:"https://egyptianproleague.com/players/113172.png", rating:-1
+                ,id:113172
             },
             {
                 name:"Fahd abo elfotouh",
-                pic:"https://egyptianproleague.com/players/133844.png", rating:-1
+                pic:"https://egyptianproleague.com/players/133844.png", rating:-1,
+                id:133844
             },
             {
                 name:"Ali Gamal",
-                pic:"https://egyptianproleague.com/players/198625.png", rating:-1
+                pic:"https://egyptianproleague.com/players/198625.png", rating:-1,
+                id:198625
             }],
             midfielders:[
             {
                 name:"Mostafa Zico",
-                pic:"https://egyptianproleague.com/players/136189.png", rating:-1
+                pic:"https://egyptianproleague.com/players/136189.png", rating:-1,
+                id:136189
             },
             {
                 name:"Mahmoud Saber",
-                pic:"https://egyptianproleague.com/players/133843.png", rating:-1
+                pic:"https://egyptianproleague.com/players/133843.png", rating:-1,
+                id:133843
             },
             {
                 name:"Mostafa Ali Okasha",
-                pic:"https://egyptianproleague.com/players/238127.png", rating:-1
+                pic:"https://egyptianproleague.com/players/238127.png", rating:-1,
+                id:238127
             },
             {
                 name:"Peter Zilo motomosi",
-                pic:"https://egyptianproleague.com/players/235961.png", rating:-1
+                pic:"https://egyptianproleague.com/players/235961.png", rating:-1,
+                id:235961
             }],
             attackers:[
             {
                 name:"Shady Hussien",
-                pic:"https://egyptianproleague.com/players/136652.png", rating:-1
+                pic:"https://egyptianproleague.com/players/136652.png", rating:-1,
+                id:136652
             },
             {
                 name:"Delson Cumony",
-                pic:"https://egyptianproleague.com/players/136652.png", rating:-1
+                pic:"https://egyptianproleague.com/players/234985.png", rating:-1,
+                id:234985
             }]
         }
     },
@@ -73,50 +87,61 @@ const match = {
         ,players: {
             goalkeeper:{
                 name:"Elhany Soliman",
-                pic:"https://egyptianproleague.com/players/3418.png", rating:-1
+                pic:"https://egyptianproleague.com/players/3418.png", rating:-1,
+                id:3418
             },
             defenders:[
             {
                 name:"Sherif Reda",
-                pic:"https://egyptianproleague.com/players/8683.png", rating:-1
+                pic:"https://egyptianproleague.com/players/8683.png", rating:-1,
+                id:8683
             },
             {
                 name:"Ahmed Gamal",
-                pic:"https://egyptianproleague.com/players/8754.png", rating:-1
+                pic:"https://egyptianproleague.com/players/8754.png", rating:-1,
+                id:8754
             },
             {
                 name:"Mahmoud Wahid",
-                pic:"https://egyptianproleague.com/players/22562.png", rating:-1
+                pic:"https://egyptianproleague.com/players/22562.png", rating:-1,
+                id:22562
             },
             {
                 name:"Barakat Haggag",
-                pic:"https://egyptianproleague.com/players/136264.png", rating:-1
+                pic:"https://egyptianproleague.com/players/136264.png", rating:-1,
+                id:136264
             }],
             midfielders:[
             {
                 name:"Islam Gaber",
-                pic:"https://egyptianproleague.com/players/102808.png", rating:-1
+                pic:"https://egyptianproleague.com/players/102808.png", rating:-1,
+                id:102808
             },
             {
                 name:"Mostafa Elbadry",
-                pic:"https://egyptianproleague.com/players/113844.png", rating:-1
+                pic:"https://egyptianproleague.com/players/113844.png", rating:-1,
+                id:113844
             },
             {
                 name:"Abdellatif ben qusso",
-                pic:"https://egyptianproleague.com/players/237107.png", rating:-1
+                pic:"https://egyptianproleague.com/players/237107.png", rating:-1,
+                id:237107
             },
             {
                 name:"Ibrahim Jumbo",
-                pic:"https://egyptianproleague.com/players/238070.png", rating:-1
+                pic:"https://egyptianproleague.com/players/238070.png", rating:-1,
+                id:238070
             }],
             attackers:[
             {
                 name:"Hossam Hassan",
-                pic:"https://egyptianproleague.com/players/20419.png", rating:-1
+                pic:"https://egyptianproleague.com/players/20419.png", rating:-1,
+                id:20419
             },
             {
                 name:"Emmanuel Ihizo",
-                pic:"https://egyptianproleague.com/players/238023.png", rating:-1
+                pic:"https://egyptianproleague.com/players/238023.png", rating:-1,
+                id:238023
             }]
         }
     },
@@ -137,6 +162,7 @@ const match = {
 //rating for each player is added after we get the data from backend to see the rating the user gave to each player if he didnt rate him the rating is 0
 //query to see if reserved or not
 const isreserved = false;
+
 return (
     <>
     <h2 style={{color:"red"}}>{match.championship}</h2>
@@ -176,7 +202,7 @@ return (
 <div style={{display:"flex",margin:"5px",alignItems:"center"}}>
                 <PlayerCard player={match.Home.players.goalkeeper} votable={false}/>
                 { (match.Home.players.goalkeeper.rating===-1)?(
-                <button type="button" style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
+                <button type="button" onClick={()=>{ gorate(match.Home.players.goalkeeper.id)}} style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
                 ):(<h4 style={{marginLeft:"2vw"}}>rating: {match.Home.players.goalkeeper.rating}</h4>)
 }
             </div>
@@ -185,7 +211,7 @@ return (
             <div style={{display:"flex",margin:"5px",flexDirection:"row-reverse",alignItems:"center",justifyContent:"space-around"}}>
                 <PlayerCard player={match.Away.players.goalkeeper} votable={false}/>
                 { (match.Away.players.goalkeeper.rating===-1)?(
-                <button type="button" style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
+                <button type="button" onClick={()=>{ gorate(match.Away.players.goalkeeper.id)}} style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
                 ):(<h4>rating: {match.Away.players.goalkeeper.rating}</h4>)
 }
             </div>
@@ -200,7 +226,7 @@ return (
             return(<div style={{display:"flex",margin:"5px",alignItems:"center"}}>
                 <PlayerCard player={player} votable={false}/>
 { (player.rating===-1) ?(
-    <button type="button" style={{height:"6vh"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
+    <button type="button" onClick={()=>gorate(player.id)} style={{height:"6vh"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
     ):(<h4>rating: {player.rating}</h4>)           }
             </div>
                 )
@@ -211,7 +237,7 @@ return (
             return(<div style={{display:"flex",margin:"5px",flexDirection:"row-reverse",alignItems:"center",justifyContent:"space-around"}}>
                 <PlayerCard player={player} votable={false}/>
                 { (player.rating===-1) ?(
-                    <button type="button" style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
+                    <button type="button" onClick={()=>gorate(player.id)} style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
     ):(<h4>rating: {player.rating}</h4>)           }
             </div>
                 )
@@ -227,7 +253,7 @@ return (
             return(<div style={{display:"flex",margin:"5px",alignItems:"center"}}>
                 <PlayerCard player={player} votable={false}/>
                 { (player.rating===-1) ?(
-                    <button type="button" style={{height:"6vh"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
+                    <button type="button" onClick={()=>gorate(player.id)} style={{height:"6vh"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
     ):(<h4>rating: {player.rating}</h4>)           }
             </div>
                 )
@@ -238,7 +264,7 @@ return (
             return(<div style={{display:"flex",margin:"5px",flexDirection:"row-reverse",alignItems:"center",justifyContent:"space-around"}}>
                 <PlayerCard player={player} votable={false}/>
                 { (player.rating===-1) ?(
-                    <button type="button" style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
+                    <button type="button" onClick={()=>gorate(player.id)} style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
     ):(<h4>rating: {player.rating}</h4>)           }
             </div>
                 )
@@ -254,7 +280,7 @@ return (
             return(<div style={{display:"flex",margin:"5px",alignItems:"center"}}>
                 <PlayerCard player={player} votable={false}/>
                 { (player.rating===-1) ?(
-                    <button type="button" style={{height:"6vh"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
+                    <button type="button" onClick={()=>gorate(player.id)} style={{height:"6vh"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
     ):(<h4>rating: {player.rating}</h4>)           }
             </div>
                 )
@@ -265,7 +291,7 @@ return (
             return(<div style={{display:"flex",margin:"5px",flexDirection:"row-reverse",alignItems:"center",justifyContent:"space-around"}}>
                 <PlayerCard player={player} votable={false}/>
                 { (player.rating===-1) ?(
-                    <button type="button" style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
+                    <button type="button" onClick={()=>gorate(player.id)} style={{height:"6vh",marginRight:"2vw"}} className="btn btn-danger btn-sm ms-4">Rate player</button>
     ):(<h4>rating: {player.rating}</h4>)           }
             </div>
                 )
