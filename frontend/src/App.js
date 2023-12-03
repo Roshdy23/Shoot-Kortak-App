@@ -31,13 +31,13 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/matches" element={<Matches ticket={false}/>} />
-        <Route path="/match/:matchId" element={<Matches ticket={false}/>} />
-        <Route path="/reservematch/:matchId" element={<Matches ticket={true}/>} />
+        <Route path="/matches" element={<Matches ticket={false} />} />
+        <Route path="/match/:matchId" element={<Matches ticket={false} />} />
+        <Route path="/reservematch/:matchId" element={<Matches ticket={true} />} />
         <Route path="/matches/:updatematchID" element={<UpdateMatch />} />
         <Route path="/matches/add" element={<AddMatch />} />
         <Route path="/stadiums" element={<Stadiums />} />
-        <Route path="/RatePlayers/:id" element={<Matches/>}/>
+        <Route path="/RatePlayers/:id" element={<Matches />} />
         <Route path="/stadiums/:updatestadiumID" element={<UpdateStadium />} />
         <Route path="/stadiums/add" element={<AddStadium />} />
         <Route path="/stores" element={<Stores />} />
