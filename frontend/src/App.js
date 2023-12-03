@@ -1,6 +1,6 @@
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
-import Matches from "./pages/adminPages/matches/Matches";
+import Matches from "./pages/Matches";
 import { Route, Routes } from "react-router-dom";
 import UpdateMatch from "./pages/adminPages/matches/UpdateMatch";
 import AddMatch from "./pages/adminPages/matches/AddMatch";
@@ -31,10 +31,13 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/matches" element={<Matches />} />
+        <Route path="/matches" element={<Matches ticket={false}/>} />
+        <Route path="/match/:matchId" element={<Matches ticket={false}/>} />
+        <Route path="/reservematch/:matchId" element={<Matches ticket={true}/>} />
         <Route path="/matches/:updatematchID" element={<UpdateMatch />} />
         <Route path="/matches/add" element={<AddMatch />} />
         <Route path="/stadiums" element={<Stadiums />} />
+        <Route path="/RatePlayers/:id" element={<Matches/>}/>
         <Route path="/stadiums/:updatestadiumID" element={<UpdateStadium />} />
         <Route path="/stadiums/add" element={<AddStadium />} />
         <Route path="/stores" element={<Stores />} />
