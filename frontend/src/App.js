@@ -21,6 +21,9 @@ import MatchResult from "./pages/adminPages/results/MatchResult";
 import AddStats from "./pages/adminPages/results/AddStats";
 import Quizzes from "./pages/adminPages/quizzes/Quizzes";
 import ViewQuizzes from "./pages/adminPages/quizzes/ViewQuiz";
+import Championships from "./pages/adminPages/championships/Championships";
+import AddChampionship from "./pages/adminPages/championships/AddChampionship";
+import UpdateChampionship from "./pages/adminPages/championships/UpdateChampionship";
 import News from "./pages/News";
 import Stats from "./pages/fanPages/Stats";
 import SelectChamp from "./pages/fanPages/stats/SelectChamp";
@@ -31,9 +34,9 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/matches" element={<Matches ticket={false}/>} />
-        <Route path="/match/:matchId" element={<Matches ticket={false}/>} />
-        <Route path="/reservematch/:matchId" element={<Matches ticket={true}/>} />
+        <Route path="/matches" element={<Matches ticket={false} />} />
+        <Route path="/match/:matchId" element={<Matches ticket={false} />} />
+        <Route path="/reservematch/:matchId" element={<Matches ticket={true} />} />
         <Route path="/matches/:updatematchID" element={<UpdateMatch />} />
         <Route path="/matches/add" element={<AddMatch />} />
         <Route path="/stadiums" element={<Stadiums />} />
@@ -60,6 +63,9 @@ function App() {
         <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/quizzes/view" element={<ViewQuizzes />} />
+        <Route path="/championships" element={<Championships />} />
+        <Route path="championships/add" element={<AddChampionship />} />
+        <Route path="championships/update" element={<UpdateChampionship />} />
       </Routes>
     </div>
   );
