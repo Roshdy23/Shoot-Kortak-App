@@ -37,21 +37,21 @@ function App() {
         <Route path="/matches" element={<Matches ticket={false} />} />
         <Route path="/match/:matchId" element={<Matches ticket={false} />} />
         <Route path="/reservematch/:matchId" element={<Matches ticket={true} />} />
-        <Route path="/matches/:updatematchID" element={<UpdateMatch />} />
+        <Route path="/matches/update/:updatematchID" element={<UpdateMatch />} />
         <Route path="/matches/add" element={<AddMatch />} />
         <Route path="/stadiums" element={<Stadiums />} />
-        <Route path="/RatePlayers/:matchId/:playerId" element={<Matches/>}/>
-        <Route path="/stadiums/:updatestadiumID" element={<UpdateStadium />} />
+        <Route path="/RatePlayers/:matchId/:playerId" element={<Matches />} />
+        <Route path="/stadiums/update/:updatestadiumID" element={<UpdateStadium />} />
         <Route path="/stadiums/add" element={<AddStadium />} />
         <Route path="/stores" element={<Stores />} />
-        <Route path ="/news" element={<News/>}/>
-        <Route path ="/article/:artId" element={<News/>}/>
-        <Route path="/stats" element={<Stats/>}/>
-        <Route path="/ChampionshipStats" element={<SelectChamp/>}/>
-        <Route path="/ChampionshipStats/:champId" element={<ChampStats/>}/>
-        <Route path="/stores/view" element={<ViewStore />} />
-        <Route path="/stores/:viewstorename/additem" element={<AddItems />} />
-        <Route path="/stores/:viewstorename/update" element={<UpdateItem />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/article/:artId" element={<News />} />
+        <Route path="/stats" element={<Stats />} />
+        <Route path="/ChampionshipStats" element={<SelectChamp />} />
+        <Route path="/ChampionshipStats/:champId" element={<ChampStats />} />
+        <Route path="/stores/view/:storeID" element={<ViewStore />} />
+        <Route path="/stores/view/:storeID/additem" element={<AddItems />} />
+        <Route path="/stores/view/:storeID/update/:itemid" element={<UpdateItem />} />
         <Route path="/clubs" element={<Clubs />} />
         <Route path="/clubs/add" element={<AddClub />} />
         <Route path="/clubs/update" element={<UpdateClub />} />
