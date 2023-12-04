@@ -30,6 +30,8 @@ import SelectChamp from "./pages/fanPages/stats/SelectChamp";
 import ChampStats from "./pages/fanPages/stats/ChampStats";
 import SelectClub from "./pages/fanPages/stats/SelectClub";
 import ClubStats from "./pages/fanPages/stats/ClubStats";
+import UpdateClubPlayers from "./pages/adminPages/clubs/UpdateClubPlayers";
+import UpdateClubCoach from "./pages/adminPages/clubs/UpdateClubCoach";
 function App() {
   return (
     <div className="App">
@@ -39,28 +41,30 @@ function App() {
         <Route path="/matches" element={<Matches ticket={false} />} />
         <Route path="/match/:matchId" element={<Matches ticket={false} />} />
         <Route path="/reservematch/:matchId" element={<Matches ticket={true} />} />
-        <Route path="/matches/:updatematchID" element={<UpdateMatch />} />
+        <Route path="/matches/update/:updatematchID" element={<UpdateMatch />} />
         <Route path="/matches/add" element={<AddMatch />} />
         <Route path="/stadiums" element={<Stadiums />} />
-        <Route path="/RatePlayers/:matchId/:playerId" element={<Matches/>}/>
-        <Route path="/stadiums/:updatestadiumID" element={<UpdateStadium />} />
+        <Route path="/RatePlayers/:matchId/:playerId" element={<Matches />} />
+        <Route path="/stadiums/update/:updatestadiumID" element={<UpdateStadium />} />
         <Route path="/stadiums/add" element={<AddStadium />} />
         <Route path="/stores" element={<Stores />} />
-        <Route path ="/news" element={<News/>}/>
-        <Route path ="/article/:artId" element={<News/>}/>
-        <Route path="/stats" element={<Stats/>}/>
-        <Route path="/ChampionshipStats" element={<SelectChamp/>}/>
-        <Route path="/TeamStats" element={<SelectClub/>}/>
-        <Route path="/TeamStats/:clubId" element={<ClubStats/>}/>
-        <Route path="/ChampionshipStats/:champId" element={<ChampStats/>}/>
-        <Route path="/stores/view" element={<ViewStore />} />
-        <Route path="/stores/:viewstorename/additem" element={<AddItems />} />
-        <Route path="/stores/:viewstorename/update" element={<UpdateItem />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/article/:artId" element={<News />} />
+        <Route path="/stats" element={<Stats />} />
+        <Route path="/ChampionshipStats" element={<SelectChamp />} />
+        <Route path="/TeamStats" element={<SelectClub />} />
+        <Route path="/TeamStats/:clubId" element={<ClubStats />} />
+        <Route path="/ChampionshipStats/:champId" element={<ChampStats />} />
+        <Route path="/stores/view/:storeID" element={<ViewStore />} />
+        <Route path="/stores/view/:storeID/additem" element={<AddItems />} />
+        <Route path="/stores/view/:storeID/update/:itemid" element={<UpdateItem />} />
         <Route path="/clubs" element={<Clubs />} />
         <Route path="/clubs/add" element={<AddClub />} />
-        <Route path="/clubs/update" element={<UpdateClub />} />
         <Route path="/clubs/add/addplayers" element={<AddClubPlayers />} />
         <Route path="/clubs/add/coach" element={<AddClubCoach />} />
+        <Route path="/clubs/update/:clubID" element={<UpdateClub />} />
+        <Route path="/clubs/update/:clubID/players" element={<UpdateClubPlayers />} />
+        <Route path="/clubs/update/:clubID/coach" element={<UpdateClubCoach />} />
         <Route path="/results" element={<Results />} />
         <Route path="/results/addresults" element={<MatchResult />} />
         <Route path="/results/addresults/stats/team1" element={<AddStats nxt="1" />} />
@@ -69,7 +73,7 @@ function App() {
         <Route path="/quizzes/view" element={<ViewQuizzes />} />
         <Route path="/championships" element={<Championships />} />
         <Route path="championships/add" element={<AddChampionship />} />
-        <Route path="championships/update" element={<UpdateChampionship />} />
+        <Route path="/championships/update/:championshiID" element={<UpdateChampionship />} />
       </Routes>
     </div>
   );

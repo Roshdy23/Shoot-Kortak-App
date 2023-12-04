@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Dropdown from "../../../components/Dropdown";
 
 function Championships() {
+    let championshiID = useParams();
+    championshiID = 9;
     return (
         <>
             <div className="container">
@@ -30,7 +32,7 @@ function Championships() {
                                     <td>64</td>
                                     <td>2022-03-12</td>
                                     <td>2022-10-03</td>
-                                    <td><Link class="btn btn-info" to="/championships/update">Update</Link></td>
+                                    <td><Link class="btn btn-info" to={`/championships/update/${championshiID}`}>Update</Link></td>
                                 </tr>
                                 <tr>
                                     <td>Egy League</td>
@@ -38,7 +40,7 @@ function Championships() {
                                     <td>64</td>
                                     <td>2022-03-12</td>
                                     <td>2022-10-03</td>
-                                    <td><Link class="btn btn-info" to="/championships/update">Update</Link></td>
+                                    <td><Link class="btn btn-info" to={`/championships/update/${championshiID}`}>Update</Link></td>
                                 </tr>
                                 <tr>
                                     <td>Egy League</td>
@@ -46,7 +48,7 @@ function Championships() {
                                     <td>64</td>
                                     <td>2022-03-12</td>
                                     <td>2022-10-03</td>
-                                    <td><Link class="btn btn-info" to="/championships/update">Update</Link></td>
+                                    <td><Link class="btn btn-info" to={`/championships/update/${championshiID}`}>Update</Link></td>
                                 </tr>
                             </tbody>
                         </table>
