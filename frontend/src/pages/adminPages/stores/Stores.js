@@ -1,9 +1,11 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Dropdown from "../../../components/Dropdown";
 
 function Stores() {
+    let storeID = useParams();
+    storeID = 2;
     return (
         <>
             <div className="container mt-5">
@@ -24,17 +26,17 @@ function Stores() {
                                 <tr>
                                     <td>Alahly We Elsalam Store</td>
                                     <th scope="col">Location1</th>
-                                    <td><Link class="btn btn-info" to="/stores/view">View</Link></td>
+                                    <td><Link class="btn btn-info" to={`/stores/view/${storeID}`}>View</Link></td>
                                 </tr>
                                 <tr>
                                     <td>Cairo Stadium Store</td>
                                     <th scope="col">Location2</th>
-                                    <td><Link class="btn btn-info" to="/stores/view">View</Link></td>
+                                    <td><Link class="btn btn-info" to={`/stores/view/${storeID}`}>View</Link></td>
                                 </tr>
                                 <tr>
                                     <td>Borj-alarab Stadium Store</td>
                                     <th scope="col">Location3</th>
-                                    <td><Link class="btn btn-info" to="/stores/view">View</Link></td>
+                                    <td><Link class="btn btn-info" to={`/stores/view/${storeID}`}>View</Link></td>
                                 </tr>
                             </tbody>
                         </table>

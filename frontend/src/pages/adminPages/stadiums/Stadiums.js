@@ -1,9 +1,11 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Dropdown from "../../../components/Dropdown";
 
 function Stadiums() {
+    let updatestadiumID = useParams();
+    /*---------------->>>>>>>>>>>>>>>>>>>>>>>>>*/ updatestadiumID = 1;
     return (
         <>
             <div className="container mt-5">
@@ -28,17 +30,17 @@ function Stadiums() {
                                 <tr>
                                     <td>Alahly We Elsalam</td>
                                     <td>Cairo</td>
-                                    <td><Link class="btn btn-info" to="/stadiums/update">Update</Link></td>
+                                    <td><Link class="btn btn-info" to={`/stadiums/update/${updatestadiumID}`}>Update</Link></td>
                                 </tr>
                                 <tr>
                                     <td>Cairo stadium</td>
                                     <td>Cairo</td>
-                                    <td><Link class="btn btn-info" to="/stadiums/update">Update</Link></td>
+                                    <td><Link class="btn btn-info" to={`/stadiums/update/${updatestadiumID}`}>Update</Link></td>
                                 </tr>
                                 <tr>
                                     <td>Borj-Alarab</td>
                                     <td>Alex</td>
-                                    <td><Link class="btn btn-info" to="/stadiums/update">Update</Link></td>
+                                    <td><Link class="btn btn-info" to={`/stadiums/update/${updatestadiumID}`}>Update</Link></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -48,7 +50,7 @@ function Stadiums() {
                         <Dropdown title="Locations" vals={["Cairo", "Giza", "Alex", "Aswan"]} />
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

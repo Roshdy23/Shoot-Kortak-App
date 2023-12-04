@@ -1,18 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-<<<<<<< HEAD
-    "\\Backend",
     "\\frontend",
     "\\frontend\\src",
-    "\\frontend\\src\\components",
-    "\\frontend\\src\\components\\Match"
-  ],
-  "SelectedNode": "\\Backend\\Backend.sln",
-=======
-    "\\frontend"
+    "\\frontend\\src\\pages",
+    "\\frontend\\src\\pages\\fanPages"
   ],
   "SelectedNode": "\\frontend\\src",
->>>>>>> refs/remotes/origin/main
   "PreviewInSolutionExplorer": false
 }
