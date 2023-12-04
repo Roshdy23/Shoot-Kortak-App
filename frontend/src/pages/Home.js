@@ -30,6 +30,7 @@ function Home() {
 
     }
 }
+
 function TrendingArts() {
     let articles = [{
         id:5,

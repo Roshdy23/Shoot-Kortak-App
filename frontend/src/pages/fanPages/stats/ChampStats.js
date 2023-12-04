@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Link } from "react-router-dom";
 
-
+import { Button } from "react-bootstrap";
 
 export default function ChampStats(){
-    
+    const navigate = useNavigate();
     const {champId} = useParams();
     const [type,setType]=useState("");
     const [champ,setChamp] = useState({});
@@ -16,6 +16,7 @@ export default function ChampStats(){
     },[])
     return(<div style={{padding:"3vh"}}>
     <div style={{height:"10vh",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+    <Button onClick={()=>{navigate("/ChampionshipStats");}} style={{width:"20px",height:"20px",marginBottom:"10px",textAlign:"center",display:"flex",justifyContent:"center",alignItems:"center"}}>&lt;</Button>
     <h2 style={{color:"red"}}>{champ.name}</h2>
     </div>
     <div>

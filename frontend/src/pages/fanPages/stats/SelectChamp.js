@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import "../stats.css"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { Button } from "react-bootstrap";
 
 export default function SelectChamp(){
 
     const [champList,setChampList] = useState([]);
-
+    const navigate = useNavigate();
     useEffect(()=>{
         setChampList([
             {
@@ -28,8 +30,9 @@ export default function SelectChamp(){
     },[])
 
     return(
-    <div className="cont">
-
+     <div style={{display:"flex" , flexDirection:"column",width:"100vw",}}>
+    <Button onClick={()=>{navigate("/Stats");}} style={{width:"20px",border:"solid back",height:"20px",margin:"10px",textAlign:"center",display:"flex",justifyContent:"center",alignItems:"center"}}>&lt;</Button>
+    <div  className="cont">
     <div style={{height:"100%",alignItems:"center",width:"100%",justifyContent:"space-around"}} className="rowcont">
     {
         champList.map((champ,ind)=>{
@@ -44,6 +47,8 @@ export default function SelectChamp(){
         })
     }
     </div>
-    </div>)
+    </div>
+    </div>
+    )
 
 };

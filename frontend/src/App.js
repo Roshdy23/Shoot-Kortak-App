@@ -28,6 +28,8 @@ import News from "./pages/News";
 import Stats from "./pages/fanPages/Stats";
 import SelectChamp from "./pages/fanPages/stats/SelectChamp";
 import ChampStats from "./pages/fanPages/stats/ChampStats";
+import SelectClub from "./pages/fanPages/stats/SelectClub";
+import ClubStats from "./pages/fanPages/stats/ClubStats";
 function App() {
   return (
     <div className="App">
@@ -48,6 +50,8 @@ function App() {
         <Route path ="/article/:artId" element={<News/>}/>
         <Route path="/stats" element={<Stats/>}/>
         <Route path="/ChampionshipStats" element={<SelectChamp/>}/>
+        <Route path="/TeamStats" element={<SelectClub/>}/>
+        <Route path="/TeamStats/:clubId" element={<ClubStats/>}/>
         <Route path="/ChampionshipStats/:champId" element={<ChampStats/>}/>
         <Route path="/stores/view" element={<ViewStore />} />
         <Route path="/stores/:viewstorename/additem" element={<AddItems />} />
