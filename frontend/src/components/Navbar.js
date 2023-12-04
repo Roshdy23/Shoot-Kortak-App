@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import { Link } from "react-router-dom";
 function Navbar() {
-    let role = "admin";
+    let role = "user";
     if (role === "admin")
         return (
             <nav className="navbar navbar-expand-lg bg-black">
@@ -69,24 +69,24 @@ function Navbar() {
                                 <Link className="nav-link text-light" to="/Matches">Matches</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" to="/">News</Link>
+                                <Link className="nav-link text-light"  to="/news">News</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" to="/">Stats</Link>
+                                <Link className="nav-link text-light" to="/stats">Stats</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light" to="/">Earn Points!</Link>
+                                <Link className="nav-link text-light" to="/quiz">Earn Points!</Link>
                             </li>
                         </ul>
                         {(status === "loggedin") ?
                             <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "40%" }}>
                                 <div className="form-check form-switch">
                                     <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                                    <label className="form-check-label text-light" for="flexSwitchCheckDefault">Dark Mode</label>
+                                    <label className="form-check-label text-light" htmlFor="flexSwitchCheckDefault">Dark Mode</label>
                                 </div>
                                 <div>
-                                    <p class="h5">Hello, {user.username}</p>
-                                    <p class="h6">You have {user.points} pts!</p>
+                                    <p className="h5">Hello, {user.username}</p>
+                                    <p className="h6">You have {user.points} pts!</p>
                                 </div>
                                 <button type="button" style={{ color: "white" }} className="btn btn-danger btn-sm ms-4">Log out</button>
                             </div>
