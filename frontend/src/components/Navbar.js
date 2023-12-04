@@ -69,7 +69,7 @@ function Navbar() {
                                 <Link className="nav-link text-light" to="/Matches">Matches</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link text-light"  to="/news">News</Link>
+                                <Link className="nav-link text-light" to="/news">News</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link text-light" to="/stats">Stats</Link>
