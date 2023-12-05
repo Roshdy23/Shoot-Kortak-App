@@ -34,11 +34,15 @@ import UpdateClubPlayers from "./pages/adminPages/clubs/UpdateClubPlayers";
 import UpdateClubCoach from "./pages/adminPages/clubs/UpdateClubCoach";
 import Quiz from "./pages/fanPages/quiz/Quiz";
 import QuizDetail from "./pages/fanPages/quiz/QuizDetail";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 function App() {
   return (
     <div className="App">
       <Navbar />
       <Routes>
+        {/* <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} /> */}
         <Route path="/" element={<Home />} />
         <Route path="/matches" element={<Matches ticket={false} />} />
         <Route path="/match/:matchId" element={<Matches ticket={false} />} />
@@ -72,8 +76,8 @@ function App() {
         <Route path="/results/addresults/stats/team1" element={<AddStats nxt="1" />} />
         <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
         <Route path="/quizzes" element={<Quizzes />} />
-        <Route path="/quiz" element={<Quiz/>} />
-        <Route path="/quiz/:quizId" element={<QuizDetail/>} />
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/:quizId" element={<QuizDetail />} />
         <Route path="/quizzes/view" element={<ViewQuizzes />} />
         <Route path="/championships" element={<Championships />} />
         <Route path="championships/add" element={<AddChampionship />} />
