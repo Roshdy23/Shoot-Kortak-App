@@ -29,7 +29,7 @@ function Matches(props) {
     }
     let { updatematchID } = useParams();
     updatematchID = 3;
-    let role = "admin";
+    let role = "user";
     if (role === "admin")
         return (
             <>

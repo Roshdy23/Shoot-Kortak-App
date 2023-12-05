@@ -5,7 +5,7 @@ import Vote from "../components/votePOTM.js";
 import POTMWinner from "../components/POTMWinner.js";
 import MatchesToday from "../components/Match/MatchesToday.js";
 function Home() {
-    let role = "admin"
+    let role = "user"
     if (role === "admin")
         return (
             <section class="jumbotron text-center mt-5">

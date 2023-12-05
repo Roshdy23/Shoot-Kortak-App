@@ -1,0 +1,38 @@
+
+.option{
+    background-color: rgba(0, 102, 255, 0);
+    border-radius: 16px;
+    height: 10vh;
+    min-width: 10vw;
+    padding: 20px;
+    color: rgba(13, 110, 253, 1);
+    font-size: x-large;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(13, 110, 253, 1);
+
+}
+.btn-outline-secondary{
+    background-color: white;
+}
+
+.selected-option{
+    background-image: linear-gradient(92.88deg, #0041a4 9.16%, #2567c9 43.89%, #457bcd 64.72%);
+border-radius: 16px;
+height: 10vh;
+min-width: 10vw;
+padding: 20px;
+color: white;
+font-size: x-large;
+display: flex;
+justify-content: center;
+align-items: center;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(14px);
+-webkit-backdrop-filter: blur(14px);
+border: 1px solid rgba(13, 110, 253, 1);
+}
