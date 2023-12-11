@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import "./quiz.css"
+import "../fanPages/quiz/quiz.css"
 import { useNavigate } from "react-router-dom";
-export default function QuizDetail() {
-
+export default function EditQuiz() {
     const navigate = useNavigate();
     const {quizId} = useParams();
     const [quiz,setQuiz] = useState({});
     const [currQuestion,setCurrQuestion] = useState({});
     const [currInd,setCurrInd] = useState(0);
-    const [answers,setAnswers] = useState([]);
+    const initAnswers = () =>{
+        let array = [];
+            for(let i=0;i<quiz.questions?.length;i++)
+                array.push(-1);
+            return array;
+    }
+    const [answers,setAnswers] = useState(initAnswers());
     const [unfinished,setUnfinished] = useState(false);
     const [s,refresh] = useState(0);
     console.log(answers);
@@ -18,34 +23,30 @@ export default function QuizDetail() {
     console.log(quiz)
     useEffect(()=>{
         setQuiz(quizzes.find((qu)=>qu.id===parseInt(quizId)));
-    },[quizId])
+    },[quizId]);
     
     useEffect(()=>{
-            setCurrQuestion(quiz.questions?.at(0))
-            let array = [];
-            for(let i=0;i<quiz.questions?.length;i++)
-                array.push(-1);
-            setAnswers(array);
-    },[quiz])
+            setCurrQuestion(quiz.questions?.at(currInd))
+    },[quiz,currInd])
 
-    useEffect(()=>{
-        setCurrQuestion(quiz?.questions?.at(currInd));
-    },[currInd])
     useEffect(()=>{
         if(s<1){refresh(s+1)}else{refresh(s-1)};
     },[currQuestion])
+
     const submit = () =>{
         if(!answers.includes(-1))
-            navigate("/quiz");
+            navigate("/PendingQuizzes");
         else{
             setUnfinished(true);
         }
     }
+
     return (
         <>
             <div style={{padding:"20px",display:"flex"}}>
                 <div style={{width:"30vw",padding:"5px"}}>
-                <h3 style={{marginLeft:"0px"}} className="row mt-4">{quiz.name}</h3>
+                    <label for="quizName">Quiz Name</label>
+                <input id="quizName" onChange={(e)=>{const tempq = quiz; tempq.name=e.target.value; setQuiz(tempq); if(s<1){refresh(s+1)}else{refresh(s-1)}}} style={{margin:"15px"}} className="row mt-4"/>
                     <div >
                         <div id="list-example" class="list-group">
                             {  
@@ -54,26 +55,36 @@ export default function QuizDetail() {
                                 })
 }
                         </div>
+                        <div style={{display:"flex",flexDirection:"column"}}>
+                            <div style={{display:"flex", width:"100%",justifyContent:"space-between"}}>
+
+                        <Button onClick={()=>{const tempq = quiz; tempq.questions?.push({title:"",choices:[],answer:""}); setQuiz(tempq); setCurrInd(currInd+1);}} style={{width:"1vw",marginTop:"2vh"}} className={"btn btn-success"}>+</Button>
+
+                        { (currInd!==0)?<Button onClick={()=>{const tempq = quiz; tempq.questions?.splice(currInd,1); setQuiz(tempq); setCurrInd(currInd-1);}} style={{width:"1vw",marginTop:"2vh"}} className={"btn btn-danger"}>-</Button>:<></>}
+                            </div>
                         <Button onClick={submit} style={{width:"8vw",marginTop:"2vh"}} className={"btn btn-success"}>Submit</Button>
-                        {
-                            (unfinished)?
-                        <h5 style={{color:"red"}}>answers all questions first</h5>:<></>
-}
+                        </div>
                     </div>
                 </div>
                     <div style={{padding:"15px",display:"flex",flexDirection:"column"}}>
                         <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" className="scrollspy-example" tabindex="0" >
                             <h2 style={{paddingBottom:"15px"}} id="list-item-1">Question {currInd+1}</h2>
-                            <h6>{currQuestion?.title}</h6>
+                            <input value={quiz.questions?.at(currInd).title} id="quesTitle"placeholder="Enter question"  onChange={(e)=>{const tempq = quiz; tempq.questions[currInd].title=e.target.value; setQuiz(tempq); if(s<1){refresh(s+1)}else{refresh(s-1)}}} style={{margin:"15px"}} className="row mt-4"/>
+                            <input value={quiz.questions?.at(currInd).answer} id="quesTitle"placeholder="Enter answer"  onChange={(e)=>{const tempq = quiz; tempq.questions[currInd].answer=e.target.value; setQuiz(tempq); if(s<1){refresh(s+1)}else{refresh(s-1)}}} style={{margin:"15px"}} className="row mt-4"/>
+                            <Button onClick={()=>{const tempq = quiz; tempq.questions?.at(currInd)?.choices?.push(""); setQuiz(tempq); if(s<1){refresh(s+1)}else{refresh(s-1)}}} style={{width:"1vw",marginTop:"2vh"}} className={"btn btn-success"}>+</Button>
                             <div style={{display:"flex",height:"50vh",justifyContent:"space-around",flexWrap:"wrap",width:"70vw",alignItems:"center"}}>
-                                { currQuestion?.choices?.map((ch)=>
-                            <Button onClick={()=>{let array = answers; array[currInd]=ch; setAnswers(answers); if(s<1){refresh(s+1)}else{refresh(s-1)}}} className={(answers?.at(currInd)===ch)?("selected-option"):("qoption")}>{ch}</Button>
+                                { currQuestion?.choices?.map((ch,ind)=>
+                                <div className="option">
+                            <input value={ch} id="quesTitle"placeholder="Enter answer"  onChange={(e)=>{const tempq = quiz; tempq.questions[currInd].choices?(tempq.questions[currInd].choices[ind]=e.target.value):((s<1)?(refresh(s+1)):(refresh(s-1))); setQuiz(tempq); if(s<1){refresh(s+1)}else{refresh(s-1)}}} style={{margin:"15px",zIndex:"9"}} className="row mt-4"/>
+                                <Button onClick={()=>{const tempq = quiz; tempq.questions?.at(currInd)?.choices?.splice(ind,1); setQuiz(tempq); if(s<1){refresh(s+1)}else{refresh(s-1)}}} className="btn btn-danger"> -
+                                </Button>
+                                </div>
                             )}
                             </div>
                         <div style={{display:"flex",backgroundColor:"white"}}>
 { (currInd!==0)?
                             <Button onClick={()=>{setCurrInd(currInd-1)}} style={{width:"8vw",position:"absolute",left:"33vw",marginTop:"2vh"}} className={"btn-outline-secondary"}>Previous</Button>:<></>
-}{(currInd!==answers.length-1)?
+}{(currInd!==quiz.questions?.length-1)?
                             <Button onClick={()=>{setCurrInd(currInd+1)}} style={{width:"8vw",position:"absolute",right:"6vw",marginTop:"2vh"}} className={"btn btn-secondary"}>Next</Button>:<></>
 }
                         </div>

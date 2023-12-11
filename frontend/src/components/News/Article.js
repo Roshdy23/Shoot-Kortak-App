@@ -12,7 +12,7 @@ export default function Article(props){
     //         data=>setArticle(data)
     //     )
     // })
-
+const role = "user";
     //for now
 useEffect(()=>{
         setArticle({
@@ -47,9 +47,22 @@ else
             <img src={article.pic} style={{height:"60vh",marginBottom:"3vh"}} alt="article pic"/>
             <p>{article.details}</p>
             <div style={{display:"flex"}}>
-                {(liked===0)?(
-            <button type="button" onClick={like} style={{display:"flex",justifyContent:"space-between",width:"60px",alignItems:"center",textAlign:"center"}} className="btn btn-outline-danger btn-sm ms-4"> <img src={"https://upload.wikimedia.org/wikipedia/commons/5/54/Bot%C3%B3n_Me_gusta.svg"} style={{height:"20px"}}  alt="article pic"/><div style={{display:"flex",height:"100%",flexDirection:"column",justifyContent:"center"}}>{(article.likes+liked).toString()}</div></button>
-                ):(<><button type="button" onClick={like} style={{display:"flex",justifyContent:"space-between",width:"60px",alignItems:"center",textAlign:"center"}} className="btn btn-danger btn-sm ms-4"> <img src={"https://upload.wikimedia.org/wikipedia/commons/5/54/Bot%C3%B3n_Me_gusta.svg"} style={{height:"20px"}}  alt="article pic"/><div style={{display:"flex",height:"100%",flexDirection:"column",justifyContent:"center"}}>{(article.likes+liked).toString()}</div></button></>)}
+
+                {(role==="user")?((liked===0)?(
+            <button type="button" onClick={like} style={{display:"flex",justifyContent:"space-between",width:"60px",alignItems:"center",textAlign:"center"}} className="btn btn-outline-danger btn-sm ms-4"> <img src={"https://upload.wikimedia.org/wikipedia/commons/5/54/Bot%C3%B3n_Me_gusta.svg"} style={{height:"20px"}}  alt="article pic"/>
+            <div style={{display:"flex",height:"100%",flexDirection:"column",justifyContent:"center"}}>{(article.likes)?.toString()}</div>
+            </button>
+                ):(<button type="button" onClick={like} style={{display:"flex",justifyContent:"space-between",width:"60px",alignItems:"center",textAlign:"center"}} className="btn btn-danger btn-sm ms-4">
+                        <img src={"https://upload.wikimedia.org/wikipedia/commons/5/54/Bot%C3%B3n_Me_gusta.svg"} style={{height:"20px"}}  alt="article pic"/>
+                        <div style={{display:"flex",height:"100%",flexDirection:"column",justifyContent:"center"}}>
+                        {(article.likes+liked).toString()}
+                        </div>
+                    </button>)):(<div style={{display:"flex",justifyContent:"space-between",width:"60px",alignItems:"center",textAlign:"center"}}>
+                        <img src={"https://upload.wikimedia.org/wikipedia/commons/5/54/Bot%C3%B3n_Me_gusta.svg"} style={{height:"20px"}}  alt="article pic"/>
+                        <div style={{display:"flex",height:"100%",flexDirection:"column",justifyContent:"center"}}>
+                        : {(article.likes)?.toString()}
+                        </div>
+                    </div>)}
             </div>
         </div>
     )

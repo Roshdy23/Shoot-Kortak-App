@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
-import Dropdown from "../../../components/Dropdown";
-import { useEffect, useState } from "react";
-export default function Quiz() {
 
+
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+
+export default function PendingQuizzes(){
 
     const [quizList,setQuizList] = useState();
 
@@ -31,17 +33,18 @@ export default function Quiz() {
             }
         ])
     },[])
-    
+
+
     return (
         <>
             <div className="container">
                 <h3 style={{color:"red"}} className="row mt-4">Quizzes</h3>
                 <div className="row mt-3">
+                <Link class="btn btn-info" to={`/CreateQuiz`}>Create new quiz</Link>
                     <div className="col col-lg-10">
                         <table className="table">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col">Journalist</th>
                                     <th scope="col">Quiz Name</th>
                                     <th scope="col">Max Points</th>
                                     <th scope="col">Number of Questions</th>
@@ -53,11 +56,10 @@ export default function Quiz() {
                                     quizList?.map((quiz)=>{
                                         return(
                                             <tr>
-                                    <td>{quiz.journalist}</td>
                                     <td >{quiz.name}</td>
                                     <td >{quiz.maxp}</td>
                                     <td >{quiz.qno}</td>
-                                    <td><Link class="btn btn-info" to={`/quiz/${quiz.id}`}>Answer</Link></td>
+                                    <td><Link class="btn btn-info" to={`/EditQuiz/${quiz.id}`}>Edit</Link></td>
                                 </tr>
                                         )
                                     })
@@ -70,3 +72,4 @@ export default function Quiz() {
         </>
     )
 }
+

@@ -36,6 +36,11 @@ import Quiz from "./pages/fanPages/quiz/Quiz";
 import QuizDetail from "./pages/fanPages/quiz/QuizDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Articles from "./pages/journalistPages/Articles";
+import CreateArticle from "./pages/journalistPages/CreateArticle";
+import PendingQuizzes from "./pages/journalistPages/PendingQuiz";
+import CreateQuiz from "./pages/journalistPages/CreateQuiz";
+import EditQuiz from "./pages/journalistPages/EditQuiz";
 function App() {
   return (
     <div className="App">
@@ -65,6 +70,8 @@ function App() {
         <Route path="/stores/view/:storeID/additem" element={<AddItems />} />
         <Route path="/stores/view/:storeID/update/:itemid" element={<UpdateItem />} />
         <Route path="/clubs" element={<Clubs />} />
+        <Route path="/articles" element={<Articles/>} />
+        <Route path="/articles/create" element={<CreateArticle/>} />
         <Route path="/clubs/add" element={<AddClub />} />
         <Route path="/clubs/add/addplayers" element={<AddClubPlayers />} />
         <Route path="/clubs/add/coach" element={<AddClubCoach />} />
@@ -77,6 +84,9 @@ function App() {
         <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/quiz" element={<Quiz />} />
+        <Route path="/EditQuiz/:quizId" element={<EditQuiz/>} />
+        <Route path="/CreateQuiz" element={<CreateQuiz />} />
+        <Route path="/PendingQuizzes" element={<PendingQuizzes />} />
         <Route path="/quiz/:quizId" element={<QuizDetail />} />
         <Route path="/quizzes/view" element={<ViewQuizzes />} />
         <Route path="/championships" element={<Championships />} />
