@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import { Link } from "react-router-dom";
 function Navbar() {
-    let role = "user";
+    let role = "admin";
     if (role === "admin")
         return (
             <nav className="navbar navbar-expand-lg bg-black">
@@ -47,7 +47,7 @@ function Navbar() {
                 </div>
             </nav>
         )
-    else if(role==="user"){
+    else if (role === "user") {
         let status = "loggedin";
         let user = {
             username: "testuser",
@@ -106,15 +106,14 @@ function Navbar() {
             </nav>
         )
     }
-    else
-    {
+    else {
         let status = "loggedin";
         let user = {
             username: "testuser",
             points: 50,
         }
-        return(
-        <nav style={{ color: "white", position: "sticky", height: "10vh", top: "0", zIndex: "5" }} className="navbar navbar-expand-lg bg-black">
+        return (
+            <nav style={{ color: "white", position: "sticky", height: "10vh", top: "0", zIndex: "5" }} className="navbar navbar-expand-lg bg-black">
                 <div className="container-fluid">
                     <a className="navbar-brand ms-5 text-light" href="/#"><h4 className="fst-italic">SHOOT KORTAK</h4></a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

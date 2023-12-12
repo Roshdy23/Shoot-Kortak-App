@@ -6,7 +6,7 @@ import POTMWinner from "../components/POTMWinner.js";
 import MatchesToday from "../components/Match/MatchesToday.js";
 import { Link } from "react-router-dom"
 function Home() {
-    let role = "user"
+    let role = "admin"
     if (role === "admin")
         return (
             <section class="jumbotron text-center mt-5">
@@ -17,7 +17,7 @@ function Home() {
                 </div>
             </section>
         )
-    else if(role==="user"){
+    else if (role === "user") {
         return (
             <div className="homeGrid">
                 <TrendingArts />
@@ -29,14 +29,14 @@ function Home() {
             </div>
         );
     }
-        else{
-            return(    <div className="cont">
+    else {
+        return (<div className="cont">
             <div className="rowcont">
-            <Link to={"/articles/create"} className="glass">New article</Link>
-            <Link to={"/ChampionshipStats"} className="glass">New quiz</Link>
+                <Link to={"/articles/create"} className="glass">New article</Link>
+                <Link to={"/ChampionshipStats"} className="glass">New quiz</Link>
             </div>
         </div>);
-        }
+    }
 }
 
 function TrendingArts() {
