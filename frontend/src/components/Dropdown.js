@@ -7,6 +7,7 @@ function Dropdown(props) {
                 {props.title}
             </button>
             <ul className="dropdown-menu">
+                <li><a key={0} className="dropdown-item" href="/#">ALL</a></li>
                 {props.vals.map((value, index) => (
                     <li><a key={index + 1} className="dropdown-item" href="/#">{value}</a></li>
                 ))}

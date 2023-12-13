@@ -12,10 +12,15 @@ import MatchPerDay from "../components/Match/MatchPerDay";
 import Match from "../components/Match/Match";
 import { useNavigate } from "react-router-dom";
 import PlayerCard from "../components/PlayerCard";
+import { baseUrl } from "../constants/url.constants"
+import httpModule from "../helpers/http.module"
 
 function Matches(props) {
-
+    const [s, setS] = useState(0);
     const [rating, setRating] = useState(0);
+    const [champid, setChampid] = useState(0);
+    const [matches, setMatches] = useState([]);
+    const [championships, setChampionships] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
         //init tooltip
@@ -27,8 +32,38 @@ function Matches(props) {
     const navback = () => {
         navigate(`/match/${matchId}`);
     }
-    let { updatematchID } = useParams();
-    updatematchID = 3;
+    useEffect(() => {
+        fetch(`${baseUrl}/Matches/Get`)
+            .then((res) => res.json())
+            .then((data) => {
+                setMatches(data);
+            })
+        fetch(`${baseUrl}/Championships/Get`)
+            .then((res) => res.json())
+            .then((data) => {
+                setChampionships(data);
+            });
+    }, [])
+    const filterHandler = (ID) => {
+        if (!ID) {
+            fetch(`${baseUrl}/Matches/Get`)
+                .then((res) => res.json())
+                .then((data) => {
+                    setMatches(data);
+                })
+        }
+        else {
+            fetch(`${baseUrl}/Matches/inChampionship/${ID}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then((res) => res.json()).then((data) => {
+                setMatches(data)
+                setChampid(ID);
+            })
+        }
+    }
     let role = "admin";
     if (role === "admin")
         return (
@@ -50,44 +85,43 @@ function Matches(props) {
                                         <th scope="col">Week Number</th>
                                         <th scope="col">Date and Time</th>
                                         <th scope="col">Championship</th>
+                                        <th scope="col">Stadium</th>
                                         <th scope="col">Update</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Alahly VS Future</td>
-                                        <td>5</td>
-                                        <td>2023-12-15 | 8:00 PM</td>
-                                        <td>Egy League</td>
-                                        <td><Link class="btn btn-info" to={`/matches/update/${updatematchID}`}>Update</Link></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Zamalek VS Massry</td>
-                                        <td>5</td>
-                                        <td>2023-12-15 | 4:00 PM</td>
-                                        <td>Egy League</td>
-                                        <td><Link class="btn btn-info" to={`/matches/update/${updatematchID}`}>Update</Link></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Enpi VS Zed</td>
-                                        <td>7</td>
-                                        <td>2023-12-23 | 9:00 PM</td>
-                                        <td>Egy League</td>
-                                        <td><Link class="btn btn-info" to={`/matches/update/${updatematchID}`}>Update</Link></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Zamalek VS Massry</td>
-                                        <td>5</td>
-                                        <td>2023-12-15 | 4:00 PM</td>
-                                        <td>Egy League</td>
-                                        <td><Link class="btn btn-info" to={`/matches/update/${updatematchID}`}>Update</Link></td>
-                                    </tr>
+                                    {matches.map((mtch, index) => {
+                                        return (
+                                            <tr key={index + 1}>
+                                                <td>{mtch.club1} VS {mtch.club2}</td>
+                                                <td>{mtch.weekno}</td>
+                                                <td>{mtch.matchDate}</td>
+                                                <td>{mtch.championshipid}</td>
+                                                <td>{mtch.stadium_id}</td>
+                                                <td><Link class="btn btn-info" to={`/matches/update/${mtch.id}`}>Update</Link></td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </table>
                         </div >
                         <div className="dropdown col col-lg-2">
                             <h5>Filter Matches</h5>
-                            <Dropdown title="Championships" vals={["chap1", "chap2", "chap3", "chap4", "chap5", "chap6"]} />
+                            <div className="dropdown col col-lg-1 mt-2">
+                                <button className="btn btn-secondary dropdown-toggle mt-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Championships
+                                </button>
+                                <ul className="dropdown-menu">
+                                    <li><button key={0} className="dropdown-item" onClick={() => {
+                                        filterHandler(0)
+                                    }}>ALL</button></li>
+                                    {championships.map((champ, index) => (
+                                        <li><button key={index + 1} className="dropdown-item" onClick={() => {
+                                            filterHandler(champ.id);
+                                        }}>{champ.name}</button></li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </div >
                 </div >
