@@ -189,5 +189,86 @@ namespace Backend
 
         }
 
+        public int  update_match(SqlConnection conn, Match match)
+        {
+            string query = "update matches set matchDate='" + match.MatchDate + "', weekno=" + match.Weekno+ ",club1='" + match.Club1 + "',club2='" + match.Club2 + "',championshipid=" + match.Championshipid + " stadium_id = "+match.StadiumId+" where id =" + match.Id + "";
+            int res = -1;
+
+            conn.Open();
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                res = 200;
+            }
+            catch (Exception ex)
+            {
+                res = 0;
+            }
+            conn.Close();
+            return res;
+        }
+
+
+        public int  update_club(SqlConnection conn, Club clubs)
+        {
+            string query = $@"update clubs set Created_At='" + clubs.CreatedAt + "', logo='" + clubs.Logo + "',name='" +
+                clubs.Name + "' stadium_home= "+clubs.StadiumHome+" where id =" + clubs.Id + "";
+            int res = -1;
+            conn.Open();
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                res = 200;
+            }
+            catch (Exception ex)
+            {
+                res = 0;
+            }
+            conn.Close();
+            return res;
+        }
+
+        public int  add_champ(SqlConnection conn, Championship champ)
+        {
+            string query = $@"insert into championship (name,logo,startingAt,endingAt,no_matches) values
+('" + champ.Name + "','" + champ.Logo + "','" + champ.StartingAt + "','" + champ.EndingAt + "'," + champ.NoMatches+ ")";
+            int res = -1;
+            conn.Open();
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                res = 200;
+            }
+            catch (Exception ex)
+            {
+                res = 0;
+            }
+            conn.Close();
+            return res;
+        }
+
+        public int update_champ(SqlConnection conn, Championship champ)
+        {
+            string query = @$"update championship set  name =  '{champ.Name}' , logo ='{champ.Logo}', startingAt = '{champ.StartingAt}' ,
+                      endingAt = '{champ.EndingAt}', no_matches = {champ.NoMatches} where id = {champ.Id};";
+
+            int res = -1;
+            conn.Open();
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                res = 200;
+            }
+            catch (Exception ex)
+            {
+                res = 0;
+            }
+            conn.Close();
+            return res;
+        }
     }
 }

@@ -24,5 +24,17 @@ namespace Backend.Controllers
         {
             return _appDbManager.getAllChampionships(_sqlconn);
         }
+        [HttpPost]
+        [Route("Add")]
+        public ActionResult<IActionResult> add_champ([FromBody ]Championship champ)
+        {
+            return (Convert.ToBoolean(_appDbManager.add_champ(_sqlconn, champ))) ? Ok() : BadRequest();
+        }
+        [HttpPost]
+        [Route("update/{id}")]
+        public ActionResult<IActionResult> update_champ(Championship champ)
+        {
+            return (Convert.ToBoolean(_appDbManager.update_champ(_sqlconn, champ))) ? Ok() : BadRequest();
+        }
     }
 }

@@ -43,5 +43,13 @@ namespace Backend.Controllers
             return _appDbManager.get_match_data(_sqlconn, Convert.ToInt32(id));
         }
 
+        [HttpPost]
+        [Route("update/{id}")]
+        public async Task<IActionResult> update_match([FromBody]Match match)
+        {
+            return (Convert.ToBoolean(_appDbManager.update_match(_sqlconn, match)))?Ok():BadRequest();
+
+        }
+
     }
 }
