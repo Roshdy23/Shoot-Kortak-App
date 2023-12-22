@@ -156,7 +156,7 @@ namespace Backend
 
         public IEnumerable<Club> add_club(SqlConnection conn, Club club)
         {
-            string query = "insert into clubs (Created_At,name,logo,stadium_home) values(" + club.Created_At + ",'" + club.name + "','" + club.logo + "',"+ club.stadium_home+")";
+            string query = "insert into clubs (Created_At,name,logo,stadium_home) values(" + club.CreatedAt + ",'" + club.Name + "','" + club.Logo + "',"+ club.StadiumHome + ")";
             conn.Open();
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.ExecuteNonQuery();
@@ -179,10 +179,10 @@ namespace Backend
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 Match match = new Match();
-                match.id = Convert.ToInt16(dt.Rows[i]["id"]);
-                match.club1 = Convert.ToString(dt.Rows[i]["club1"]);
-                match.club2 = Convert.ToString(dt.Rows[i]["club2"]);
-                match.championshipid = Convert.ToInt16(dt.Rows[i]["championshipid"]);
+                match.Id = Convert.ToInt16(dt.Rows[i]["id"]);
+                match.Club1 = Convert.ToString(dt.Rows[i]["club1"]);
+                match.Club2 = Convert.ToString(dt.Rows[i]["club2"]);
+                match.Championshipid = Convert.ToInt16(dt.Rows[i]["championshipid"]);
                 list.Add(match);
             }
             return list;
