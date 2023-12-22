@@ -1,20 +1,19 @@
-﻿namespace Backend.Models
-{
-    public class Championship
-    {
-        /*[id]
-      ,[name]
-      ,[logo]
-      ,[startingAt]
-      ,[endingAt]
-      ,[no_matches]
-         */
+﻿
+namespace Back_End.Models;
 
-        public int id { get; set; }
-        public string name { get; set; }
-        public string logo { get; set; }
-        public DateTime startingAt { get; set; }
-        public DateTime endingAt { get; set; }
-        public int no_matches { get; set; }
-    }
+public partial class Championship
+{
+    public int Id { get; set; }
+
+    public string? Name { get; set; }
+
+    public string? Logo { get; set; }
+
+    public DateTime? StartingAt { get; set; }
+
+    public DateTime? EndingAt { get; set; }
+
+    public int? NoMatches { get; set; }
+
+
 }

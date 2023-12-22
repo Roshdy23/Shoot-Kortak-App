@@ -1,4 +1,4 @@
-﻿using Backend.Models;
+﻿using Back_End.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System;
@@ -21,21 +21,21 @@ namespace Backend
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 Match match = new Match();
-                match.id = Convert.ToInt32(dt.Rows[i]["id"]);
-                match.matchDate = Convert.ToString(dt.Rows[i]["matchDate"]);
-                match.weekno = Convert.ToInt16(dt.Rows[i]["weekno"]);
-                match.club1 = Convert.ToString(dt.Rows[i]["club1"]);
-                match.club2 = Convert.ToString(dt.Rows[i]["club2"]);
-                match.championshipid = Convert.ToInt32(dt.Rows[i]["championshipid"]);
-                match.stadium_id = Convert.ToInt32(dt.Rows[i]["stadium_id"]);
+                match.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
+                match.MatchDate = Convert.ToString(dt.Rows[i]["MatchDate"]);
+                match.Weekno = Convert.ToInt16(dt.Rows[i]["Weekno"]);
+                match.Club1 = Convert.ToString(dt.Rows[i]["Club1"]);
+                match.Club2 = Convert.ToString(dt.Rows[i]["Club2"]);
+                match.Championshipid = Convert.ToInt32(dt.Rows[i]["Championshipid"]);
+                match.StadiumId = Convert.ToInt32(dt.Rows[i]["StadiumId"]);
                 list.Add(match);
             }
 
             return list;
         }
-        public IEnumerable<Match> getAllMatchesInChampionship(SqlConnection conn, int id)
+        public IEnumerable<Match> getAllMatchesInChampionship(SqlConnection conn, int Id)
         {
-            string query = @"select * from matches where championshipid=" + id;
+            string query = @"select * from matches where Championshipid=" + Id;
             conn.Open();
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
@@ -45,13 +45,13 @@ namespace Backend
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 Match match = new Match();
-                match.id = Convert.ToInt32(dt.Rows[i]["id"]);
-                match.matchDate = Convert.ToString(dt.Rows[i]["matchDate"]);
-                match.weekno = Convert.ToInt16(dt.Rows[i]["weekno"]);
-                match.club1 = Convert.ToString(dt.Rows[i]["club1"]);
-                match.club2 = Convert.ToString(dt.Rows[i]["club2"]);
-                match.championshipid = Convert.ToInt32(dt.Rows[i]["championshipid"]);
-                match.stadium_id = Convert.ToInt32(dt.Rows[i]["stadium_id"]);
+                match.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
+                match.MatchDate = Convert.ToString(dt.Rows[i]["MatchDate"]);
+                match.Weekno = Convert.ToInt16(dt.Rows[i]["Weekno"]);
+                match.Club1 = Convert.ToString(dt.Rows[i]["Club1"]);
+                match.Club2 = Convert.ToString(dt.Rows[i]["Club2"]);
+                match.Championshipid = Convert.ToInt32(dt.Rows[i]["Championshipid"]);
+                match.StadiumId = Convert.ToInt32(dt.Rows[i]["StadiumId"]);
                 list.Add(match);
             }
             return list;
@@ -68,21 +68,23 @@ namespace Backend
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 Championship champ = new Championship();
-                champ.id = Convert.ToInt32(dt.Rows[i]["id"]);
-                champ.startingAt = Convert.ToDateTime(dt.Rows[i]["startingAt"]);
-                champ.endingAt = Convert.ToDateTime(dt.Rows[i]["endingAt"]);
-                champ.name = Convert.ToString(dt.Rows[i]["name"]);
-                champ.no_matches = Convert.ToInt32(dt.Rows[i]["no_matches"]);
+                champ.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
+                champ.StartingAt = Convert.ToDateTime(dt.Rows[i]["StartingAt"]);
+                champ.EndingAt = Convert.ToDateTime(dt.Rows[i]["EndingAt"]);
+                champ.Name = Convert.ToString(dt.Rows[i]["Name"]);
+                champ.NoMatches = Convert.ToInt32(dt.Rows[i]["no_matches"]);
                 list.Add(champ);
             }
             return list;
         }
         public int addMatch(SqlConnection conn, Match m)
         {
-            string date = m.matchDate.Substring(6) + '-' + m.matchDate.Substring(0, 2) + '-' + m.matchDate.Substring(3, 2);
-            string query = $@"insert into matches(matchDate,weekno,club1,club2,championshipid,stadium_id)
-                              values ('{date}',{m.weekno},'{m.club1}','{m.club2}',{m.championshipid},{m.stadium_id})";
-            int res = -1;
+
+            string date = m.MatchDate.Substring(6) + '-' + m.MatchDate.Substring(0,2) + '-' + m.MatchDate.Substring(3,2);
+            string query = $@"insert into matches(MatchDate,Weekno,Club1,Club2,Championshipid,StadiumId)
+                              values ('{date}',{m.Weekno},'{m.Club1}','{m.Club2}',{m.Championshipid},{m.StadiumId})";
+            int res=-1;
+
             conn.Open();
             SqlCommand sqlCommand = new SqlCommand(query, conn);
             try
@@ -100,14 +102,14 @@ namespace Backend
         public IEnumerable<Club> getAllClubsInChampionship(SqlConnection conn, int champ_id)
         {
             string query = $@"select * from clubs
-                                where clubs.id in(
-                                select c.id from clubs c,Club_cup cl
-                                where cl.championship_id={champ_id} and cl.club_id=c.id
+                                where clubs.Id in(
+                                select c.Id from clubs c,Club_cup cl
+                                where cl.championship_id={champ_id} and cl.club_id=c.Id
 
                                 union 
 
-                                select c.id from clubs c,Club_league cl
-                                where cl.championship_id={champ_id} and cl.club_id=c.id
+                                select c.Id from clubs c,Club_league cl
+                                where cl.championship_id={champ_id} and cl.club_id=c.Id
                                 )";
             conn.Open();
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
@@ -118,11 +120,11 @@ namespace Backend
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 Club club = new Club();
-                club.id = Convert.ToInt32(dt.Rows[i]["id"]);
-                club.Created_At = Convert.ToInt32(dt.Rows[i]["Created_At"]);
-                club.name = Convert.ToString(dt.Rows[i]["name"]);
-                club.logo = Convert.ToString(dt.Rows[i]["logo"]);
-                club.stadium_home = Convert.ToInt32(dt.Rows[i]["stadium_home"]);
+                club.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
+                club.CreatedAt = Convert.ToInt32(dt.Rows[i]["CreatedAt"]);
+                club.Name = Convert.ToString(dt.Rows[i]["Name"]);
+                club.Logo = Convert.ToString(dt.Rows[i]["Logo"]);
+                club.StadiumHome = Convert.ToInt32(dt.Rows[i]["StadiumHome"]);
                 list.Add(club);
             }
             return list;
@@ -139,13 +141,13 @@ namespace Backend
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 Stadium stad = new Stadium();
-                stad.id = Convert.ToInt32(dt.Rows[i]["id"]);
-                stad.Created_At = Convert.ToInt32(dt.Rows[i]["Created_At"]);
+                stad.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
+                stad.CreatedAt = Convert.ToInt32(dt.Rows[i]["CreatedAt"]);
                 stad.Name = Convert.ToString(dt.Rows[i]["Name"]);
-                stad.image = Convert.ToString(dt.Rows[i]["image"]);
-                stad.width = Convert.ToInt32(dt.Rows[i]["width"]);
-                stad.length = Convert.ToInt32(dt.Rows[i]["length"]);
-                stad.location = Convert.ToString(dt.Rows[i]["location"]);
+                stad.Image = Convert.ToString(dt.Rows[i]["Image"]);
+                stad.Width = Convert.ToInt32(dt.Rows[i]["Width"]);
+                stad.Length = Convert.ToInt32(dt.Rows[i]["Length"]);
+                stad.Location = Convert.ToString(dt.Rows[i]["Location"]);
                 stad.Capacity = Convert.ToInt32(dt.Rows[i]["Capacity"]);
                 list.Add(stad);
             }

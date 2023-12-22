@@ -1,21 +1,20 @@
-﻿namespace Backend.Models
+﻿
+namespace Back_End.Models;
+
+public partial class Match
 {
-    public class Match
-    {
-        /*[id]
-      ,[matchDate]
-      ,[weekno]
-      ,[club1]
-      ,[club2]
-      ,[championshipid]
-      ,[stadium_id]
-         */
-        public int id { get; set; }
-        public string matchDate { get; set; }
-        public int weekno { get; set; }
-        public string club1 { get; set; }
-        public string club2 { get; set;}
-        public int championshipid { get; set; }
-        public int stadium_id { get; set; }
-    }
+    public int Id { get; set; }
+
+    public string? MatchDate { get; set; }
+
+    public int? Weekno { get; set; }
+
+    public string? Club1 { get; set; }
+
+    public string? Club2 { get; set; }
+
+    public int? Championshipid { get; set; }
+
+    public int? StadiumId { get; set; }
+
 }
