@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Backend.Controllers
 {
@@ -23,6 +24,13 @@ namespace Backend.Controllers
         public IEnumerable<Club> getAllClubsInChamp(string id)
         {
             return _appDbManager.getAllClubsInChampionship(_sqlconn, Convert.ToInt32(id));
+        }
+
+        [HttpPost]
+        [Route("Add")]
+        public ActionResult<IActionResult> add_club(Club club)
+        {
+            return (Convert.ToBoolean(_appDbManager.add_club(_sqlconn, club))) ? Ok() : BadRequest();
         }
     }
 }
