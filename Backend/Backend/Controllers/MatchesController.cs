@@ -36,6 +36,12 @@ namespace Backend.Controllers
         {
             return (Convert.ToBoolean(_appDbManager.addMatch(_sqlconn,m)))?  Ok():BadRequest();
         }
-        
+        [HttpGet]
+        [Route("GetMatch/{id}")]
+        public IEnumerable<Match> getmatch(string id)
+        {
+            return _appDbManager.get_match_data(_sqlconn, Convert.ToInt32(id));
+        }
+
     }
 }

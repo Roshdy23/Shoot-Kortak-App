@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Data;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Backend
 {
@@ -76,27 +77,29 @@ namespace Backend
             }
             return list;
         }
-        public  int addMatch(SqlConnection conn,Match m)
+        public int addMatch(SqlConnection conn, Match m)
         {
+
             string date = m.MatchDate.Substring(6) + '-' + m.MatchDate.Substring(0,2) + '-' + m.MatchDate.Substring(3,2);
             string query = $@"insert into matches(MatchDate,Weekno,Club1,Club2,Championshipid,StadiumId)
                               values ('{date}',{m.Weekno},'{m.Club1}','{m.Club2}',{m.Championshipid},{m.StadiumId})";
             int res=-1;
+
             conn.Open();
             SqlCommand sqlCommand = new SqlCommand(query, conn);
             try
             {
-            sqlCommand.ExecuteNonQuery();
-                res= 200;
+                sqlCommand.ExecuteNonQuery();
+                res = 200;
             }
             catch (Exception ex)
             {
-                res= 0;
+                res = 0;
             }
             conn.Close();
             return res;
         }
-        public IEnumerable<Club> getAllClubsInChampionship(SqlConnection conn,int champ_id)
+        public IEnumerable<Club> getAllClubsInChampionship(SqlConnection conn, int champ_id)
         {
             string query = $@"select * from clubs
                                 where clubs.Id in(
@@ -150,5 +153,41 @@ namespace Backend
             }
             return list;
         }
+
+        public IEnumerable<Club> add_club(SqlConnection conn, Club club)
+        {
+            string query = "insert into clubs (Created_At,name,logo,stadium_home) values(" + club.CreatedAt + ",'" + club.Name + "','" + club.Logo + "',"+ club.StadiumHome + ")";
+            conn.Open();
+            SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            List<Club> list = new List<Club>();
+            list.Add(club);
+            return list;
+
+        }
+
+        public IEnumerable<Match> get_match_data(SqlConnection conn, int id)
+        {
+            List<Match> list = new List<Match>();
+            string query = "select * from matches where id = " + id + "";
+            conn.Open();
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            conn.Close();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Match match = new Match();
+                match.Id = Convert.ToInt16(dt.Rows[i]["id"]);
+                match.Club1 = Convert.ToString(dt.Rows[i]["club1"]);
+                match.Club2 = Convert.ToString(dt.Rows[i]["club2"]);
+                match.Championshipid = Convert.ToInt16(dt.Rows[i]["championshipid"]);
+                list.Add(match);
+            }
+            return list;
+
+        }
+
     }
 }
