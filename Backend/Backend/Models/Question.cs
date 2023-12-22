@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace Back_End.Models;
 
 public partial class Question
@@ -20,4 +18,5 @@ public partial class Question
     public string? TheCorrectAnswer { get; set; }
 
     public int? QuizId { get; set; }
+}
 
