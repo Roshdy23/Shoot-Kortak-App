@@ -36,6 +36,6 @@ namespace Backend.Controllers
         {
             return (Convert.ToBoolean(_appDbManager.addMatch(_sqlconn,m)))?  Ok():BadRequest();
         }
-        
+
     }
 }
