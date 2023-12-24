@@ -11,22 +11,37 @@ namespace Backend.Controllers
     public class StoresController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        SqlConnection _sqlConnection;
-        AppDBmanager _dbmanager;
-
+        SqlConnection _sqlconn;
+        AppDBmanager _appDbManager;
         public StoresController(IConfiguration configuration)
         {
+
             _configuration = configuration;
-            _sqlConnection = new SqlConnection(_configuration.GetConnectionString("conn"));
-            _dbmanager = new AppDBmanager();
-            _sqlConnection.Open();
+            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn"));
+            _appDbManager = new AppDBmanager();
+            _sqlconn.Open();
+         }
+
+        [HttpGet]
+        [Route("Get")]
+        public IEnumerable<Store> getAllStores()
+        {
+            return _appDbManager.getAllStores(_sqlconn);
         }
 
+        [HttpGet]
+        [Route("Get/{stadiumid}")]
+        public IEnumerable<Store> getOneStore(string stad_id)
+        {
+            return _appDbManager.getOneStore(_sqlconn,Convert.ToInt32(stad_id));
+        }
+      
         [HttpGet]
         [Route("Store'sItems/{storeID}")]
         public IEnumerable<Dictionary<String, object>> StoreItems( int storeID) 
         {
-            return _dbmanager.AllStoreItems(_sqlConnection, storeID);
+            return _dbmanager.AllStoreItems(_sqlconn, storeID);
         }
+
     }
 }
