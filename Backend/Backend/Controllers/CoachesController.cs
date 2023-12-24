@@ -2,39 +2,29 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using System.Data;
-
+using Microsoft.Extensions.Configuration;
 namespace Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StoresController : ControllerBase
+    public class CoachesController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         SqlConnection _sqlconn;
         AppDBmanager _appDbManager;
-        public StoresController(IConfiguration configuration)
+        public CoachesController(IConfiguration configuration)
         {
-
             _configuration = configuration;
             _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn"));
             _appDbManager = new AppDBmanager();
             _sqlconn.Open();
-         }
-
-        [HttpGet]
-        [Route("Get")]
-        public IEnumerable<Store> getAllStores()
-        {
-            return _appDbManager.getAllStores(_sqlconn);
         }
 
-        [HttpGet]
-        [Route("Get/{stadiumid}")]
-        public IEnumerable<Store> getOneStore(string stad_id)
+        [HttpPost]
+        [Route("Add")]
+        public async Task<IActionResult> addCoach([FromBody] Coach c)
         {
-            return _appDbManager.getOneStore(_sqlconn,Convert.ToInt32(stad_id));
+            return (Convert.ToBoolean(_appDbManager.addCoach(_sqlconn, c)) ? Ok() : BadRequest());
         }
-
     }
 }

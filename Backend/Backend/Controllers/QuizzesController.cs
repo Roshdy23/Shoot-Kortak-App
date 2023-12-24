@@ -28,5 +28,13 @@ namespace Backend.Controllers
         {
             return _dbmanager.AllQuizzes(_connection);
         }
+
+        [HttpGet]
+        [Route("GetJournalist/{ssn}")]
+
+        public IEnumerable<Quiz> getAllQuizzesOfJour(string ssn)
+        {
+            return _dbmanager.getAllQuizzesOfJour(_connection, Convert.ToInt32(ssn));
+        }
     }
 }

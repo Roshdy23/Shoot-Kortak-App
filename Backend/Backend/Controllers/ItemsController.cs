@@ -28,10 +28,10 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        [Route("AddStore'sItem")]
-        public IActionResult addStoreItem([FromBody] StoreItem storeItem) 
+        [Route("updateItem")]
+        public async Task<IActionResult> updateItem([FromBody] Item item, string id)
         {
-            return Convert.ToBoolean(_appDbManager.addStoreItem(_sqlconn,storeItem))?Ok():BadRequest();
+            return (Convert.ToBoolean(_appDbManager.updateItem(_sqlconn, item, Convert.ToInt32(id)))) ? Ok() : BadRequest();
         }
     }
 }
