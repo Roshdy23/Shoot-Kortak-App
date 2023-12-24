@@ -1,32 +1,28 @@
 ﻿using Back_End.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using System.Data;
 
 namespace Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StoresController : ControllerBase
+    public class PlayersController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         SqlConnection _sqlConnection;
-        AppDBmanager _dbmanager;
-
-        public StoresController(IConfiguration configuration)
+        AppDBmanager _appDbManager;
+        public PlayersController(IConfiguration configuration)
         {
             _configuration = configuration;
             _sqlConnection = new SqlConnection(_configuration.GetConnectionString("conn"));
-            _dbmanager = new AppDBmanager();
+            _appDbManager = new AppDBmanager();
             _sqlConnection.Open();
         }
-
-        [HttpGet]
-        [Route("Store'sItems/{storeID}")]
-        public IEnumerable<Dictionary<String, object>> StoreItems( int storeID) 
+        [HttpPut]
+        [Route("UpdatePlayer/{playerID}")]
+        public IActionResult updatePlayer(int playerID, [FromBody] Player player)
         {
-            return _dbmanager.AllStoreItems(_sqlConnection, storeID);
+            return Convert.ToBoolean(_appDbManager.updatePlayer(_sqlConnection, playerID, player)) ? Ok() : BadRequest(); 
         }
     }
 }

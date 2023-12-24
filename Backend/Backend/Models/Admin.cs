@@ -1,8 +1,7 @@
 ﻿
 namespace Back_End.Models;
 
-public partial class Admin
+public partial class Admin:User
 {
-    public int Ssn { get; set; }
 
 }
