@@ -1,4 +1,4 @@
-﻿using Backend.Models;
+﻿using Back_End.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -15,8 +15,9 @@ namespace Backend.Controllers
         public MatchesController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn").ToString());
+            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn"));
             _appDbManager = new AppDBmanager();
+            _sqlconn.Open();
         }
         [HttpGet]
         [Route("Get")]
@@ -36,6 +37,29 @@ namespace Backend.Controllers
         {
             return (Convert.ToBoolean(_appDbManager.addMatch(_sqlconn,m)))?  Ok():BadRequest();
         }
+
+        [HttpGet]
+        [Route("GetMatch/{id}")]
+        public IEnumerable<Match> getmatch(string id)
+        {
+            return _appDbManager.getMatchData(_sqlconn, Convert.ToInt32(id));
+        }
+
+        [HttpPost]
+        [Route("update/{id}")]
+
+        public async Task<IActionResult> updateMatch([FromBody]Match match,string id)
+        {
+            return (Convert.ToBoolean(_appDbManager.updateMatch(_sqlconn, match, Convert.ToInt32(id))))?Ok():BadRequest();
+        }
+
+        [HttpGet]
+        [Route("GetMatchesDate")]
+        public IEnumerable<Match> getMatchesByDate(string date)
+        {
+            return _appDbManager.getMatchesByDate(_sqlconn, date);
+        }
+
 
     }
 }
