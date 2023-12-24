@@ -16,7 +16,8 @@ namespace Backend.Controllers
         public ClubsController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn").ToString());
+            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn"));
+            _sqlconn.Open();
             _appDbManager = new AppDBmanager();
         }
         [HttpGet]
@@ -28,16 +29,30 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("Add")]
-        public  ActionResult<IActionResult> add_club(Club club)
+        public  ActionResult<IActionResult> addClub(Club club)
         {
-            return (Convert.ToBoolean(_appDbManager.add_club(_sqlconn, club))) ? Ok() : BadRequest();
+            return (Convert.ToBoolean(_appDbManager.addClub(_sqlconn, club))) ? Ok() : BadRequest();
         }
 
         [HttpPost]
         [Route("update/{id}")]
-        public ActionResult<IActionResult> update_club(Club club)
+        public ActionResult<IActionResult> updateClub(Club club)
         {
-            return (Convert.ToBoolean(_appDbManager.add_club(_sqlconn, club))) ? Ok() : BadRequest();
+            return (Convert.ToBoolean(_appDbManager.addClub(_sqlconn, club))) ? Ok() : BadRequest();
+        }
+
+        [HttpGet]
+        [Route("AllClubs")]
+        public IEnumerable<Club> getClubs()
+        {
+            return _appDbManager.getAllClubs(_sqlconn);
+        }
+
+        [HttpPut]
+        [Route("UpdateClub'sCoach/{clubId}")]
+        public IActionResult updateCoach(int clubId,string newCoach)
+        {
+            return Convert.ToBoolean(_appDbManager.updateCoach(_sqlconn,clubId, newCoach))?Ok():BadRequest();
         }
     }
 }
