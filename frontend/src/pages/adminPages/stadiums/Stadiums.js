@@ -1,11 +1,19 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import { Link, useParams } from "react-router-dom";
-import Dropdown from "../../../components/Dropdown";
+import { Link, useParams, useEffect } from "react-router-dom";
+import { useState } from "react";
+import { baseUrl } from "../../../constants/url.constants";
 
 function Stadiums() {
     let updatestadiumID = useParams();
-    /*---------------->>>>>>>>>>>>>>>>>>>>>>>>>*/ updatestadiumID = 1;
+    const [stadiums, setStadiums] = useState([{ id: 2, name: "Borj Alarab", location: "Alex" }, { id: 3, name: "Petrosport", location: "Cairo" }, { id: 4, name: "Alahly We Alsalam", location: "Cairo" }]);
+    // useEffect(() => {
+    //     fetch(`${baseUrl}/Stadiums/Get`)
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             setStadiums(data);
+    //         })
+    // }, [])
     return (
         <>
             <div className="container mt-5">
@@ -23,31 +31,23 @@ function Stadiums() {
                                 <tr>
                                     <th scope="col">Name</th>
                                     <th scope="col">Location</th>
+                                    <th scope="col">Capacity</th>
                                     <th scope="col">Update</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Alahly We Elsalam</td>
-                                    <td>Cairo</td>
-                                    <td><Link class="btn btn-info" to={`/stadiums/update/${updatestadiumID}`}>Update</Link></td>
-                                </tr>
-                                <tr>
-                                    <td>Cairo stadium</td>
-                                    <td>Cairo</td>
-                                    <td><Link class="btn btn-info" to={`/stadiums/update/${updatestadiumID}`}>Update</Link></td>
-                                </tr>
-                                <tr>
-                                    <td>Borj-Alarab</td>
-                                    <td>Alex</td>
-                                    <td><Link class="btn btn-info" to={`/stadiums/update/${updatestadiumID}`}>Update</Link></td>
-                                </tr>
+                                {stadiums.map((stad, index) => {
+                                    return (
+                                        <tr>
+                                            <td>{stad.name}</td>
+                                            <td>{stad.location}</td>
+                                            <td>{stad.Capacity}</td>
+                                            <td><Link class="btn btn-info" to={`/stadiums/update/${stad.id}`}>Update</Link></td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
-                    </div>
-                    <div className="dropdown col col-lg-2">
-                        <h5>Filter Stadiums</h5>
-                        <Dropdown title="Locations" vals={["Cairo", "Giza", "Alex", "Aswan"]} />
                     </div>
                 </div>
             </div >

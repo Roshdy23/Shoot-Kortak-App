@@ -10,7 +10,9 @@ import { Link } from 'react-router-dom';
 import Dropdownx from '../../../components/Dropdownx';
 import { baseUrl } from "../../../constants/url.constants";
 
+
 function AddMatch() {
+    const [check, setCheck] = useState(-1);
     const [dateValue, setDateValue] = useState(new Date());
     const [weekno, setWeekno] = useState('');
     const [champ, setChamp] = useState('Championships');
@@ -59,7 +61,7 @@ function AddMatch() {
     const HandelAdd = () => {
         let tmp = dateValue.toLocaleDateString().toString();
         console.log(tmp);
-        if (club1 == "" || club2 == "" || stadium == "Stadiums" || champ == "Championships" || weekno == "") { HandelInsertion() }
+        if (club1 == "" || club2 == "" || stadium == "Stadiums" || champ == "Championships" || weekno == "") { setCheck(0) }
         else {
             fetch(`${baseUrl}/Matches/Add`, {
                 method: 'POST',
@@ -76,10 +78,9 @@ function AddMatch() {
                     stadium_id: stadiumid,
                 })
             }).then((res) => res)
+                .catch((ex) => ex);
+            setCheck(1);
         }
-    }
-    const HandelInsertion = () => {
-
     }
     return (
         <>
@@ -100,7 +101,6 @@ function AddMatch() {
                             ))}
                         </ul>
                     </div>
-                    {/* <Dropdownx sett1={setChamp} title={champ} vals={championships.map((ch) => { return ch.name })} /> */}
                 </div>
                 <div className="row mt-3">
                     <div className="col col-lg-6">
@@ -159,6 +159,9 @@ function AddMatch() {
                     </div>
                 </div>
                 <button class="btn btn-success col col-lg-1 mt-3" onClick={HandelAdd} >Add</button>
+            </div>
+            <div className='container mt-3'>
+                {check == 0 ? <h6 style={{ color: "red" }}>Please Insert All The Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Added Successfully</h6> : <p></p>}
             </div>
         </>
     )
