@@ -34,9 +34,10 @@ namespace Backend.Controllers
         }
         [HttpGet]
         [Route("GetStadium")]
-        public IEnumerable<Stadium> getStadium(int  id)
+        public IEnumerable<Stadium> getStadium(int id)
         {
             return _appDbManager.getStadium(_sqlconn, Convert.ToInt32(id));
+        }
 
         [HttpPut()]
         [Route("UpdateStadium/{StadiumId}")]

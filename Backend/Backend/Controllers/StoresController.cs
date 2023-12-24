@@ -40,7 +40,7 @@ namespace Backend.Controllers
         [Route("Store'sItems/{storeID}")]
         public IEnumerable<Dictionary<String, object>> StoreItems( int storeID) 
         {
-            return _dbmanager.AllStoreItems(_sqlconn, storeID);
+            return _appDbManager.AllStoreItems(_sqlconn, storeID);
         }
 
     }
