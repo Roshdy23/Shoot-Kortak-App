@@ -742,7 +742,7 @@ namespace Backend
             }
         }
 
-        public int updateCoach(SqlConnection sqlConnection, int clubID, string name)
+        public int updateClubCoach(SqlConnection sqlConnection, int clubID, string name)
         {
             string fName = "", lName = "";
             bool first = true;
@@ -1092,6 +1092,30 @@ namespace Backend
                 items.Add(row);
             }
             return items;
+        }
+
+        public IEnumerable<Dictionary<object, object>> getItemInStore(SqlConnection conn, int itemid, int stadid)
+        {
+            string query = @$"select i.item_image ,i.item_name,i.item_price,si.qty  from items as i  , store_items as si where i.id={itemid} 
+          and si.stadium_id = {stadid} and si.item_id ={itemid}";
+
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<Dictionary<object, object>> d = new List<Dictionary<object, object>>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Dictionary<object, object> dob = new();
+                dob.Add("Name", dt.Rows[i]["item_name"]);
+
+                dob.Add("qty", dt.Rows[i]["qty"]);
+
+                dob.Add("price", dt.Rows[i]["item_price"]);
+
+                dob.Add("image", dt.Rows[i]["item_image"]);
+                d.Add(dob);
+            }
+            return d;
         }
     }
 }

@@ -49,10 +49,10 @@ namespace Backend.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateClub'sCoach/{clubId}")]
-        public IActionResult updateCoach(int clubId,string newCoach)
+        [Route("UpdateClubCoach/{clubId}")]
+        public IActionResult updateClubCoach(int clubId,string newCoach)
         {
-            return Convert.ToBoolean(_appDbManager.updateCoach(_sqlconn,clubId, newCoach))?Ok():BadRequest();
+            return Convert.ToBoolean(_appDbManager.updateClubCoach(_sqlconn,clubId, newCoach))?Ok():BadRequest();
         }
     }
 }
