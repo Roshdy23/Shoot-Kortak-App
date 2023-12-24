@@ -28,16 +28,16 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("Add")]
-        public  ActionResult<IActionResult> add_club(Club club)
+        public  async Task<IActionResult> add_club(Club club)
         {
             return (Convert.ToBoolean(_appDbManager.add_club(_sqlconn, club))) ? Ok() : BadRequest();
         }
 
         [HttpPost]
         [Route("update/{id}")]
-        public ActionResult<IActionResult> update_club(Club club)
+        public  async Task<IActionResult> update_club(Club club)
         {
-            return (Convert.ToBoolean(_appDbManager.add_club(_sqlconn, club))) ? Ok() : BadRequest();
+            return (Convert.ToBoolean(_appDbManager.update_club(_sqlconn, club))) ? Ok() : BadRequest();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace Back_End.Models;
 
-public partial class Player
+public partial class Player 
 {
     public int Id { get; set; }
 

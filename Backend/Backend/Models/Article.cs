@@ -7,4 +7,6 @@ public partial class Article
 
     public int? JournalistSsn { get; set; }
 
+    public string articleDate { get; set; }
+
 }

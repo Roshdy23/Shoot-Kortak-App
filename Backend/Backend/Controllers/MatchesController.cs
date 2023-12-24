@@ -45,10 +45,17 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("update/{id}")]
-        public async Task<IActionResult> update_match([FromBody]Match match)
+        public async Task<IActionResult> update_match([FromBody]Match match,string id)
         {
-            return (Convert.ToBoolean(_appDbManager.update_match(_sqlconn, match)))?Ok():BadRequest();
+            return (Convert.ToBoolean(_appDbManager.update_match(_sqlconn, match, Convert.ToInt32(id))))?Ok():BadRequest();
 
+        }
+
+        [HttpGet]
+        [Route("GetMatchesDate")]
+        public IEnumerable<Match> getMatchesByDate(string date)
+        {
+            return _appDbManager.getMatchesByDate(_sqlconn, date);
         }
 
     }

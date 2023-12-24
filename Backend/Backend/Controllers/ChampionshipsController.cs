@@ -23,18 +23,26 @@ namespace Backend.Controllers
         public IEnumerable<Championship> getAllChampionships()
         {
             return _appDbManager.getAllChampionships(_sqlconn);
-        }
+        } 
         [HttpPost]
         [Route("Add")]
-        public ActionResult<IActionResult> add_champ([FromBody ]Championship champ)
+        public async Task<IActionResult> add_champ([FromBody ]Championship champ)
         {
             return (Convert.ToBoolean(_appDbManager.add_champ(_sqlconn, champ))) ? Ok() : BadRequest();
         }
         [HttpPost]
         [Route("update/{id}")]
-        public ActionResult<IActionResult> update_champ(Championship champ)
+        public async Task<IActionResult> update_champ(Championship champ)
         {
             return (Convert.ToBoolean(_appDbManager.update_champ(_sqlconn, champ))) ? Ok() : BadRequest();
         }
+        [HttpGet]
+        [Route("Getchamp")]
+        public IEnumerable<Championship> getChampionship(string id)
+        {
+            return _appDbManager.getChamp(_sqlconn,Convert.ToInt32(id)); 
+        }
+
+        
     }
 }
