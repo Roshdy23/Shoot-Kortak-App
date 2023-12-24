@@ -1,9 +1,9 @@
 ﻿
 namespace Back_End.Models;
 
-public partial class Player 
+public partial class Player:MatchStaff
+
 {
-    public int Id { get; set; }
 
     public int? ClubId { get; set; }
 

@@ -15,8 +15,9 @@ namespace Backend.Controllers
         public MatchesController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn").ToString());
+            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn"));
             _appDbManager = new AppDBmanager();
+            _sqlconn.Open();
         }
         [HttpGet]
         [Route("Get")]
@@ -40,15 +41,15 @@ namespace Backend.Controllers
         [Route("GetMatch/{id}")]
         public IEnumerable<Match> getmatch(string id)
         {
-            return _appDbManager.get_match_data(_sqlconn, Convert.ToInt32(id));
+            return _appDbManager.getMatchData(_sqlconn, Convert.ToInt32(id));
         }
 
         [HttpPost]
         [Route("update/{id}")]
-        public async Task<IActionResult> update_match([FromBody]Match match,string id)
-        {
-            return (Convert.ToBoolean(_appDbManager.update_match(_sqlconn, match, Convert.ToInt32(id))))?Ok():BadRequest();
 
+        public async Task<IActionResult> updateMatch([FromBody]Match match,string id)
+        {
+            return (Convert.ToBoolean(_appDbManager.updateMatch(_sqlconn, match, Convert.ToInt32(id))))?Ok():BadRequest();
         }
 
         [HttpGet]

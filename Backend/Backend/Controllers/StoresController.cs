@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace Backend.Controllers
 {
@@ -16,9 +17,10 @@ namespace Backend.Controllers
         {
 
             _configuration = configuration;
-            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn").ToString());
+            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn"));
             _appDbManager = new AppDBmanager();
-        }
+            _sqlconn.Open();
+         }
 
         [HttpGet]
         [Route("Get")]
@@ -33,7 +35,13 @@ namespace Backend.Controllers
         {
             return _appDbManager.getOneStore(_sqlconn,Convert.ToInt32(stad_id));
         }
+      
+        [HttpGet]
+        [Route("Store'sItems/{storeID}")]
+        public IEnumerable<Dictionary<String, object>> StoreItems( int storeID) 
+        {
+            return _dbmanager.AllStoreItems(_sqlconn, storeID);
+        }
 
-       
     }
 }
