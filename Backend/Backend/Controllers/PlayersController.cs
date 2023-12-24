@@ -24,5 +24,12 @@ namespace Backend.Controllers
         {
             return Convert.ToBoolean(_appDbManager.updatePlayer(_sqlConnection, playerID, player)) ? Ok() : BadRequest(); 
         }
+
+        [HttpPost]
+        [Route("Add")]
+        public async Task<IActionResult> addPlayer([FromBody] Player p)
+        {
+            return (Convert.ToBoolean(_appDbManager.addPlayer(_sqlConnection, p))) ? Ok() : BadRequest();
+        }
     }
 }

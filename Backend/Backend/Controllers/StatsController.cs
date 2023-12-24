@@ -50,5 +50,20 @@ namespace Backend.Controllers
         {
             return _appDbManager.TopCleanSheets(_sqlconn);
         }
+
+        [HttpPost]
+        [Route("Add")]
+
+        public async Task<IActionResult> addPlayerStatInChamp([FromBody] Stat s)
+        {
+            return (Convert.ToBoolean(_appDbManager.addPlayerStatInChamp(_sqlconn, s)) ? Ok() : BadRequest());
+        }
+
+        [HttpGet]
+        [Route("GetPlayersStat")]
+        public IEnumerable<Dictionary<object, object>> getPlayersStats(string clubid, string champid)
+        {
+            return _appDbManager.getPlayersStat(_sqlconn, Convert.ToInt32(clubid), Convert.ToInt32(champid));
+        }
     }
 }

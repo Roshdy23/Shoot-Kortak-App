@@ -1,4 +1,4 @@
-﻿using Back_End.Models;
+using Back_End.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -24,18 +24,27 @@ namespace Backend.Controllers
         public IEnumerable<Championship> getAllChampionships()
         {
             return _appDbManager.getAllChampionships(_sqlconn);
-        }
+        } 
         [HttpPost]
         [Route("Add")]
-        public ActionResult<IActionResult> addChamp([FromBody ]Championship champ)
+        public async Task<IActionResult> addChamp([FromBody ]Championship champ)
         {
             return (Convert.ToBoolean(_appDbManager.addChamp(_sqlconn, champ))) ? Ok() : BadRequest();
         }
         [HttpPost]
         [Route("update/{id}")]
-        public ActionResult<IActionResult> updateChamp(Championship champ)
+
+        public async Task<IActionResult> updateChamp(Championship champ)
         {
             return (Convert.ToBoolean(_appDbManager.updateChamp(_sqlconn, champ))) ? Ok() : BadRequest();
         }
+        [HttpGet]
+        [Route("Getchamp")]
+        public IEnumerable<Championship> getChampionship(string id)
+        {
+            return _appDbManager.getChamp(_sqlconn,Convert.ToInt32(id)); 
+        }
+
+        
     }
 }
