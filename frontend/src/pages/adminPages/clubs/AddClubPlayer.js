@@ -9,9 +9,9 @@ import DropdownLabel from '../../../components/DropdownWithLabel';
 import { Link, useParams } from 'react-router-dom';
 import { baseUrl } from '../../../constants/url.constants';
 
-function AddClubPlayers() {
+function AddClubPlayer() {
     const [check, setCheck] = useState(-1);
-    const { clubID } = useParams();
+    let { clubID } = useParams();
     const [currClub, setCurrClub] = useState({ id: 2, name: "AL Ahly" })
     const [frstName, setFrstName] = useState("");
     const [scndName, setScndName] = useState("");
@@ -89,7 +89,7 @@ function AddClubPlayers() {
     return (
         <>
             <div className="container">
-                <h3 className='mt-3'>ADD PLAYERS TO: {currClub.name}</h3>
+                <h3 className='mt-3'>ADD NEW PLAYER TO: {currClub.name}</h3>
                 <div className='row'></div>
                 <div className='row mt-3'>
                     <div className='col col-lg-9'>
@@ -182,7 +182,6 @@ function AddClubPlayers() {
                     </div>
                 </div>
                 <button class="btn btn-success col col-lg-1" onClick={HandelAdd} >Add</button>
-                <Link class="btn btn-danger ms-4 col col-lg-3" to={`/clubs/add/${clubID}/addcoach`}>Finish and Proceed to Add Club's Coach</Link>
                 <div className='ow mt-3'>
                     {check == 0 ? <h6 style={{ color: "red" }}>Please Insert all Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Added Successfully</h6> : <p></p>}
                 </div>
@@ -190,4 +189,4 @@ function AddClubPlayers() {
         </>
     )
 }
-export default AddClubPlayers;
+export default AddClubPlayer;

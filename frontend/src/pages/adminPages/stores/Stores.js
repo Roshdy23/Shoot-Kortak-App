@@ -10,7 +10,14 @@ function Stores() {
     const [stores, setStores] = useState([{ stadiumid: 2, name: "Borj Alarab Store", profit: 25000, itmCount: 12 },
     { stadiumid: 3, name: "Alex Stadium Store", profit: 14000, itmCount: 20 },
     { stadiumid: 4, name: "Petrosport Store", profit: 10000, itmCount: 18 }]);
+    const [stadiums, setStadiums] = useState([{ id: 2, name: "Borj Alarab", location: "Alex" }, { id: 3, name: "Petrosport", location: "Cairo" }, { id: 4, name: "Alahly We Alsalam", location: "Cairo" }]);
+
     useEffect(() => {
+        fetch(`${baseUrl}/Stadiums/Get`)
+            .then((res) => res.json())
+            .then((data) => {
+                setStadiums(data);
+            }).catch((ex) => console.log(ex));
         fetch(`${baseUrl}/Stores/Get`)
             .then((res) => res.json())
             .then((data) => {
