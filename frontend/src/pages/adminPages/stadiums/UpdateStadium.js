@@ -12,51 +12,55 @@ import { baseUrl } from '../../../constants/url.constants';
 
 
 function UpdateStadium() {
+    const [check, setCheck] = useState(-1);
     const [startDate, setStartDate] = useState(new Date());
-    const [newName, setNewName] = useState("New Name");
-    const [newImage, setNewImage] = useState("New Image URl");
-    const [newCapacity, setNewCapacity] = useState("12");
-    const [stadData, setStadData] = useState({
-        id: 3,
-        name: "Borj Alarab",
-        width: "1",
-        Capacity: "75000",
-        length: "3",
-        image: "https:/Borj+Alarab/image01",
-        location: "https:/googlemaps/location123",
-        createdAt: "1940"
-    });
-    let Stadiumid = useParams();
+    const [newName, setNewName] = useState("");
+    const [newImage, setNewImage] = useState("");
+    const [newCapacity, setNewCapacity] = useState("");
+    const [stadData, setStadData] = useState([{}]);
+    let { updatestadiumID } = useParams();
     useEffect(() => {
-        fetch(`${baseUrl}/Stadiums/GetStadium/${Stadiumid}`)
+        fetch(`${baseUrl}/Stadiums/GetStad/${updatestadiumID}`)
             .then((res) => res.json())
-            .then((data) => setStadData(data)).catch((ex) => ex)
+            .then((data) => {
+                setStadData(data);
+            })
+            .catch((ex) => console.log(ex));
     }, [])
     const HandelUpdate = () => {
-        if (newName == "New Name" && newImage == "New Image") {
-            //<Alert text="insert new values to update"/>
+        if (newName == "" && newImage == "" && newCapacity == "") {
+            setCheck(0);
         }
         else {
-            let myname = (newName === "New Name") ? stadData.name : newName;
-            let myimg = (newImage === "New Image") ? stadData.image : newImage;
-            let mycap = (newCapacity === "12") ? stadData.Capacity : newCapacity;
-            fetch(`${baseUrl}/Stadiums/UpdateStadium/${Stadiumid}`, {
+            let myname = (newName === "") ? stadData[0].name : newName;
+            let myimg = (newImage === "") ? stadData[0].image : newImage;
+            let mycap = (newCapacity === "") ? stadData[0].capacity : newCapacity;
+            fetch(`${baseUrl}/Stadiums/UpdateStadium/${updatestadiumID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: stadData.id,
+                    id: stadData[0].id,
                     name: myname,
-                    Capacity: mycap,
+                    width: stadData[0].width,
+                    capacity: mycap,
+                    length: stadData[0].length,
                     image: myimg,
+                    location: stadData[0].location,
+                    createdAt: stadData[0].createdAt,
                 })
             })
-                .then((res) => res)
+                .then((res) => res).catch((ex) => console.log(ex));
+            setCheck(1);
         }
+        setTimeout(() => {
+            // set a timer to hide the element after 3 seconds
+            setCheck(-1);
+        }, 1000);
     }
     const Handelnewname = (event) => {
-        setNewName(event.targret.value);
+        setNewName(event.target.value);
     }
     const Handelnewimage = (event) => {
         setNewImage(event.target.value);
@@ -71,25 +75,25 @@ function UpdateStadium() {
                     <h3>UPDATE STADIUM INFO</h3>
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Stadium Name: ${stadData.name}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Stadium Name: ${stadData[0].name}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Stadium Location: ${stadData.location}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Stadium Location: ${stadData[0].location}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Stadium Capacity: ${stadData.Capacity}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Stadium Capacity: ${stadData[0].capacity}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Stadium Width: ${stadData.width} KM`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Stadium Width: ${stadData[0].width} KM`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Stadium Lenght: ${stadData.length} KM`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Stadium Lenght: ${stadData[0].length} KM`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Stadium Image: ${stadData.image}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Stadium Image: ${stadData[0].image}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Stadium CreatedAt: ${stadData.createdAt}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Stadium CreatedAt: ${stadData[0].createdAt}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className='row mt-3'>
                     <div className='col col-lg-9'>
@@ -125,6 +129,9 @@ function UpdateStadium() {
                     HandelUpdate();
                 }}>Update</button>
                 <Link className="btn btn-danger col col-lg-1 mt-4 ms-5" to={"/stadiums"} >Cancel</Link>
+            </div>
+            <div className='container mt-3'>
+                {check == 0 ? <h6 style={{ color: "red" }}>Please Insert Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Updated Successfully</h6> : <p></p>}
             </div>
         </>
     )

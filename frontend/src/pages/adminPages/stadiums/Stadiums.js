@@ -1,19 +1,19 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import { Link, useParams, useEffect } from "react-router-dom";
-import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { baseUrl } from "../../../constants/url.constants";
 
 function Stadiums() {
-    let updatestadiumID = useParams();
+    let { updatestadiumID } = useParams();
     const [stadiums, setStadiums] = useState([{ id: 2, name: "Borj Alarab", location: "Alex" }, { id: 3, name: "Petrosport", location: "Cairo" }, { id: 4, name: "Alahly We Alsalam", location: "Cairo" }]);
-    // useEffect(() => {
-    //     fetch(`${baseUrl}/Stadiums/Get`)
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             setStadiums(data);
-    //         })
-    // }, [])
+    useEffect(() => {
+        fetch(`${baseUrl}/Stadiums/Get`)
+            .then((res) => res.json())
+            .then((data) => {
+                setStadiums(data);
+            }).catch((ex) => console.log(ex));
+    }, [])
     return (
         <>
             <div className="container mt-5">
@@ -41,7 +41,7 @@ function Stadiums() {
                                         <tr>
                                             <td>{stad.name}</td>
                                             <td>{stad.location}</td>
-                                            <td>{stad.Capacity}</td>
+                                            <td>{stad.capacity}</td>
                                             <td><Link class="btn btn-info" to={`/stadiums/update/${stad.id}`}>Update</Link></td>
                                         </tr>
                                     )

@@ -7,53 +7,78 @@ import { useParams } from 'react-router-dom';
 import { baseUrl } from '../../../constants/url.constants';
 
 function UpdateMatch(props) {
+    const [check, setCheck] = useState(-1);
     const [newDate, setNewDate] = useState(new Date());
-    const [stadiums, setStadiums] = useState([{ id: 2, name: "Borj" }, { id: 3, name: "Elarab" }, { id: 4, name: "Borj Elarab" }]);
-    const [newStadium, setNewStadium] = useState({ id: 10, name: "STADIUMS" });
-    const [tickets, setTickts] = useState();
-    const [matchChamp, setMatchChamp] = useState("match champonship");
-    const [matchStadium, setMatchStadium] = useState("Borj Elarab");
-    const [mdata, setMdata] = useState({
-        id: 3,
-        matchDate: "2023-span-span",
-        matchWeekNo: "5",
-        matchTeam1: "match team1",
-        matchTeam2: "match team2",
-        matchChampid: 4,
-        matchStadiumid: 2,
-    });
-    let matchid = useParams();
+    const [stadiums, setStadiums] = useState([{}]);
+    const [newStadium, setNewStadium] = useState({ id: -1, name: "STADIUMS" });
+    const [tickets, setTickts] = useState("");
+    const [matchChamp, setMatchChamp] = useState("");
+    const [matchStadium, setMatchStadium] = useState("");
+    const [mdata, setMdata] = useState([{}]);
+    let { updatematchID } = useParams();
     useEffect(() => {
-        fetch(`${baseUrl}/Matches/GetMatch/${matchid}`)
+        fetch(`${baseUrl}/Matches/GetMatch/${updatematchID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
             .then((res) => res.json())
-            .then((data) => setMdata(data)).catch((ex) => ex);
+            .then((data) => { setMdata(data) }).catch((ex) => console.log(ex));
+
         fetch(`${baseUrl}/Stadiums/Get`)
             .then((res) => res.json())
-            .then((data) => setStadiums(data)).catch((ex) => ex);
-        fetch(`${baseUrl}/Stadiums/Get/${mdata.matchStadiumid}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setTickts(data.capacity);
-                setMatchStadium(data.name);
-            }
-            ).catch((ex) => ex);
-        fetch(`${baseUrl}/Championships/GetChampionship/${mdata.matchChampid}`)
-            .then((res) => res.json())
-            .then((data) => setMatchChamp(data)).catch((ex) => ex);
+            .then((data) => setStadiums(data)).catch((ex) => console.log(ex));
     }, [])
-    const HandelUpdate = () => {
-        fetch(`${baseUrl}/Matches/Update`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: mdata.id,
-                matchNewDate: newDate,
-                matchNewStadium: newStadium
+    function ft() {
+        if (mdata[0].id) {
+            fetch(`${baseUrl}/Stadiums/GetStad/${mdata[0].stadiumId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
             })
-        })
-            .then((res) => res).catch((ex) => ex)
+                .then((res) => res.json())
+                .then((data) => {
+                    setTickts(data[0].capacity);
+                    setMatchStadium(data[0].name);
+                }
+                ).catch((ex) => console.log(ex));
+            fetch(`${baseUrl}/Championships/Getchamp/${mdata[0].championshipid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then((res) => res.json())
+                .then((data) => setMatchChamp(data[0].name)).catch((ex) => console.log(ex));
+        }
+    }
+    const HandelUpdate = () => {
+        let comp = new Date().toLocaleDateString();
+        let tmp = newDate.toLocaleDateString();
+        if (newStadium.name == "STADIUMS" && tmp == comp) { setCheck(0) }
+        else {
+            let newSt = newStadium.id == -1 ? mdata.matchStadiumid : newStadium.id;
+            fetch(`${baseUrl}/Matches/Update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: mdata.id,
+                    matchNewDate: tmp,
+                    matchNewStadium: newSt
+                })
+            })
+                .then((res) => res)
+                .catch((ex) => console.log(ex));
+            setCheck(1);
+        }
+        setTimeout(() => {
+            // set a timer to hide the element after 3 seconds
+            setCheck(-1);
+        }, 1000);
     }
     return (
         <>
@@ -63,19 +88,19 @@ function UpdateMatch(props) {
                     <input className="form-control" type="text" value={`Championship: ${matchChamp}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Team1: ${mdata.matchTeam1}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Team1: ${mdata[0].club1}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Team2: ${mdata.matchTeam2}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Team2: ${mdata[0].club2}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
                     <input className="form-control" type="text" value={`Tickets Quantity: ${tickets}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Week Number: ${mdata.matchWeekNo}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Week Number: ${mdata[0].weekno}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Match Date: ${mdata.matchDate}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Match Date: ${mdata[0].matchDate}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
                     <input className="form-control" type="text" value={`Match Stadium: ${matchStadium}`} aria-label="readonly input example" readonly />
@@ -102,6 +127,9 @@ function UpdateMatch(props) {
                 <button class="btn btn-info col col-lg-1 mt-3" onClick={() => {
                     HandelUpdate();
                 }}>Update</button>
+            </div>
+            <div className='container mt-3'>
+                {check == 0 ? <h6 style={{ color: "red" }}>Please Insert Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Updated Successfully</h6> : <p></p>}
             </div>
         </>
     )
