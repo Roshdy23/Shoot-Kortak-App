@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zDgHipXkPttYF1CSrx7MBezm5b10AUoHLlxLmLuSNuAfRI3J4/spO0Wu21DdnyYdb0qgM5bsv6mcVaZb00H0QA==",
+  "dgSpecHash": "YfoZzcKrzPPNDA9WRptP6XmX6WklTAZMd67WxKFNjI63qz32xa2Swy5kwYZju08Jdo8+CrFXXeEw4vIOeWZBzw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\elros\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
+  "projectFilePath": "C:\\Users\\elros\\projectDB\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\elros\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\elros\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

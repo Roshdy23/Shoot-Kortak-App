@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\elros\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj": {}
+    "C:\\Users\\elros\\projectDB\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\elros\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj": {
+    "C:\\Users\\elros\\projectDB\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\elros\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Users\\elros\\projectDB\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\elros\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
+        "projectPath": "C:\\Users\\elros\\projectDB\\Shoot-Kortak-App\\Backend\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\elros\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\elros\\Shoot-Kortak-App\\Backend\\Backend\\obj\\",
+        "outputPath": "C:\\Users\\elros\\projectDB\\Shoot-Kortak-App\\Backend\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\elros\\AppData\\Roaming\\NuGet\\NuGet.Config",
