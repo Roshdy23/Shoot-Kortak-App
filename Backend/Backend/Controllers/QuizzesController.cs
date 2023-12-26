@@ -36,5 +36,21 @@ namespace Backend.Controllers
         {
             return _dbmanager.getAllQuizzesOfJour(_connection, Convert.ToInt32(ssn));
         }
+        [HttpGet]
+        [Route("GetQuiz/{id}")]
+        public IEnumerable<Quiz> getQuizById(string id)
+        {
+            return _dbmanager.getQuizById(_connection, Convert.ToInt32(id));
+        }
+
+        [HttpPost]
+        [Route("AcceptOrRefuse")]
+        public async Task<IActionResult> setQuizState(string quizid, string state)
+        {
+           int temp= _dbmanager.setQuizState(_connection,Convert.ToInt32(quizid),Convert.ToInt32(state));
+            if (temp != 0)
+                return Ok();
+            return BadRequest();
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace Backend
 
 
 
-       private bool checkDate(string datenow, string date2)
+       private int checkDate(string datenow, string date2)
         {
 
            string month = "";
@@ -39,10 +39,6 @@ namespace Backend
 
                 year1 += datenow[i++];
             }
-
-
-            // year month day
-
             i = 0;
 
             string month2 = "";
@@ -89,25 +85,102 @@ namespace Backend
             int mcheck = Convert.ToInt32(month2);
             int dcheck = Convert.ToInt32(day2);
 
-            if (ynow > ycheck) return true;
-            if (ynow < ycheck) return false;
+            if (ynow > ycheck) return 1;
+            if (ynow < ycheck) return 0;
             if (ynow == ycheck)
             {
 
-                if (mnow > mcheck) return true;
-                if (mnow < mcheck) return false;
+                if (mnow > mcheck) return 1;
+                if (mnow < mcheck) return 0;
 
 
-                if (dnow > dcheck) return true;
+                if (dnow > dcheck) return 1;
 
-                if (dnow < dcheck) return false;
+                if (dnow < dcheck) return 0;
 
-                return false;
+                return -1;
 
             }
-            return false;
+            return 0;
            
             
+        }
+
+        private int checkDate2(string datenow, string datematch)
+        {
+
+            string month = "";
+            int i = 0;
+            while (datenow[i] != '/')
+            {
+                month += datenow[i++];
+            }
+
+            i++;
+            string day1 = "";
+            while (datenow[i] != '/')
+            {
+
+                day1 += datenow[i++];
+            }
+            i++;
+            int n = 4;
+            string year1 = "";
+            for (int j = 0; j < 4; j++)
+            {
+
+                year1 += datenow[i++];
+            }
+            i = 0;
+            //year month day
+            string year2 = "";
+            for (int j = 0; j < 4; j++)
+            {
+                year2 += datematch[i++];
+            }
+
+            i++;
+            string month2 = "";
+            while (datematch[i] != '/')
+            {
+                month2 += datematch[i++];
+            }
+            i++;
+            string day2 = "";
+            while (datematch[i] != ' ')
+            {
+                day2 += datematch[i++];
+            }
+
+
+            int ynow = Convert.ToInt32(year1);
+            int mnow = Convert.ToInt32(month);
+            int dnow = Convert.ToInt32(day1);
+
+            int ycheck = Convert.ToInt32(year2);
+            int mcheck = Convert.ToInt32(month2);
+            int dcheck = Convert.ToInt32(day2);
+
+            if (ynow > ycheck) return 1;
+            if (ynow < ycheck) return 0;
+            if (ynow == ycheck)
+            {
+
+                if (mnow > mcheck) return 1;
+                if (mnow < mcheck) return 0;
+
+
+                if (dnow > dcheck) return 1;
+
+                if (dnow < dcheck) return 0;
+
+                return -1;
+
+            }
+            return 0;
+
+
+
         }
 
         private bool checkClub(string club, SqlConnection conn)
@@ -199,7 +272,7 @@ namespace Backend
 
             return list;
         }
-        public IEnumerable<Championship> getAllChampionships(SqlConnection conn)
+        public IEnumerable<Championship> getAllFinishedChampionships(SqlConnection conn)
         {
             DateTime d=DateTime.Now;
              string date= d.ToString();
@@ -218,7 +291,7 @@ namespace Backend
                 champ.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
                 champ.StartingAt = Convert.ToDateTime(dt.Rows[i]["StartingAt"]);
                 string checkdate = Convert.ToString(dt.Rows[i]["EndingAt"]);
-                if (!checkDate(date, checkdate))continue;
+                if (checkDate(date, checkdate)==0||checkDate(date,checkdate)==-1)continue;
                 champ.EndingAt = Convert.ToDateTime(dt.Rows[i]["EndingAt"]);
                 champ.Name = Convert.ToString(dt.Rows[i]["Name"]);
                 champ.NoMatches = Convert.ToInt32(dt.Rows[i]["no_matches"]);
@@ -1348,6 +1421,129 @@ namespace Backend
                 d.Add(dob);
             }
             return d;
+
+        }
+
+
+        public IEnumerable<Championship> getAllCurrentChampiopnship(SqlConnection conn)
+        {
+            DateTime d = DateTime.Now;
+            string date = d.ToString();
+
+
+
+
+            string query = @"select * from championship";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<Championship> list = new List<Championship>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Championship champ = new Championship();
+                champ.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
+                champ.StartingAt = Convert.ToDateTime(dt.Rows[i]["StartingAt"]);
+                string checkdate = Convert.ToString(dt.Rows[i]["EndingAt"]);
+                if (checkDate(checkdate,date)==0) continue;
+                champ.EndingAt = Convert.ToDateTime(dt.Rows[i]["EndingAt"]);
+                champ.Name = Convert.ToString(dt.Rows[i]["Name"]);
+                champ.NoMatches = Convert.ToInt32(dt.Rows[i]["no_matches"]);
+                list.Add(champ);
+            }
+            return list;
+        }
+
+        public IEnumerable<Match> getAllFinishedMatches(SqlConnection conn)
+        {
+            DateTime d = DateTime.Now;
+            string date = d.ToString();
+
+
+
+
+            string query = @"select * from matches";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<Match> list = new List<Match>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Match match = new Match();
+                match.Id = Convert.ToInt32(dt.Rows[i]["id"]);
+                match.MatchDate = Convert.ToString(dt.Rows[i]["matchDate"]);
+                string checkdate = Convert.ToString(dt.Rows[i]["matchDate"]);
+                if (checkDate(date,checkdate) == 0) continue;
+               
+                match.Club1 = Convert.ToString(dt.Rows[i]["club1"]);
+                match.Club2 = Convert.ToString(dt.Rows[i]["club2"]);
+                if (dt.Rows[i]["weekno"].ToString() != "")
+                    match.Weekno = Convert.ToInt32(dt.Rows[i]["weekno"]);
+                else
+                    match.Weekno = null;
+
+                match.StadiumId = Convert.ToInt32(dt.Rows[i]["stadium_id"]);
+                list.Add(match);
+            }
+            return list;
+        }
+
+        public IEnumerable<Quiz> getQuizById(SqlConnection conn, int id)
+        {
+            string query = @$"select * from quizzes where id = {id}";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<Quiz> list = new List<Quiz>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Quiz quiz = new();
+                quiz.Id = Convert.ToInt32(dt.Rows[i]["ID"]);
+                quiz.JournalistSsn = Convert.ToInt32(dt.Rows[i]["journalist_ssn"]);
+                list.Add(quiz);
+
+            }
+            return list;
+        }
+
+        public int addResultToFinishedMatch(SqlConnection conn, int id, string result)
+        {
+            string query = @$"update matches set result='{result}' where id ={id}";
+
+            int res = -1;
+
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                res = 200;
+            }
+            catch (Exception ex)
+            {
+                res = 0;
+            }
+            return res;
+
+        }
+
+        public int setQuizState(SqlConnection conn, int id, int state)
+        {
+            int s = state == 1 ? 1 : 0;
+            string query = @$"update quizzes set state = {s} where id ={id}";
+
+
+            int res = -1;
+
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                res = 200;
+            }
+            catch (Exception ex)
+            {
+                res = 0;
+            }
+            return res;
 
         }
     }
