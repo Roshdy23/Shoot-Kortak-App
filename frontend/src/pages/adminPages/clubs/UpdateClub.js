@@ -17,14 +17,7 @@ function UpdateClub() {
     const [newLogo, setNewLogo] = useState("");
     const [newCreatedAt, setNewCreatedAt] = useState("");
     let { clubID } = useParams();
-    const [clubData, setClubData] = useState({
-        id: 3,
-        name: "AL Ahly",
-        createdAt: "1907",
-        marketValue: "5 Billions",
-        trophiesCount: "90",
-        logoUrl: "https://google.com/",
-    });
+    const [clubData, setClubData] = useState([{}]);
     useEffect(() => {
         fetch(`${baseUrl}/Clubs/GetClub/${clubID}`)
             .then((res) => res.json())
@@ -36,16 +29,16 @@ function UpdateClub() {
             setCheck(0);
         }
         else {
-            let myname = (newName == "") ? clubData.name : newName;
-            let mylogo = (newLogo == "") ? clubData.logoUrl : newLogo;
-            let mycreatedat = (newCreatedAt === "") ? clubData.createdAt : newCreatedAt;
-            fetch(`${baseUrl}/Clubs/UpdateClub/${clubID}`, {
+            let myname = (newName == "") ? clubData[0].name : newName;
+            let mylogo = (newLogo == "") ? clubData[0].logoUrl : newLogo;
+            let mycreatedat = (newCreatedAt === "") ? clubData[0].createdAt : newCreatedAt;
+            fetch(`${baseUrl}/Clubs/update/${clubID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: clubData.id,
+                    id: clubData[0].id,
                     name: myname,
                     createdAt: mycreatedat,
                     logoUrl: mylogo,
@@ -76,19 +69,16 @@ function UpdateClub() {
                     <h3>UPDATE CLUB INFO</h3>
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Club Name: ${clubData.name}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Club Name: ${clubData[0].name}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Created At: ${clubData.createdAt}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Created At: ${clubData[0].createdAt}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Market Value: ${clubData.marketValue}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Market Value: ${clubData[0].marketValue}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Trophies Count: ${clubData.trophiesCount}`} aria-label="readonly input example" readonly />
-                </div>
-                <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`LogoUrl: ${clubData.logoUrl}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`LogoUrl: ${clubData[0].logo}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className='row mt-3'>
                     <div className='col col-lg-9'>

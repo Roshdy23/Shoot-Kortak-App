@@ -1,5 +1,5 @@
 import DateTimePicker from 'react-datetime-picker';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
@@ -18,6 +18,18 @@ function AddClub() {
     const [clubName, setClubName] = useState("");
     const [trophies, setTrophiesCount] = useState("");
     const [logo, setLogo] = useState("");
+    const [stadiums, setStadiums] = useState([]);
+    const [stadium, setStadium] = useState('Stadiums');
+    const [stadiumid, setStadiumid] = useState("");
+
+
+    useEffect(() => {
+        fetch(`${baseUrl}/Stadiums/Get`)
+            .then((res) => res.json())
+            .then((data) => {
+                setStadiums(data);
+            }).catch((ex) => console.log(ex));
+    }, []);
     const HandelCreatedAt = (e) => {
         setCreatedAt(e.target.value)
     }
@@ -31,7 +43,7 @@ function AddClub() {
         setTrophiesCount(e.target.value);
     }
     const HandelAdd = () => {
-        if (clubName == "" || trophies == "" || logo == "" || createdAt == "") {
+        if (clubName == "" || logo == "" || createdAt == "" || stadiumid == "") {
             setCheck(0);
         }
         else {
@@ -44,7 +56,7 @@ function AddClub() {
                     id: '1',
                     name: clubName,
                     logo: logo,
-                    trophiesCount: trophies,
+                    stadiumHome: stadiumid,
                     createdAt: createdAt
                 })
             }).then((res) => res)
@@ -77,16 +89,6 @@ function AddClub() {
                 <div className='row mt-3'>
                     <div className='col col-lg-9'>
                         <div className="row mb-3">
-                            <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Club Trophies Count</label>
-                            <div class="col-sm-10 col-lg-6">
-                                <input type="text" className="form-control" id="colFormLabel" placeholder="insert trophies count" onChange={HandelTrophies} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='row mt-3'>
-                    <div className='col col-lg-9'>
-                        <div className="row mb-3">
                             <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Club Logo Url</label>
                             <div class="col-sm-10 col-lg-6">
                                 <input type="text" className="form-control" id="colFormLabel" placeholder="insert logo url" onChange={Handellogo} />
@@ -102,6 +104,22 @@ function AddClub() {
                                 <input type="text" className="form-control" id="colFormLabel" placeholder="insert createdAt" onChange={HandelCreatedAt} />
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <h5 className="col col-lg-4 mt-3">Choose Home Stadium</h5>
+                    <div className="dropdown col col-lg-1 mt-2">
+                        <button className="btn btn-secondary dropdown-toggle mt-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {stadium}
+                        </button>
+                        <ul className="dropdown-menu">
+                            {stadiums.map((stad, index) => (
+                                <li><button key={index + 1} className="dropdown-item" onClick={() => {
+                                    setStadium(stad.name);
+                                    setStadiumid(stad.id);
+                                }}>{stad.name}</button></li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
                 <button class="btn btn-success col col-lg-1 mt-4" onClick={() => {

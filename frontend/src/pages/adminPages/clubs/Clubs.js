@@ -7,15 +7,14 @@ import { baseUrl } from "../../../constants/url.constants"
 
 
 function Clubs() {
-    const [clubs, setClubs] = useState([{ id: 2, name: "ALahly", createdAt: "1907", marketValue: "5", trophiesCount: "90" },
-    { id: 3, name: "Zamalek", createdAt: "1920", marketValue: "3", trophiesCount: "50" },
-    { id: 4, name: "Almasry", createdAt: "1930", marketValue: "1", trophiesCount: "20" }]);
-    const [championships, setChampionships] = useState([{ id: 2, name: "Egy Primer League" },
-    { id: 3, name: "Nile League" },
-    { id: 4, name: "Egy Cup" }]);
+    const [clubs, setClubs] = useState([{}]);
+
+    const [championships, setChampionships] = useState([{}]);
+
     const [champ, setChamp] = useState({ id: -1, name: "CHAMPIONSHIPS" })
+
     useEffect(() => {
-        fetch(`${baseUrl}/Clubs/Get`)
+        fetch(`${baseUrl}/Clubs/Allclubs`)
             .then((res) => res.json())
             .then((data) => {
                 setClubs(data);
@@ -28,14 +27,14 @@ function Clubs() {
     }, []);
     const filterHandler = (ID) => {
         if (!ID) {
-            fetch(`${baseUrl}/Clubs/Get`)
+            fetch(`${baseUrl}/Clubs/Allclubs`)
                 .then((res) => res.json())
                 .then((data) => {
                     setClubs(data);
                 }).catch((ex) => console.log(ex));
         }
         else {
-            fetch(`${baseUrl}/Clubs/inChampionship/${ID}`, {
+            fetch(`${baseUrl}/Clubs/GetInChamp/${ID}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,7 +52,7 @@ function Clubs() {
                     <Link className="btn btn-success col col-lg-2" to="/clubs/add">Add Club</Link>
                 </div>
                 <div className="row">
-                    <h3 className="col col-lg-3">UPDATE CLUBS INFO</h3>
+                    <h3 className="col col-lg-4">UPDATE CLUBS INFO</h3>
                 </div>
                 <div className="row mt-3">
                     <div className="col col-lg-10">
@@ -62,8 +61,8 @@ function Clubs() {
                                 <tr>
                                     <th scope="col">Name</th>
                                     <th scope="col">Created At</th>
+                                    <th scope="col">Home Stadium</th>
                                     <th scope="col">Market Value</th>
-                                    <th scope="col">Trophies Count</th>
                                     <th scope="col">Update</th>
                                 </tr>
                             </thead>
@@ -73,8 +72,8 @@ function Clubs() {
                                         <tr key={index + 1}>
                                             <td>{club.name}</td>
                                             <td>{club.createdAt}</td>
+                                            <td>{club.stadiumHome}</td>
                                             <td>{club.marketValue}</td>
-                                            <td>{club.trophiesCount}</td>
                                             <td><Link class="btn btn-info" to={`/clubs/update/${club.id}`}>Update</Link></td>
                                         </tr>
                                     )
