@@ -7,4 +7,5 @@ public partial class Quiz
 
     public int? JournalistSsn { get; set; }
 
+    public bool? state { get; set; }  
 }
