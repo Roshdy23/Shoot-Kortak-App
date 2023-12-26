@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { baseUrl } from "../../../constants/url.constants";
 
 function Championships() {
-    const [championships, setChampionships] = useState([{ id: 2, name: "Nile Cup", noClubs: "18", noMatches: "643", startDate: "2023-05-23", endDate: "2023-11-07" },
-    { id: 3, name: "EGY League", noClubs: "18", noMatches: "643", startDate: "2023-05-23", endDate: "2023-11-07" },
-    { id: 4, name: "National Cup", noClubs: "18", noMatches: "643", startDate: "2023-05-23", endDate: "2023-11-07" }]);
+    const [championships, setChampionships] = useState([{ id: 2, name: "tmptmp", noClubs: "18", noMatches: "643", startingAt: "2023-05-23", endDate: "2023-11-07" },
+    { id: 6, name: "EGY tmptmp", noClubs: "18", noMatches: "643", startingAt: "2023-05-23", endDate: "2023-11-07" },
+    { id: 5, name: "tmptmp Cup", noClubs: "18", noMatches: "643", startingAt: "2023-05-23", endDate: "2023-11-07" }]);
     useEffect(() => {
         fetch(`${baseUrl}/Championships/Get`)
             .then((res) => res.json())
@@ -41,8 +41,8 @@ function Championships() {
                                             <td>{champ.name}</td>
                                             <td>{champ.noClubs}</td>
                                             <td>{champ.noMatches}</td>
-                                            <td>{champ.startDate}</td>
-                                            <td>{champ.endDate}</td>
+                                            <td>{champ.startingAt}</td>
+                                            <td>{champ.endingAt}</td>
                                             <td><Link class="btn btn-info" to={`/championships/update/${champ.id}`}>Update</Link></td>
                                         </tr>
                                     )

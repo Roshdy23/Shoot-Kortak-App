@@ -17,12 +17,20 @@ function UpdateChampionship() {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
 
-    const [champ, setChamp] = useState({ id: 3, name: "EGY League", noClubs: "18", noMatches: "643", startDate: "2023-05-23", endDate: "2023-11-07" });
+    const [champ, setChamp] = useState([{ id: 4, name: 'tmptmp', logo: null, startingAt: '2023-11-03T00:00:00', endingAt: '2024-02-10T00:00:00' }]);
     useEffect(() => {
-        fetch(`${baseUrl}/Championships/GetChamp/${champID}`)
+        fetch(`${baseUrl}/Championships/GetChamp/${champID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
             .then((res) => res.json())
-            .then((data) => setChamp(data))
-            .catch((ex) => console.log(ex))
+            .then((data) => {
+                setChamp(data);
+            })
+            .catch((ex) => console.log(ex));
+
     }, []);
     const HandelUpdate = () => {
         let tmp = new Date();
@@ -32,15 +40,19 @@ function UpdateChampionship() {
             setCheck(0);
         }
         else {
-            fetch(`${baseUrl}/Championships/Update/${champID}`, {
-                method: 'PUT',
+            console.log(champ[0]);
+            fetch(`${baseUrl}/Championships/update/${champID}`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: champID,
-                    startDate: startDate,
-                    endDate: endDate
+                    Id: champ[0].id,
+                    Name: champ[0].name,
+                    Logo: champ[0].logo,
+                    StartingAt: startDate,
+                    EndingAt: endDate,
+                    NoMatches: champ[0].noMatches,
                 })
             })
                 .then((res) => res)
@@ -50,6 +62,7 @@ function UpdateChampionship() {
         setTimeout(() => {
             setCheck(-1);
         }, 1000);
+
     }
     return (
         <>
@@ -58,19 +71,19 @@ function UpdateChampionship() {
                     <div className="col col-lg-7">
                         <h3 className='row mt-4'>UPDATE CHAMPIONSHIP INFO</h3>
                         <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                            <input className="form-control" type="text" value={`Name: ${champ.name}`} aria-label="readonly input example" readonly />
+                            <input className="form-control" type="text" value={"Name: " + champ[0].name} aria-label="readonly input example" readonly />
                         </div>
                         <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                            <input className="form-control" type="text" value={`Number of clubs: ${champ.noClubs}`} aria-label="readonly input example" readonly />
+                            <input className="form-control" type="text" value={`Number of clubs: ${champ[0].noClubs}`} aria-label="readonly input example" readonly />
                         </div>
                         <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                            <input className="form-control" type="text" value={`Number of Matches: ${champ.noMatches}`} aria-label="readonly input example" readonly />
+                            <input className="form-control" type="text" value={`Number of Matches: ${champ[0].noMatches}`} aria-label="readonly input example" readonly />
                         </div>
                         <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                            <input className="form-control" type="text" value={`Start Date: ${champ.startDate}`} aria-label="readonly input example" readonly />
+                            <input className="form-control" type="text" value={`Start Date: ${champ[0].startingAt}`} aria-label="readonly input example" readonly />
                         </div>
                         <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                            <input className="form-control" type="text" value={`End Date: ${champ.endDate}`} aria-label="readonly input example" readonly />
+                            <input className="form-control" type="text" value={`End Date: ${champ[0].endingAt}`} aria-label="readonly input example" readonly />
                         </div>
                         <div className='row mt-3'>
                             <div className='col-2'><label >Update Start Date</label></div>

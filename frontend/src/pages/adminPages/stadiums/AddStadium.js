@@ -17,7 +17,7 @@ function AddStadium() {
     const [width, setWidth] = useState("");
     const [cap, setCap] = useState("");
     const [check, setCheck] = useState(-1);
-    const [createdAt, setCreatedAt] = useState(new Date());
+    const [createdAt, setCreatedAt] = useState("");
     const handlecapacity = (event) => {
         setCap(event.target.value)
     }
@@ -36,13 +36,15 @@ function AddStadium() {
     const handlelocation = (event) => {
         setLoc(event.target.value)
     }
+    const handelcreated = event => {
+        setCreatedAt(event.target.value);
+    }
     const HandelAdd = () => {
-        if (createdAt < Date.now() || nme == "" || cap == "" || loc == "" || image == "" || length == "" || width == "") {
+        if (createdAt == "" || nme == "" || cap == "" || loc == "" || image == "" || length == "" || width == "") {
             setCheck(0);
         }
         else {
-            let tmp = createdAt.toLocaleDateString();
-            fetch(`${baseUrl}/Stadiums/Add`, {
+            fetch(`${baseUrl}/Stadiums/AddStadium`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +57,7 @@ function AddStadium() {
                     length: length,
                     image: image,
                     location: loc,
-                    createdAt: tmp,
+                    createdAt: createdAt,
                 })
             }).then((res) => res)
                 .catch((ex) => console.log(ex));
@@ -72,7 +74,7 @@ function AddStadium() {
                 <div className='row mt-4'>
                     <h3>Add New Stadium To The System</h3>
                 </div>
-                <div className='row mt-3'>
+                <div className='row mt-2'>
                     <div className='col col-lg-9'>
                         <div className="row mb-3">
                             <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Stadium Name</label>
@@ -82,7 +84,7 @@ function AddStadium() {
                         </div>
                     </div>
                 </div>
-                <div className='row mt-3'>
+                <div className='row mt-2'>
                     <div className='col col-lg-9'>
                         <div className="row mb-3">
                             <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Stadium Location</label>
@@ -92,7 +94,7 @@ function AddStadium() {
                         </div>
                     </div>
                 </div>
-                <div className='row mt-3'>
+                <div className='row'>
                     <div className='col col-lg-9'>
                         <div className="row mb-3">
                             <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Stadium Capacity</label>
@@ -102,7 +104,7 @@ function AddStadium() {
                         </div>
                     </div>
                 </div>
-                <div className='row mt-3'>
+                <div className='row'>
                     <div className='col col-lg-9'>
                         <div className="row mb-3">
                             <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Stadium Image</label>
@@ -112,7 +114,7 @@ function AddStadium() {
                         </div>
                     </div>
                 </div>
-                <div className='row mt-3'>
+                <div className='row mt-2'>
                     <div className='col col-lg-9'>
                         <div className="row mb-3">
                             <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Stadium Width</label>
@@ -122,7 +124,7 @@ function AddStadium() {
                         </div>
                     </div>
                 </div>
-                <div className='row mt-3'>
+                <div className='row mt-2'>
                     <div className='col col-lg-9'>
                         <div className="row mb-3">
                             <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Stadium Length</label>
@@ -132,11 +134,17 @@ function AddStadium() {
                         </div>
                     </div>
                 </div>
-                <div className='row mt-3'>
-                    <div className='col-2'><label >Created At</label></div>
-                    <div className='col-4'><DatePicker selected={createdAt} onChange={setCreatedAt} /></div>
+                <div className='row mt-2'>
+                    <div className='col col-lg-9'>
+                        <div className="row mb-3">
+                            <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Stadium Created At</label>
+                            <div class="col-sm-10 col-lg-6">
+                                <input type="text" className="form-control" id="colFormLabel" placeholder="insert stadium createdAt" onChange={handelcreated} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button class="btn btn-success col col-lg-1 mt-4" onClick={() => {
+                <button class="btn btn-success col col-lg-1" onClick={() => {
                     HandelAdd();
                 }} >Add</button>
             </div>

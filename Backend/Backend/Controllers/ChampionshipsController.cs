@@ -39,10 +39,10 @@ namespace Backend.Controllers
             return (Convert.ToBoolean(_appDbManager.updateChamp(_sqlconn, champ))) ? Ok() : BadRequest();
         }
         [HttpGet]
-        [Route("Getchamp")]
+        [Route("Getchamp/{id}")]
         public IEnumerable<Championship> getChampionship(string id)
         {
-            return _appDbManager.getChamp(_sqlconn,Convert.ToInt32(id)); 
+            return _appDbManager.getChamp(_sqlconn, Convert.ToInt32(id)); 
         }
 
         

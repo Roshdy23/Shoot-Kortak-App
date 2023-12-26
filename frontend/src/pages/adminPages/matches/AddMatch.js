@@ -30,12 +30,12 @@ function AddMatch() {
             .then((res) => res.json())
             .then((data) => {
                 setChampionships(data);
-            });
+            }).catch((ex) => console.log(ex));
         fetch(`${baseUrl}/Stadiums/Get`)
             .then((res) => res.json())
             .then((data) => {
                 setStadiums(data);
-            });
+            }).catch((ex) => console.log(ex));
     }, []);
     const filterClubs = (ID) => {
         fetch(`${baseUrl}/Clubs/GetInChamp/${ID}`)
@@ -43,7 +43,7 @@ function AddMatch() {
             .then((data) => {
                 setClubs1(data);
                 setClubs2(data);
-            })
+            }).catch((ex) => console.log(ex));
     }
     const HandelSecondClubs = (event) => {
         let cl = clubs1.filter((c, ind) => {
@@ -59,9 +59,10 @@ function AddMatch() {
         setWeekno(event.target.value);
     }
     const HandelAdd = () => {
-        let tmp = dateValue.toLocaleDateString().toString();
-        console.log(tmp);
-        if (club1 == "" || club2 == "" || stadium == "Stadiums" || champ == "Championships" || weekno == "") { setCheck(0) }
+        let tmp = dateValue.toLocaleDateString();
+        let x = new Date();
+        x = x.toLocaleDateString();
+        if (club1 == "" || club2 == "" || stadium == "Stadiums" || champ == "Championships" || weekno == "" || tmp == x) { setCheck(0) }
         else {
             fetch(`${baseUrl}/Matches/Add`, {
                 method: 'POST',
@@ -69,16 +70,16 @@ function AddMatch() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: '1',
+                    id: 1,
                     matchDate: tmp,
                     weekno: weekno,
                     club1: club1,
                     club2: club2,
                     championshipid: champid,
-                    stadium_id: stadiumid,
+                    stadiumId: stadiumid,
                 })
             }).then((res) => res)
-                .catch((ex) => ex);
+                .catch((ex) => console.log(ex));
             setCheck(1);
         }
         setTimeout(() => {

@@ -93,7 +93,7 @@ function App() {
         <Route path="/quizzes/view" element={<ViewQuizzes />} />
         <Route path="/championships" element={<Championships />} />
         <Route path="championships/add" element={<AddChampionship />} />
-        <Route path="/championships/update/:championshiID" element={<UpdateChampionship />} />
+        <Route path="/championships/update/:champID" element={<UpdateChampionship />} />
       </Routes>
     </div>
   );

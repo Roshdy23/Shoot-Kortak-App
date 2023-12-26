@@ -9,39 +9,51 @@ import { baseUrl } from '../../../constants/url.constants';
 function UpdateMatch(props) {
     const [check, setCheck] = useState(-1);
     const [newDate, setNewDate] = useState(new Date());
-    const [stadiums, setStadiums] = useState([{ id: 2, name: "Borj" }, { id: 3, name: "Elarab" }, { id: 4, name: "Borj Elarab" }]);
+    const [stadiums, setStadiums] = useState([{}]);
     const [newStadium, setNewStadium] = useState({ id: -1, name: "STADIUMS" });
-    const [tickets, setTickts] = useState();
-    const [matchChamp, setMatchChamp] = useState("match champonship");
-    const [matchStadium, setMatchStadium] = useState("Borj Elarab");
-    const [mdata, setMdata] = useState({
-        id: 3,
-        matchDate: "2023-span-span",
-        matchWeekNo: "5",
-        matchTeam1: "match team1",
-        matchTeam2: "match team2",
-        matchChampid: 4,
-        matchStadiumid: 2,
-    });
-    let matchid = useParams();
+    const [tickets, setTickts] = useState("");
+    const [matchChamp, setMatchChamp] = useState("");
+    const [matchStadium, setMatchStadium] = useState("");
+    const [mdata, setMdata] = useState([{}]);
+    let { updatematchID } = useParams();
     useEffect(() => {
-        fetch(`${baseUrl}/Matches/GetMatch/${matchid}`)
+        fetch(`${baseUrl}/Matches/GetMatch/${updatematchID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
             .then((res) => res.json())
-            .then((data) => setMdata(data)).catch((ex) => console.log(ex));
+            .then((data) => { setMdata(data) }).catch((ex) => console.log(ex));
+
         fetch(`${baseUrl}/Stadiums/Get`)
             .then((res) => res.json())
             .then((data) => setStadiums(data)).catch((ex) => console.log(ex));
-        fetch(`${baseUrl}/Stadiums/Get/${mdata.matchStadiumid}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setTickts(data.capacity);
-                setMatchStadium(data.name);
-            }
-            ).catch((ex) => console.log(ex));
-        fetch(`${baseUrl}/Championships/GetChampionship/${mdata.matchChampid}`)
-            .then((res) => res.json())
-            .then((data) => setMatchChamp(data)).catch((ex) => console.log(ex));
     }, [])
+    function ft() {
+        if (mdata[0].id) {
+            fetch(`${baseUrl}/Stadiums/GetStad/${mdata[0].stadiumId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    setTickts(data[0].capacity);
+                    setMatchStadium(data[0].name);
+                }
+                ).catch((ex) => console.log(ex));
+            fetch(`${baseUrl}/Championships/Getchamp/${mdata[0].championshipid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then((res) => res.json())
+                .then((data) => setMatchChamp(data[0].name)).catch((ex) => console.log(ex));
+        }
+    }
     const HandelUpdate = () => {
         let comp = new Date().toLocaleDateString();
         let tmp = newDate.toLocaleDateString();
@@ -76,19 +88,19 @@ function UpdateMatch(props) {
                     <input className="form-control" type="text" value={`Championship: ${matchChamp}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Team1: ${mdata.matchTeam1}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Team1: ${mdata[0].club1}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Team2: ${mdata.matchTeam2}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Team2: ${mdata[0].club2}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
                     <input className="form-control" type="text" value={`Tickets Quantity: ${tickets}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Week Number: ${mdata.matchWeekNo}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Week Number: ${mdata[0].weekno}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Match Date: ${mdata.matchDate}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Match Date: ${mdata[0].matchDate}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
                     <input className="form-control" type="text" value={`Match Stadium: ${matchStadium}`} aria-label="readonly input example" readonly />

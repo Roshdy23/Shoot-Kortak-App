@@ -41,9 +41,10 @@ function AddChampionship() {
                 body: JSON.stringify({
                     id: 1,
                     name: name,
-                    logoUrl: logo,
-                    startDate: startDate,
-                    endDate: endDate
+                    logo: logo,
+                    startingAt: startDate,
+                    endingAt: endDate,
+                    noMatches: 0,
                 })
             })
                 .then((res) => res) // get the added champId from response  and set AddedChampID by it 
@@ -109,7 +110,8 @@ function AddChampClubs(props) {
     const [club, setClub] = useState({ id: -1, name: "Choose", createdAt: "1000", marketValue: "1", trophiesCount: "1" });
     const [check, setCheck] = useState(-1);
     useEffect(() => {
-        fetch(`${baseUrl}/Clubs/Get/notInChampionship/${props.champId}`)
+        // fetch(`${baseUrl}/Clubs/Get/notInChampionship/${props.champId}`)
+        fetch(`${baseUrl}/Clubs/Allclubs`)
             .then((res) => res.json())
             .then((data) => setClubs(data))
             .catch((ex) => console.log(ex))
