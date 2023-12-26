@@ -502,23 +502,41 @@ namespace Backend
         }
 
 
-        public int addPlayer(SqlConnection conn, Player player)
+        public Player addPlayer(SqlConnection conn,int clubID, Player player)
         {
 
-            string query = $@"insert into Players (club_id,Height,Market_value,main_position,T_shirt_Number,foot) 
-      values({player.ClubId} , {player.Height},{player.MarketValue} ,'{player.MainPosition}',{player.TShirtNumber},'{player.Foot}' ";
-            int res = -1;
+            player.ClubId = clubID;
+
+            string query = $@"insert into Match_Staff(Birthdate,Nationality,Fname,Lname";
+
+            string values = $@" values('{player.Birthdate}' ,'{player.Nationality}','{player.Fname}','{player.Lname}' ";
+            if(player.Photo!=null)
+            {
+                query += ",Photo";
+                values += @$",'{player.Photo}";
+            }
+            query += ")";
+            values += ");";
+            query += values;
+
             SqlCommand sqlCommand = new SqlCommand(query, conn);
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                res = 200;
-            }
-            catch (Exception ex)
-            {
-                res = 0;
-            }
-            return res;
+
+            sqlCommand.ExecuteNonQuery();
+
+            query = "Select max(id) from Match_staff";
+            sqlCommand.CommandText = query;
+            int id = Convert.ToInt32(sqlCommand.ExecuteScalar());
+
+            player.Id = id;
+
+            query = $@"insert into players 
+                    Values ({player.Id},{player.ClubId},{player.Height},{player.MarketValue},'{player.MainPosition}',{player.TShirtNumber},'{player.Foot}')" ;
+          
+
+            sqlCommand.CommandText = query;
+
+            sqlCommand.ExecuteNonQuery();
+            return player;
         }
 
 
@@ -540,23 +558,39 @@ namespace Backend
             return list;
         }
 
-        public int addCoach(SqlConnection conn, Coach coach)
+        public Coach addCoach(SqlConnection conn, int clubID , Coach coach)
         {
+            Coach newCoach = coach;
+            newCoach.ClubId = clubID;
 
-            string query = $@"insert into Coaches (club_id,team_managed_no) 
-             values({coach.ClubId} ,{coach.TeamManagedNo}) ";
-            int res = -1;
+            string query = $@"insert into Match_Staff
+             values('{coach.Birthdate}' ,'{coach.Nationality}','{coach.Photo}','{coach.Fname}','{coach.Lname}') ";
+          
             SqlCommand sqlCommand = new SqlCommand(query, conn);
-            try
+          
+            sqlCommand.ExecuteNonQuery();
+
+            query = "Select max(id) from Match_staff";
+            sqlCommand.CommandText= query;
+            int id = Convert.ToInt32(sqlCommand.ExecuteScalar());
+
+            newCoach.Id = id;
+            newCoach.ClubId = clubID;
+
+            query = $@"insert into Coaches (id,club_id";
+            string values = $@" values({id},{clubID} ";
+            if(coach.TeamManagedNo!=null)
             {
-                sqlCommand.ExecuteNonQuery();
-                res = 200;
+                query += ",Team_managed_no";
+                values += @$",{coach.TeamManagedNo}";
             }
-            catch (Exception ex)
-            {
-                res = 0;
-            }
-            return res;
+            query += ")";
+            values += ")";
+            query += values;
+            sqlCommand.CommandText = query;
+
+            sqlCommand.ExecuteNonQuery();
+            return newCoach;          
         }
 
         public int addPlayerStatInChamp(SqlConnection conn, Stat s)
@@ -666,26 +700,6 @@ namespace Backend
 
             return list;
         }
-
-        public int updateQuiz(SqlConnection conn, AcceptingQuiz aq)
-        {
-
-            string query = $@"update Accepting_quizzes set State ='{aq.State}' where quiz_id ={aq.QuizId} and admin_ssn ={aq.AdminSsn} ;";
-
-            int res = -1;
-            SqlCommand sqlCommand = new SqlCommand(query, conn);
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                res = 200;
-            }
-            catch (Exception ex)
-            {
-                res = 0;
-            }
-            return res;
-        }
-
 
         public IEnumerable<Stadium> getStadium(SqlConnection conn, int id)
         {

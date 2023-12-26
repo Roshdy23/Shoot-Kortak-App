@@ -20,11 +20,12 @@ namespace Backend.Controllers
             _sqlconn.Open();
         }
 
+
         [HttpPost]
-        [Route("Add")]
-        public async Task<IActionResult> addCoach([FromBody] Coach c)
+        [Route("AddCoach/{clubID}")]
+        public Coach addCoach(int clubID, [FromBody] Coach coach)
         {
-            return (Convert.ToBoolean(_appDbManager.addCoach(_sqlconn, c)) ? Ok() : BadRequest());
+            return _appDbManager.addCoach(_sqlconn, clubID, coach);
         }
     }
 }

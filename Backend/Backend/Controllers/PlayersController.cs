@@ -26,10 +26,10 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        [Route("Add")]
-        public async Task<IActionResult> addPlayer([FromBody] Player p)
+        [Route("AddPlayerh/{clubID}")]
+        public Player addPlayer(int clubID, [FromBody] Player player)
         {
-            return (Convert.ToBoolean(_appDbManager.addPlayer(_sqlConnection, p))) ? Ok() : BadRequest();
+            return _appDbManager.addPlayer(_sqlConnection, clubID, player);
         }
     }
 }
