@@ -7,9 +7,10 @@ import { useParams } from 'react-router-dom';
 import { baseUrl } from '../../../constants/url.constants';
 
 function UpdateMatch(props) {
+    const [check, setCheck] = useState(-1);
     const [newDate, setNewDate] = useState(new Date());
     const [stadiums, setStadiums] = useState([{ id: 2, name: "Borj" }, { id: 3, name: "Elarab" }, { id: 4, name: "Borj Elarab" }]);
-    const [newStadium, setNewStadium] = useState({ id: 10, name: "STADIUMS" });
+    const [newStadium, setNewStadium] = useState({ id: -1, name: "STADIUMS" });
     const [tickets, setTickts] = useState();
     const [matchChamp, setMatchChamp] = useState("match champonship");
     const [matchStadium, setMatchStadium] = useState("Borj Elarab");
@@ -26,34 +27,46 @@ function UpdateMatch(props) {
     useEffect(() => {
         fetch(`${baseUrl}/Matches/GetMatch/${matchid}`)
             .then((res) => res.json())
-            .then((data) => setMdata(data)).catch((ex) => ex);
+            .then((data) => setMdata(data)).catch((ex) => console.log(ex));
         fetch(`${baseUrl}/Stadiums/Get`)
             .then((res) => res.json())
-            .then((data) => setStadiums(data)).catch((ex) => ex);
+            .then((data) => setStadiums(data)).catch((ex) => console.log(ex));
         fetch(`${baseUrl}/Stadiums/Get/${mdata.matchStadiumid}`)
             .then((res) => res.json())
             .then((data) => {
                 setTickts(data.capacity);
                 setMatchStadium(data.name);
             }
-            ).catch((ex) => ex);
+            ).catch((ex) => console.log(ex));
         fetch(`${baseUrl}/Championships/GetChampionship/${mdata.matchChampid}`)
             .then((res) => res.json())
-            .then((data) => setMatchChamp(data)).catch((ex) => ex);
+            .then((data) => setMatchChamp(data)).catch((ex) => console.log(ex));
     }, [])
     const HandelUpdate = () => {
-        fetch(`${baseUrl}/Matches/Update`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: mdata.id,
-                matchNewDate: newDate,
-                matchNewStadium: newStadium
+        let comp = new Date().toLocaleDateString();
+        let tmp = newDate.toLocaleDateString();
+        if (newStadium.name == "STADIUMS" && tmp == comp) { setCheck(0) }
+        else {
+            let newSt = newStadium.id == -1 ? mdata.matchStadiumid : newStadium.id;
+            fetch(`${baseUrl}/Matches/Update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: mdata.id,
+                    matchNewDate: tmp,
+                    matchNewStadium: newSt
+                })
             })
-        })
-            .then((res) => res).catch((ex) => ex)
+                .then((res) => res)
+                .catch((ex) => console.log(ex));
+            setCheck(1);
+        }
+        setTimeout(() => {
+            // set a timer to hide the element after 3 seconds
+            setCheck(-1);
+        }, 1000);
     }
     return (
         <>
@@ -102,6 +115,9 @@ function UpdateMatch(props) {
                 <button class="btn btn-info col col-lg-1 mt-3" onClick={() => {
                     HandelUpdate();
                 }}>Update</button>
+            </div>
+            <div className='container mt-3'>
+                {check == 0 ? <h6 style={{ color: "red" }}>Please Insert Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Updated Successfully</h6> : <p></p>}
             </div>
         </>
     )

@@ -58,9 +58,13 @@ function AddStadium() {
                     createdAt: tmp,
                 })
             }).then((res) => res)
-                .catch((ex) => ex);
+                .catch((ex) => console.log(ex));
             setCheck(1);
         }
+        setTimeout(() => {
+            // set a timer to hide the element after 3 seconds
+            setCheck(-1);
+        }, 1000);
     }
     return (
         <>

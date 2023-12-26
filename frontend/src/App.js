@@ -41,6 +41,7 @@ import CreateArticle from "./pages/journalistPages/CreateArticle";
 import PendingQuizzes from "./pages/journalistPages/PendingQuiz";
 import CreateQuiz from "./pages/journalistPages/CreateQuiz";
 import EditQuiz from "./pages/journalistPages/EditQuiz";
+import AddClubPlayer from "./pages/adminPages/clubs/AddClubPlayer";
 function App() {
   return (
     <div className="App">
@@ -70,21 +71,22 @@ function App() {
         <Route path="/stores/view/:storeID/additem" element={<AddItems />} />
         <Route path="/stores/view/:storeID/update/:itemid" element={<UpdateItem />} />
         <Route path="/clubs" element={<Clubs />} />
-        <Route path="/articles" element={<Articles/>} />
-        <Route path="/articles/create" element={<CreateArticle/>} />
+        <Route path="/articles" element={<Articles />} />
+        <Route path="/articles/create" element={<CreateArticle />} />
         <Route path="/clubs/add" element={<AddClub />} />
-        <Route path="/clubs/add/addplayers" element={<AddClubPlayers />} />
-        <Route path="/clubs/add/coach" element={<AddClubCoach />} />
+        <Route path="/clubs/add/:clubID/addplayers" element={<AddClubPlayers />} />
+        <Route path="/clubs/add/:clubID/addcoach" element={<AddClubCoach />} />
         <Route path="/clubs/update/:clubID" element={<UpdateClub />} />
         <Route path="/clubs/update/:clubID/players" element={<UpdateClubPlayers />} />
         <Route path="/clubs/update/:clubID/coach" element={<UpdateClubCoach />} />
+        <Route path="/clubs/update/:clubID/addplayer" element={<AddClubPlayer />} />
         <Route path="/results" element={<Results />} />
         <Route path="/results/addresults" element={<MatchResult />} />
         <Route path="/results/addresults/stats/team1" element={<AddStats nxt="1" />} />
         <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/quiz" element={<Quiz />} />
-        <Route path="/EditQuiz/:quizId" element={<EditQuiz/>} />
+        <Route path="/EditQuiz/:quizId" element={<EditQuiz />} />
         <Route path="/CreateQuiz" element={<CreateQuiz />} />
         <Route path="/PendingQuizzes" element={<PendingQuizzes />} />
         <Route path="/quiz/:quizId" element={<QuizDetail />} />

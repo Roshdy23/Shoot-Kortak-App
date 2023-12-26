@@ -12,6 +12,7 @@ import { baseUrl } from '../../../constants/url.constants';
 
 
 function UpdateStadium() {
+    const [check, setCheck] = useState(-1);
     const [startDate, setStartDate] = useState(new Date());
     const [newName, setNewName] = useState("New Name");
     const [newImage, setNewImage] = useState("New Image URl");
@@ -30,11 +31,12 @@ function UpdateStadium() {
     useEffect(() => {
         fetch(`${baseUrl}/Stadiums/GetStadium/${Stadiumid}`)
             .then((res) => res.json())
-            .then((data) => setStadData(data)).catch((ex) => ex)
+            .then((data) => setStadData(data))
+            .catch((ex) => console.log(ex));
     }, [])
     const HandelUpdate = () => {
-        if (newName == "New Name" && newImage == "New Image") {
-            //<Alert text="insert new values to update"/>
+        if (newName == "New Name" && newImage == "New Image URl") {
+            setCheck(0);
         }
         else {
             let myname = (newName === "New Name") ? stadData.name : newName;
@@ -52,8 +54,13 @@ function UpdateStadium() {
                     image: myimg,
                 })
             })
-                .then((res) => res)
+                .then((res) => res).catch((ex) => console.log(ex));
+            setCheck(1);
         }
+        setTimeout(() => {
+            // set a timer to hide the element after 3 seconds
+            setCheck(-1);
+        }, 1000);
     }
     const Handelnewname = (event) => {
         setNewName(event.targret.value);
@@ -125,6 +132,9 @@ function UpdateStadium() {
                     HandelUpdate();
                 }}>Update</button>
                 <Link className="btn btn-danger col col-lg-1 mt-4 ms-5" to={"/stadiums"} >Cancel</Link>
+            </div>
+            <div className='container mt-3'>
+                {check == 0 ? <h6 style={{ color: "red" }}>Please Insert Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Updated Successfully</h6> : <p></p>}
             </div>
         </>
     )

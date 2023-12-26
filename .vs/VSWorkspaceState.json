@@ -4,8 +4,10 @@
     "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\pages",
+    "\\frontend\\src\\pages\\adminPages",
+    "\\frontend\\src\\pages\\adminPages\\clubs",
     "\\frontend\\src\\pages\\fanPages"
   ],
-  "SelectedNode": "\\frontend\\src",
+  "SelectedNode": "\\frontend\\src\\pages\\adminPages\\clubs\\Clubs.js",
   "PreviewInSolutionExplorer": false
 }

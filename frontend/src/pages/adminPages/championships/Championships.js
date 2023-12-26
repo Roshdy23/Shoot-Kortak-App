@@ -1,9 +1,18 @@
 import { Link, useParams } from "react-router-dom";
 import Dropdown from "../../../components/Dropdown";
+import { useEffect, useState } from "react";
+import { baseUrl } from "../../../constants/url.constants";
 
 function Championships() {
-    let championshiID = useParams();
-    championshiID = 9;
+    const [championships, setChampionships] = useState([{ id: 2, name: "Nile Cup", noClubs: "18", noMatches: "643", startDate: "2023-05-23", endDate: "2023-11-07" },
+    { id: 3, name: "EGY League", noClubs: "18", noMatches: "643", startDate: "2023-05-23", endDate: "2023-11-07" },
+    { id: 4, name: "National Cup", noClubs: "18", noMatches: "643", startDate: "2023-05-23", endDate: "2023-11-07" }]);
+    useEffect(() => {
+        fetch(`${baseUrl}/Championships/Get`)
+            .then((res) => res.json())
+            .then((data) => setChampionships(data))
+            .catch((ex) => console.log(ex))
+    }, [])
     return (
         <>
             <div className="container">
@@ -26,36 +35,20 @@ function Championships() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Egy League</td>
-                                    <td>16</td>
-                                    <td>64</td>
-                                    <td>2022-03-12</td>
-                                    <td>2022-10-03</td>
-                                    <td><Link class="btn btn-info" to={`/championships/update/${championshiID}`}>Update</Link></td>
-                                </tr>
-                                <tr>
-                                    <td>Egy League</td>
-                                    <td>16</td>
-                                    <td>64</td>
-                                    <td>2022-03-12</td>
-                                    <td>2022-10-03</td>
-                                    <td><Link class="btn btn-info" to={`/championships/update/${championshiID}`}>Update</Link></td>
-                                </tr>
-                                <tr>
-                                    <td>Egy League</td>
-                                    <td>16</td>
-                                    <td>64</td>
-                                    <td>2022-03-12</td>
-                                    <td>2022-10-03</td>
-                                    <td><Link class="btn btn-info" to={`/championships/update/${championshiID}`}>Update</Link></td>
-                                </tr>
+                                {championships.map((champ, ind) => {
+                                    return (
+                                        <tr>
+                                            <td>{champ.name}</td>
+                                            <td>{champ.noClubs}</td>
+                                            <td>{champ.noMatches}</td>
+                                            <td>{champ.startDate}</td>
+                                            <td>{champ.endDate}</td>
+                                            <td><Link class="btn btn-info" to={`/championships/update/${champ.id}`}>Update</Link></td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
-                    </div>
-                    <div className="dropdown col col-lg-2">
-                        <h5>Filter Matches</h5>
-                        <Dropdown title="Championships" vals={["All", "Finished", "Current", "Not Started"]} />
                     </div>
                 </div>
             </div>

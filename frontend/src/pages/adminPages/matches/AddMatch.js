@@ -81,6 +81,10 @@ function AddMatch() {
                 .catch((ex) => ex);
             setCheck(1);
         }
+        setTimeout(() => {
+            // set a timer to hide the element after 3 seconds
+            setCheck(-1);
+        }, 1000);
     }
     return (
         <>
