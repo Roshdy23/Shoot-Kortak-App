@@ -13,7 +13,6 @@ import Match from "../components/Match/Match";
 import { useNavigate } from "react-router-dom";
 import PlayerCard from "../components/PlayerCard";
 import { baseUrl } from "../constants/url.constants"
-import httpModule from "../helpers/http.module"
 
 function Matches(props) {
     const [s, setS] = useState(0);
@@ -37,12 +36,12 @@ function Matches(props) {
             .then((res) => res.json())
             .then((data) => {
                 setMatches(data);
-            })
+            }).catch((ex) => console.log(ex));
         fetch(`${baseUrl}/Championships/Get`)
             .then((res) => res.json())
             .then((data) => {
                 setChampionships(data);
-            });
+            }).catch((ex) => console.log(ex));
     }, [])
     const filterHandler = (ID) => {
         if (!ID) {
@@ -50,7 +49,7 @@ function Matches(props) {
                 .then((res) => res.json())
                 .then((data) => {
                     setMatches(data);
-                })
+                }).catch((ex) => console.log(ex));
         }
         else {
             fetch(`${baseUrl}/Matches/inChampionship/${ID}`, {
@@ -61,7 +60,7 @@ function Matches(props) {
             }).then((res) => res.json()).then((data) => {
                 setMatches(data)
                 setChampid(ID);
-            })
+            }).catch((ex) => console.log(ex));
         }
     }
     let role = "admin";

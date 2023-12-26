@@ -20,13 +20,13 @@ namespace Backend.Controllers
             _sqlconn.Open();
         }
         [HttpGet]
-        [Route("Get")]
-        public IEnumerable<Championship> getAllChampionships()
+        [Route("GetFinished")]
+        public IEnumerable<Championship> getAllFinishedChampionships()
         {
-            return _appDbManager.getAllChampionships(_sqlconn);
+            return _appDbManager.getAllFinishedChampionships(_sqlconn);
         } 
         [HttpPost]
-        [Route("Add")]
+        [Route("AddChamp")]
         public async Task<IActionResult> addChamp([FromBody ]Championship champ)
         {
             return (Convert.ToBoolean(_appDbManager.addChamp(_sqlconn, champ))) ? Ok() : BadRequest();
@@ -39,12 +39,17 @@ namespace Backend.Controllers
             return (Convert.ToBoolean(_appDbManager.updateChamp(_sqlconn, champ))) ? Ok() : BadRequest();
         }
         [HttpGet]
-        [Route("Getchamp")]
+        [Route("Getchamp/{id}")]
         public IEnumerable<Championship> getChampionship(string id)
         {
-            return _appDbManager.getChamp(_sqlconn,Convert.ToInt32(id)); 
+            return _appDbManager.getChamp(_sqlconn, Convert.ToInt32(id)); 
+        }
+        [HttpGet]
+        [Route("GetCurrent")]
+       public  IEnumerable<Championship> getAllCurrentChampiopnship()
+        {
+            return _appDbManager.getAllCurrentChampiopnship(_sqlconn);
         }
 
-        
     }
 }
