@@ -60,6 +60,27 @@ namespace Backend.Controllers
             return _appDbManager.getMatchesByDate(_sqlconn, date);
         }
 
+        [HttpGet]
+        [Route("GetFinishedMatches")]
+
+        public IEnumerable<Match> getAllFinishedMatches()
+        {
+            return _appDbManager.getAllFinishedMatches(_sqlconn);
+        }
+
+        [HttpPost]
+        [Route("addResultTofinishedMatch/{id}")]
+
+        public async Task<IActionResult> addResultToFinishedMatch(string id,string res)
+        {
+            int state = _appDbManager.addResultToFinishedMatch(_sqlconn, Convert.ToInt32(id), res);
+            if (state !=0)
+            {
+                return Ok(Convert.ToInt32(id));
+            }
+            else
+                return BadRequest();
+        }
 
     }
 }
