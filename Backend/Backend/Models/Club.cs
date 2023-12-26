@@ -1,17 +1,16 @@
-﻿namespace Backend.Models
+﻿
+namespace Back_End.Models;
+
+public partial class Club
 {
-    public class Club
-    {
-        /*[id]
-      ,[name]
-      ,[logo]
-      ,[stadium_home]
-      ,[Created_At]
-         */
-        public int id { get; set; }
-        public string name { get; set; }
-        public string logo { get; set; }
-        public int stadium_home { get; set; }
-        public int Created_At { get; set; }
-    }
+    public int Id { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public string? Logo { get; set; }
+
+    public int? StadiumHome { get; set; }
+
+    public int? CreatedAt { get; set; }
+
 }
