@@ -273,13 +273,14 @@ namespace Backend
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 Dictionary<object, object> dob = new();
-                dob.Add("Name", dt.Rows[i]["id"]);
+                dob.Add("Name", dt.Rows[i]["name"]);
 
-                dob.Add("qty", dt.Rows[i]["name"]);
+                dob.Add("Logo", dt.Rows[i]["logo"]);
 
-                dob.Add("price", dt.Rows[i]["logo"]);
+                dob.Add("CreatedAt", dt.Rows[i]["Created_At"]);
 
-                dob.Add("image", dt.Rows[i]["Created_At"]);
+                dob.Add("ID", dt.Rows[i]["id"]);
+
 
                 string query2 = @$"select sum(Market_value) as marketValue from Players where club_id = {Convert.ToInt64(dt.Rows[i]["id"])}";
 
@@ -817,13 +818,13 @@ namespace Backend
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 Dictionary<object, object> dob = new();
-                dob.Add("Name", dt.Rows[i]["id"]);
+                dob.Add("Name", dt.Rows[i]["name"]);
 
-                dob.Add("qty", dt.Rows[i]["name"]);
+                dob.Add("Logo", dt.Rows[i]["logo"]);
 
-                dob.Add("price", dt.Rows[i]["logo"]);
+                dob.Add("CreatedAt", dt.Rows[i]["Created_At"]);
 
-                dob.Add("image", dt.Rows[i]["Created_At"]);
+                dob.Add("ID", dt.Rows[i]["id"]);
 
                 string query2 = @$"select sum(Market_value) as marketValue from Players where club_id = {Convert.ToInt64(dt.Rows[i]["id"])}";
 
@@ -1301,13 +1302,14 @@ namespace Backend
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 Dictionary<object, object> dob = new();
-                dob.Add("Name", dt.Rows[i]["id"]);
+                dob.Add("Name", dt.Rows[i]["name"]);
 
-                dob.Add("qty", dt.Rows[i]["name"]);
+                dob.Add("Logo", dt.Rows[i]["logo"]);
 
-                dob.Add("price", dt.Rows[i]["logo"]);
+                dob.Add("CreatedAt", dt.Rows[i]["Created_At"]);
 
-                dob.Add("image", dt.Rows[i]["Created_At"]);
+                dob.Add("ID", dt.Rows[i]["id"]);
+
 
                 string query2 = @$"select sum(Market_value) as marketValue from Players where club_id = {Convert.ToInt64(dt.Rows[i]["id"])}";
 
