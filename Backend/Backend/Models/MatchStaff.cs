@@ -5,7 +5,7 @@ public partial class MatchStaff
 {
     public int Id { get; set; }
 
-    public DateOnly Birthdate { get; set; }
+    public string Birthdate { get; set; } = null!;
 
     public string Nationality { get; set; } = null!;
 
