@@ -9,6 +9,6 @@ public partial class Order
 
     public int ItemId { get; set; }
 
-    public int? Qty { get; set; }
+    public int Qty { get; set; }
 
 }

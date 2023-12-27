@@ -7,6 +7,5 @@ public partial class Answer
 
     public int QuestionId { get; set; }
 
-    public string? FanAnswer { get; set; }
-
+    public string FanAnswer { get; set; } = null!;
 }

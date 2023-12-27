@@ -1,8 +1,6 @@
 ﻿
 namespace Back_End.Models;
 
-public partial class League
+public partial class League:Championship
 {
-    public int ChampionshipId { get; set; }
-
 }

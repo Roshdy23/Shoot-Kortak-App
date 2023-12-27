@@ -7,6 +7,6 @@ public partial class ReservingMatch
 
     public int MatchId { get; set; }
 
-    public string? TicketQr { get; set; }
+    public string TicketQr { get; set; } = null!;
 
 }

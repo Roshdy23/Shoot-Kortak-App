@@ -7,10 +7,10 @@ public partial class Club
 
     public string Name { get; set; } = null!;
 
-    public string? Logo { get; set; }
+    public string Logo { get; set; } = null!;
 
-    public int? StadiumHome { get; set; }
+    public int StadiumHome { get; set; }
 
-    public int? CreatedAt { get; set; }
+    public int CreatedAt { get; set; }
 
 }
