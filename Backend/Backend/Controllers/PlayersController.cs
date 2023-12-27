@@ -31,5 +31,12 @@ namespace Backend.Controllers
         {
             return _appDbManager.addPlayer(_sqlConnection, clubID, player);
         }
+
+        [HttpDelete]
+        [Route("DeletePlayer/{playerID}")]
+        public IActionResult deletePlayer(int playerID)
+        {
+            return Convert.ToBoolean(_appDbManager.deletePlayer(_sqlConnection, playerID))?Ok():BadRequest();
+        }
     }
 }

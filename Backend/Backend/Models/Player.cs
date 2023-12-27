@@ -5,16 +5,16 @@ public partial class Player:MatchStaff
 
 {
 
-    public required int ClubId { get; set; }
+    public int? ClubId { get; set; }
 
-    public required decimal Height { get; set; }
+    public decimal Height { get; set; }
 
-    public required int MarketValue { get; set; }
+    public int MarketValue { get; set; }
 
-    public required string MainPosition { get; set; }
+    public string MainPosition { get; set; } = null!;
 
-    public required int TShirtNumber { get; set; }
+    public int TShirtNumber { get; set; }
 
-    public required string Foot { get; set; }
+    public string Foot { get; set; } = null!;
 
 }

@@ -9,6 +9,6 @@ public partial class Rating
 
     public int MatchId { get; set; }
 
-    public int? Rate { get; set; }
+    public int Rate { get; set; }
 
 }

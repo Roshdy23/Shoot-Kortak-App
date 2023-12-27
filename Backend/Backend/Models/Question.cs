@@ -5,18 +5,18 @@ public partial class Question
 {
     public int Id { get; set; }
 
-    public string? QuestionContent { get; set; }
+    public string QuestionContent { get; set; } = null!;
 
-    public string? Answer1 { get; set; }
+    public string Answer1 { get; set; } = null!;
 
-    public string? Answer2 { get; set; }
+    public string Answer2 { get; set; } = null!;
 
-    public string? Answer3 { get; set; }
+    public string Answer3 { get; set; } = null!;
 
-    public string? Answer4 { get; set; }
+    public string Answer4 { get; set; } = null!;
 
-    public string? TheCorrectAnswer { get; set; }
+    public string TheCorrectAnswer { get; set; } = null!;
 
-    public int? QuizId { get; set; }
+    public int QuizId { get; set; }
 }
 

@@ -586,11 +586,10 @@ namespace Backend
             if(player.Photo!=null)
             {
                 query += ",Photo";
-                values += @$",'{player.Photo}";
+                values += @$",'{player.Photo}'";
             }
-            query += ")";
-            values += ");";
-            query += values;
+            query += ") "+ values + ");";
+
 
             SqlCommand sqlCommand = new SqlCommand(query, conn);
 
@@ -610,6 +609,20 @@ namespace Backend
 
             sqlCommand.ExecuteNonQuery();
             return player;
+        }
+        public int deletePlayer(SqlConnection conn,int playerId)
+        {
+            string query = @$"Delete from Match_staff where id = {playerId}; ";
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                return 1;
+            }
+            catch(Exception ex) 
+            {
+                return 0;
+            }
         }
 
 
@@ -938,7 +951,7 @@ namespace Backend
             return d;
         }
 
-        public int addStadium(SqlConnection sqlConnection, Stadium stadium)
+        public Stadium addStadium(SqlConnection sqlConnection, Stadium stadium)
         {
             string query = $@"INSERT INTO STADIUM (NAME";
             string values = $"'{stadium.Name}'";
@@ -974,15 +987,12 @@ namespace Backend
             }
             query += ") VALUES (" + values + ");";
             SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                return 1;
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
+
+            sqlCommand.ExecuteNonQuery();
+            query = "Select max(id) from STADIUM";
+            sqlCommand.CommandText = query;
+            stadium.Id = Convert.ToInt32(sqlCommand.ExecuteScalar());
+            return stadium;
         }
 
         public int updateClubCoach(SqlConnection sqlConnection, int clubID, string name)
@@ -1078,19 +1088,13 @@ namespace Backend
             return items;
         }
 
-        public int addStoreItem(SqlConnection sqlConnection, StoreItem storeItem)
+        public StoreItem addStoreItem(SqlConnection sqlConnection, StoreItem storeItem)
         {
             string query = $@"Insert into Store_items Values({storeItem.StadiumId},{storeItem.ItemId},{storeItem.Qty})";
             SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                return 1;
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
+            sqlCommand.ExecuteNonQuery();
+
+            return storeItem;
         }
 
         public IEnumerable<Question> getQuizQuestions(SqlConnection sqlConnection, int quizID)
