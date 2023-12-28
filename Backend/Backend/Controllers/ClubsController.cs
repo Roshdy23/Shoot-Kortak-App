@@ -67,6 +67,21 @@ namespace Backend.Controllers
         {
             return _appDbManager.getOneClub(_sqlconn, clubId);
         }
+        [HttpPost]
+        [Route("AddClubToChamp")]
 
+        public async Task<IActionResult> addClubToChampionship(string clubid,string champid)
+        {
+            return Convert.ToBoolean(_appDbManager.addClubToChampionship(_sqlconn, Convert.ToInt32(clubid), Convert.ToInt32(champid))) ? Ok() : BadRequest();
+        }
+        [HttpGet]
+        [Route("getClubsNotInChamp")]
+
+        public IEnumerable<Dictionary<object,object>> getAllClubsNotInChamp(string id)
+        {
+            return _appDbManager.getAllClubsNotInChamp(_sqlconn, Convert.ToInt32(id));
+        }
+
+           
     }
 }

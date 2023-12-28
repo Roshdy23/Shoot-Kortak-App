@@ -7,5 +7,9 @@ public partial class Quiz
 
     public int JournalistSsn { get; set; }
 
+    public string Name { get; set; }    
+
     public bool? state { get; set; }  
+
+    public List<Question> questions { get; set; }   
 }

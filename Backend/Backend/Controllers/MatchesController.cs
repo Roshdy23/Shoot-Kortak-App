@@ -21,13 +21,13 @@ namespace Backend.Controllers
         }
         [HttpGet]
         [Route("Get")]
-        public IEnumerable<Match> getAllMatches()
+        public IEnumerable<Dictionary<object,object>> getAllMatches()
         {
             return _appDbManager.getAllMatches(_sqlconn);
         }
         [HttpGet]
         [Route("inChampionship/{id}")]
-        public IEnumerable<Match> getAllMatchesInChampionship(string id)
+        public IEnumerable<Dictionary<object,object>> getAllMatchesInChampionship(string id)
         {
             return _appDbManager.getAllMatchesInChampionship(_sqlconn, Convert.ToInt32(id));
         }
@@ -40,7 +40,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("GetMatch/{id}")]
-        public IEnumerable<Match> getmatch(string id)
+        public IEnumerable<Dictionary<object,object>> getmatch(string id)
         {
             return _appDbManager.getMatchData(_sqlconn, Convert.ToInt32(id));
         }
@@ -55,7 +55,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("GetMatchesDate")]
-        public IEnumerable<Match> getMatchesByDate(string date)
+        public IEnumerable<Dictionary<object,object>> getMatchesByDate(string date)
         {
             return _appDbManager.getMatchesByDate(_sqlconn, date);
         }
@@ -63,7 +63,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("GetFinishedMatches")]
 
-        public IEnumerable<Match> getAllFinishedMatches()
+        public IEnumerable<Dictionary<object,object>> getAllFinishedMatches()
         {
             return _appDbManager.getAllFinishedMatches(_sqlconn);
         }
@@ -81,6 +81,28 @@ namespace Backend.Controllers
             else
                 return BadRequest();
         }
+        [HttpGet]
+        [Route("getMatchesToday")]
 
+       public IEnumerable<Dictionary<object,object>> getMatchesToday()
+        {
+            return _appDbManager.getMatchesToday(_sqlconn);
+        }
+
+        [HttpGet]
+        [Route("getMatchesinDate/{date1}")]
+
+        public IEnumerable<Dictionary<object, object>> getMatchesInDate(string date)
+        {
+            return _appDbManager.getMatchesInDate(_sqlconn,Convert.ToString(date));
+        }
+
+        [HttpGet]
+        [Route("getFinishedMatchinChmap/{id}")]
+        public IEnumerable<Dictionary<object,object>> getFinishedMatchInChamp(string id)
+        {
+            return _appDbManager.getFinishedMatchesInChamp(_sqlconn, Convert.ToInt32(id));
+        }
+        
     }
 }

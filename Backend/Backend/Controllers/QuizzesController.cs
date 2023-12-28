@@ -52,5 +52,37 @@ namespace Backend.Controllers
                 return Ok();
             return BadRequest();
         }
+
+        [HttpGet]
+        [Route("getPendingQuizzes")]
+        public IEnumerable<Quiz> getAllPendingQuizzes()
+        {
+            return _dbmanager.getAllPendingQuizzes(_connection);    
+        }
+
+        [HttpGet]
+        [Route("getPendingQuizzesOfJour/{id}")]
+
+        public IEnumerable<Quiz> getAllPendingQuizzesOfJour(string id)
+        {
+            return _dbmanager.getAllPendingQuizzesOfJour(_connection,Convert.ToInt32(id));
+        }
+        [HttpPost]
+        [Route("CreateQuiz")]
+        public async Task<IActionResult> createQuiz([FromBody] Quiz q)
+        {
+            int temp=_dbmanager.createQuiz(_connection, q);
+            if(temp!=0)return Ok(); 
+            else return BadRequest();   
+        }
+
+        [HttpDelete]
+        [Route("deleteQuiz/{id}")]
+        public async Task<IActionResult> deleteQuiz(string id)
+        {
+            int temp= (_dbmanager.deleteQuiz(_connection,Convert.ToInt32(id)));
+            if (temp == 0) return BadRequest();
+            else return Ok();
+        }
     }
 }

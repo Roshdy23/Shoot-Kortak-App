@@ -24,7 +24,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("Get")]
-        public IEnumerable<Store> getAllStores()
+        public IEnumerable<Dictionary<object,object>> getAllStores()
         {
             return _appDbManager.getAllStores(_sqlconn);
         }
