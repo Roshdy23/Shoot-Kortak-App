@@ -30,7 +30,7 @@ namespace Backend.Controllers
 
         [HttpDelete]
         [Route("DeleteCoach/{coachID}")]
-        public IActionResult deleteCoach(int coachID) 
+        public IActionResult deleteCoach(int coachID)
         {
             return Convert.ToBoolean(_appDbManager.deletePlayer(_sqlconn, coachID)) ? Ok() : BadRequest();
 

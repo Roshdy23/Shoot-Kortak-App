@@ -30,7 +30,7 @@ namespace Backend.Controllers
         [Route("Get/{location}")]
         public IEnumerable<Stadium> getAllStadiumsInLocation(string loc)
         {
-            return _appDbManager.getAllStadiumsInLocation(_sqlconn,loc);
+            return _appDbManager.getAllStadiumsInLocation(_sqlconn, loc);
         }
         [HttpGet]
         [Route("GetStad/{id}")]
@@ -41,9 +41,9 @@ namespace Backend.Controllers
 
         [HttpPut()]
         [Route("UpdateStadium/{StadiumId}")]
-        public IActionResult updateStadiums( int StadiumId , [FromBody] Stadium stadium)
+        public IActionResult updateStadiums(int StadiumId, [FromBody] Stadium stadium)
         {
-            return Convert.ToBoolean(_appDbManager.updateStadium(_sqlconn, StadiumId , stadium)) ? Ok() : BadRequest();
+            return Convert.ToBoolean(_appDbManager.updateStadium(_sqlconn, StadiumId, stadium)) ? Ok() : BadRequest();
         }
 
         [HttpPost]

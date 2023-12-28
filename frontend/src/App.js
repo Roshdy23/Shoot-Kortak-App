@@ -42,15 +42,18 @@ import PendingQuizzes from "./pages/journalistPages/PendingQuiz";
 import CreateQuiz from "./pages/journalistPages/CreateQuiz";
 import EditQuiz from "./pages/journalistPages/EditQuiz";
 import AddClubPlayer from "./pages/adminPages/clubs/AddClubPlayer";
+import { useState } from "react";
 function App() {
+  const [user,setUser] = useState({});
+  const [rfsh,setRfsh] = useState(0);
   return (
     <div className="App">
-      <Navbar />
+      <Navbar rfshr = {rfsh} user = {user} setUser={setUser} />
       <Routes>
         {/* <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} /> */}
-        <Route path="/" element={<Home />} />
-        <Route path="/matches" element={<Matches ticket={false} />} />
+        <Route path="/" element={<Home user = {user} />} />
+        <Route path="/matches" element={<Matches user = {user} ticket={false} />} />
         <Route path="/match/:matchId" element={<Matches ticket={false} />} />
         <Route path="/reservematch/:matchId" element={<Matches ticket={true} />} />
         <Route path="/matches/update/:updatematchID" element={<UpdateMatch />} />
@@ -60,8 +63,8 @@ function App() {
         <Route path="/stadiums/update/:updatestadiumID" element={<UpdateStadium />} />
         <Route path="/stadiums/add" element={<AddStadium />} />
         <Route path="/stores" element={<Stores />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/article/:artId" element={<News />} />
+        <Route path="/news" element={<News user = {user} />} />
+        <Route path="/article/:artId" element={<News user = {user} />} />
         <Route path="/stats" element={<Stats />} />
         <Route path="/ChampionshipStats" element={<SelectChamp />} />
         <Route path="/TeamStats" element={<SelectClub />} />
@@ -80,12 +83,14 @@ function App() {
         <Route path="/clubs/update/:clubID/players" element={<UpdateClubPlayers />} />
         <Route path="/clubs/update/:clubID/coach" element={<UpdateClubCoach />} />
         <Route path="/clubs/update/:clubID/addplayer" element={<AddClubPlayer />} />
+        <Route path="/login" element={<Login refresh = {rfsh} setRefresh={setRfsh} />}/>
+        <Route path="/register" element={<Register/>}/>
         <Route path="/results" element={<Results />} />
-        <Route path="/results/addresults" element={<MatchResult />} />
+        <Route path="/results/addresults/:matchId" element={<MatchResult />} />
         <Route path="/results/addresults/stats/team1" element={<AddStats nxt="1" />} />
         <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
         <Route path="/quizzes" element={<Quizzes />} />
-        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz" element={(user?.role==="Fan")?<Quiz />:<Login refresh = {rfsh} setRefresh={setRfsh} />} />
         <Route path="/EditQuiz/:quizId" element={<EditQuiz />} />
         <Route path="/CreateQuiz" element={<CreateQuiz />} />
         <Route path="/PendingQuizzes" element={<PendingQuizzes />} />

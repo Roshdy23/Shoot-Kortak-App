@@ -7,7 +7,7 @@ public partial class Player:MatchStaff
 
     public int? ClubId { get; set; }
 
-    public decimal Height { get; set; }
+    public float Height { get; set; }
 
     public int MarketValue { get; set; }
 

@@ -21,6 +21,7 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("AddPlayerh/{clubID}")]
+
         public IEnumerable<Player> addPlayer(int clubID, [FromBody] Player player)
         {
             return _appDbManager.addPlayer(_sqlConnection, clubID, player);
@@ -30,7 +31,7 @@ namespace Backend.Controllers
         [Route("DeletePlayer/{playerID}")]
         public IActionResult deletePlayer(int playerID)
         {
-            return Convert.ToBoolean(_appDbManager.deletePlayer(_sqlConnection, playerID))?Ok():BadRequest();
+            return Convert.ToBoolean(_appDbManager.deletePlayer(_sqlConnection, playerID)) ? Ok() : BadRequest();
         }
     }
 }

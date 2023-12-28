@@ -16,6 +16,7 @@ function AddChampionship() {
     const [endDate, setEndDate] = useState(new Date());
     const [name, setName] = useState("");
     const [logo, setLogo] = useState("");
+    const [nomat, setNoMat] = useState("");
 
     const [AddedChampID, setAddedChampID] = useState("0");
     let [show, setShow] = useState(false);
@@ -25,11 +26,14 @@ function AddChampionship() {
     const HandelLogo = (e) => {
         setLogo(e.target.value);
     }
+    const Handelnomat = (e) => {
+        setNoMat(e.target.value);
+    }
     const HandelAdd = () => {
         let tmp = new Date();
         let strt = startDate.toLocaleDateString();
         let end = endDate.toLocaleDateString();
-        if (name == "" || logo == "" || strt == tmp.toLocaleDateString() || end == tmp.toLocaleDateString()) {
+        if (name == "" || logo == "" || strt == tmp.toLocaleDateString() || end == tmp.toLocaleDateString() || nomat == "") {
             setCheck(0);
         }
         else {
@@ -44,7 +48,7 @@ function AddChampionship() {
                     logo: logo,
                     startingAt: startDate,
                     endingAt: endDate,
-                    noMatches: 0,
+                    noMatches: nomat,
                 })
             })
                 .then((res) => res) // get the added champId from response  and set AddedChampID by it 
@@ -63,7 +67,7 @@ function AddChampionship() {
                     <div className="col col-lg-7">
                         <h3 className='row mt-4'>Add New Championship To The System</h3>
                         <div className='row mt-3'>
-                            <div className='col col-lg-9'>
+                            <div className='col'>
                                 <div className="row mb-3">
                                     <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Name</label>
                                     <div class="col-sm-10 col-lg-6">
@@ -73,11 +77,21 @@ function AddChampionship() {
                             </div>
                         </div>
                         <div className='row mt-3'>
-                            <div className='col col-lg-9'>
+                            <div className='col'>
                                 <div className="row mb-3">
                                     <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Logo</label>
                                     <div class="col-sm-10 col-lg-6">
                                         <input type="text" className="form-control" id="colFormLabel" placeholder="insert logo url" onChange={HandelLogo} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='row mt-3'>
+                            <div className='col'>
+                                <div className="row">
+                                    <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Number of Matches</label>
+                                    <div class="col-sm-10 col-lg-6">
+                                        <input type="text" className="form-control" id="colFormLabel" placeholder="insert number of matches" onChange={Handelnomat} />
                                     </div>
                                 </div>
                             </div>
@@ -104,10 +118,8 @@ function AddChampionship() {
     )
 }
 function AddChampClubs(props) {
-    const [clubs, setClubs] = useState([{ id: 2, name: "ALahly", createdAt: "1907", marketValue: "5", trophiesCount: "90" },
-    { id: 3, name: "Zamalek", createdAt: "1920", marketValue: "3", trophiesCount: "50" },
-    { id: 4, name: "Almasry", createdAt: "1930", marketValue: "1", trophiesCount: "20" }]);
-    const [club, setClub] = useState({ id: -1, name: "Choose", createdAt: "1000", marketValue: "1", trophiesCount: "1" });
+    const [clubs, setClubs] = useState([{}]);
+    const [club, setClub] = useState({ id: -1, Name: "Choose", createdAt: "1000", marketValue: "1", trophiesCount: "1" });
     const [check, setCheck] = useState(-1);
     useEffect(() => {
         // fetch(`${baseUrl}/Clubs/Get/notInChampionship/${props.champId}`)
@@ -145,13 +157,13 @@ function AddChampClubs(props) {
                 </div>
                 <div className="dropdown col">
                     <button className="btn btn-black dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {club.name}
+                        {club.Name}
                     </button>
                     <ul className="dropdown-menu">
                         {clubs.map((cl, index) => (
                             <li><button key={index + 1} className="dropdown-item" onClick={() => {
                                 setClub(cl);
-                            }}>{cl.name}</button></li>
+                            }}>{cl.Name}</button></li>
                         ))}
                     </ul>
                 </div>
