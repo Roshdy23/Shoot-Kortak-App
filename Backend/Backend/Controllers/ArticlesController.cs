@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Back_End.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
 namespace Backend.Controllers
@@ -24,6 +25,20 @@ namespace Backend.Controllers
         public IEnumerable<Dictionary<Object,Object>> TopLikes()
         {
             return _dbmanager.TopLikes(_connection);
+        }
+
+        [HttpGet]
+        [Route("GetArticles/{journalistID}")]
+        public IEnumerable<Article> getArticles(int journalistID)
+        {
+            return _dbmanager.getArticles(_connection, journalistID);
+        }
+
+        [HttpPost]
+        [Route("AddLikeDislike/{fanSSN}/{ArticleID}")]
+        public bool addLike(int fanSSN , int ArticleID)
+        {
+            return _dbmanager.addLike(_connection, fanSSN , ArticleID);
         }
     }
 }
