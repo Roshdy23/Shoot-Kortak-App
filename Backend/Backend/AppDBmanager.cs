@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Numerics;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Backend
@@ -221,6 +222,17 @@ namespace Backend
             sqlDataAdapter.Fill(dt);
             if (dt.Rows.Count > 0) return true;
             return false;
+        }
+        private bool checkWord(string word)
+        {
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (!char.IsLetter(word[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public IEnumerable<Dictionary<object,object>> getAllMatches(SqlConnection conn)
@@ -674,40 +686,68 @@ namespace Backend
         }
 
 
-        public Player addPlayer(SqlConnection conn,int clubID, Player player)
+        public IEnumerable<Player> addPlayer(SqlConnection conn,int clubID, Player player)
         {
+            bool nationalityValid = checkWord(player.Nationality);
+            bool FnameValid = checkWord(player.Fname);
+            bool LnameValid = checkWord(player.Lname);
+            bool positionValid = checkWord(player.MainPosition);
+            bool footValid = checkWord(player.Foot);
+            List<Player> list = new List<Player>();
 
-            player.ClubId = clubID;
-
-            string query = $@"insert into Match_Staff(Birthdate,Nationality,Fname,Lname";
-
-            string values = $@" values('{player.Birthdate}' ,'{player.Nationality}','{player.Fname}','{player.Lname}' ";
-            if(player.Photo!=null)
+            if (nationalityValid && FnameValid && LnameValid && positionValid && footValid)
             {
-                query += ",Photo";
-                values += @$",'{player.Photo}'";
+                string query = $@"Select * from Match_staff m,Players p where p.id = m.id and m.Fname='{player.Fname}'and m.Lname ='{player.Lname}' and m.Birthdate = '{player.Birthdate}' and p.Main_Position = '{player.MainPosition}'";
+                SqlDataAdapter sqlDataAdapter= new SqlDataAdapter(query,conn);
+                DataTable dataTable = new();
+                sqlDataAdapter.Fill(dataTable);
+    
+                if (dataTable.Rows.Count == 0)
+                {
+                
+                    player.ClubId = clubID;
+                    query = $@"insert into Match_Staff(Birthdate,Nationality,Fname,Lname";
+                    string values = $@" values('{player.Birthdate}' ,'{player.Nationality}','{player.Fname}','{player.Lname}' ";
+                    if (player.Photo != null)
+                    {
+                        query += ",Photo";
+                        values += @$",'{player.Photo}'";
+                    }
+                    query += ") " + values + ");";
+
+
+                    SqlCommand sqlCommand = new SqlCommand(query, conn);
+
+                    sqlCommand.ExecuteNonQuery();
+
+                    query = "Select max(id) from Match_staff";
+                    sqlCommand.CommandText = query;
+                    int id = Convert.ToInt32(sqlCommand.ExecuteScalar());
+
+                    player.Id = id;
+
+                    query = $@"insert into players 
+                    Values ({player.Id},{player.ClubId},{player.Height},{player.MarketValue},'{player.MainPosition}',{player.TShirtNumber},'{player.Foot}')";
+
+
+                    sqlCommand.CommandText = query;
+
+                    sqlCommand.ExecuteNonQuery();
+
+                    list.Add(player);
+                    return list;
+                }
+                else
+                {
+                    player.Id = Convert.ToInt32(dataTable.Rows[0]["id"]);
+                    list.Add(player);
+                    return list;
+                }
+
             }
-            query += ") "+ values + ");";
-
-
-            SqlCommand sqlCommand = new SqlCommand(query, conn);
-
-            sqlCommand.ExecuteNonQuery();
-
-            query = "Select max(id) from Match_staff";
-            sqlCommand.CommandText = query;
-            int id = Convert.ToInt32(sqlCommand.ExecuteScalar());
-
-            player.Id = id;
-
-            query = $@"insert into players 
-                    Values ({player.Id},{player.ClubId},{player.Height},{player.MarketValue},'{player.MainPosition}',{player.TShirtNumber},'{player.Foot}')" ;
-          
-
-            sqlCommand.CommandText = query;
-
-            sqlCommand.ExecuteNonQuery();
-            return player;
+            else
+                return list;
+            
         }
         public int deletePlayer(SqlConnection conn,int playerId)
         {
@@ -743,39 +783,75 @@ namespace Backend
             return list;
         }
 
-        public Coach addCoach(SqlConnection conn, int clubID , Coach coach)
+        public IEnumerable<Coach> addCoach(SqlConnection conn, int clubID , Coach coach)
         {
-            Coach newCoach = coach;
-            newCoach.ClubId = clubID;
-
-            string query = $@"insert into Match_Staff
-             values('{coach.Birthdate}' ,'{coach.Nationality}','{coach.Photo}','{coach.Fname}','{coach.Lname}') ";
-          
-            SqlCommand sqlCommand = new SqlCommand(query, conn);
-          
-            sqlCommand.ExecuteNonQuery();
-
-            query = "Select max(id) from Match_staff";
-            sqlCommand.CommandText= query;
-            int id = Convert.ToInt32(sqlCommand.ExecuteScalar());
-
-            newCoach.Id = id;
-            newCoach.ClubId = clubID;
-
-            query = $@"insert into Coaches (id,club_id";
-            string values = $@" values({id},{clubID} ";
-            if(coach.TeamManagedNo!=null)
+            bool nationalityValid = checkWord(coach.Nationality);
+            bool FnameValid = checkWord(coach.Fname);
+            bool LnameValid = checkWord(coach.Lname);
+            List<Coach> list = new List<Coach>();
+            if (nationalityValid && FnameValid && LnameValid)
             {
-                query += ",Team_managed_no";
-                values += @$",{coach.TeamManagedNo}";
-            }
-            query += ")";
-            values += ")";
-            query += values;
-            sqlCommand.CommandText = query;
+                string query = $@"Select * from Match_staff m,Coaches c where c.id = m.id and m.Fname='{coach.Fname}'and m.Lname ='{coach.Lname}' and m.Birthdate = '{coach.Birthdate}'";
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+                DataTable dataTable = new();
+                sqlDataAdapter.Fill(dataTable);
+                if (dataTable.Rows.Count == 0)
+                {
+                    coach.ClubId = clubID;
+                    query = $@"insert into Match_Staff(Birthdate,Nationality,Fname,Lname";
 
-            sqlCommand.ExecuteNonQuery();
-            return newCoach;          
+                    string values = $@" values('{coach.Birthdate}' ,'{coach.Nationality}','{coach.Fname}','{coach.Lname}' ";
+                    if (coach.Photo != null)
+                    {
+                        query += ",Photo";
+                        values += @$",'{coach.Photo}'";
+                    }
+                    query += ") " + values + ");";
+                    SqlCommand sqlCommand = new SqlCommand(query, conn);
+                    sqlCommand.ExecuteNonQuery();
+                    query = "Select max(id) from Match_staff";
+                    sqlCommand.CommandText = query;
+                    int id = Convert.ToInt32(sqlCommand.ExecuteScalar());
+
+                    coach.Id = id;
+
+                    query = $@"insert into Coaches (id,club_id";
+                    values = $@" values({id},{clubID} ";
+                    if (coach.TeamManagedNo != null)
+                    {
+                        query += ",Team_managed_no";
+                        values += @$",{coach.TeamManagedNo}";
+                    }
+                    query += ")" + values + ")";
+
+                    sqlCommand.CommandText = query;
+
+                    sqlCommand.ExecuteNonQuery();
+                    list.Add(coach);
+                }
+                else
+                {
+                    coach.Id = Convert.ToInt32(dataTable.Rows[0]["id"]);
+                    list.Add(coach);
+                }
+            }
+            return list;
+           
+        }
+
+        public int deleteCoach(SqlConnection conn, int coachId)
+        {
+            string query = @$"Delete from Match_staff where id = {coachId}; ";
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
         }
 
         public int addPlayerStatInChamp(SqlConnection conn, Stat s)
