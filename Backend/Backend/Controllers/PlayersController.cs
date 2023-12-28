@@ -27,7 +27,7 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("AddPlayerh/{clubID}")]
-        public Player addPlayer(int clubID, [FromBody] Player player)
+        public Player addPlayer(int clubID, Player player)
         {
             return _appDbManager.addPlayer(_sqlConnection, clubID, player);
         }

@@ -81,7 +81,7 @@ function App() {
         <Route path="/clubs/update/:clubID/coach" element={<UpdateClubCoach />} />
         <Route path="/clubs/update/:clubID/addplayer" element={<AddClubPlayer />} />
         <Route path="/results" element={<Results />} />
-        <Route path="/results/addresults" element={<MatchResult />} />
+        <Route path="/results/addresults/:matchId" element={<MatchResult />} />
         <Route path="/results/addresults/stats/team1" element={<AddStats nxt="1" />} />
         <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
         <Route path="/quizzes" element={<Quizzes />} />

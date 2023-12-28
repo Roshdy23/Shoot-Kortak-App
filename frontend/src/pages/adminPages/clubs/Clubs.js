@@ -19,7 +19,7 @@ function Clubs() {
             .then((data) => {
                 setClubs(data);
             }).catch((ex) => console.log(ex));
-        fetch(`${baseUrl}/Championships/Get`)
+        fetch(`${baseUrl}/Championships/GetCurrent`)
             .then((res) => res.json())
             .then((data) => {
                 setChampionships(data);
@@ -70,11 +70,11 @@ function Clubs() {
                                 {clubs.map((club, index) => {
                                     return (
                                         <tr key={index + 1}>
-                                            <td>{club.name}</td>
-                                            <td>{club.createdAt}</td>
+                                            <td>{club.Name}</td>
+                                            <td>{club.CreatedAt}</td>
                                             <td>{club.stadiumHome}</td>
                                             <td>{club.marketValue}</td>
-                                            <td><Link class="btn btn-info" to={`/clubs/update/${club.id}`}>Update</Link></td>
+                                            <td><Link class="btn btn-info" to={`/clubs/update/${club.ID}`}>Update</Link></td>
                                         </tr>
                                     )
                                 })}

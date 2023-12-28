@@ -35,8 +35,8 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        [Route("update/{id}")]
-        public  async Task<IActionResult> updateClub(Club club)
+        [Route("Update")]
+        public  async Task<IActionResult> updateClub( Club club)
         {
             return (Convert.ToBoolean(_appDbManager.updateClub(_sqlconn, club))) ? Ok() : BadRequest();
         }
@@ -55,14 +55,14 @@ namespace Backend.Controllers
             return Convert.ToBoolean(_appDbManager.updateClubCoach(_sqlconn,clubId, newCoach))?Ok():BadRequest();
         }
         [HttpGet]
-        [Route("getClubPlayers")]
+        [Route("getClubPlayers/{clubId}")]
         public IEnumerable<Dictionary<object, object>> getClubPlayers(int clubId) 
         {
            return     _appDbManager.getClubPlayers(_sqlconn, clubId);
         }
 
         [HttpGet]
-        [Route("getOneClub")]
+        [Route("getOneClub/{clubId}")]
         public IEnumerable<Dictionary<object, object>> getOneClub(int clubId)
         { 
             return _appDbManager.getOneClub(_sqlconn, clubId);

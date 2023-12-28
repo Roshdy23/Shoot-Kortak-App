@@ -37,7 +37,7 @@ function Matches(props) {
             .then((data) => {
                 setMatches(data);
             }).catch((ex) => console.log(ex));
-        fetch(`${baseUrl}/Championships/Get`)
+        fetch(`${baseUrl}/Championships/GetCurrent`)
             .then((res) => res.json())
             .then((data) => {
                 setChampionships(data);
@@ -96,7 +96,7 @@ function Matches(props) {
                                                 <td>{mtch.weekno}</td>
                                                 <td>{mtch.matchDate}</td>
                                                 <td>{mtch.championshipid}</td>
-                                                <td>{mtch.stadium_id}</td>
+                                                <td>{mtch.stadiumId}</td>
                                                 <td><Link class="btn btn-info" to={`/matches/update/${mtch.id}`}>Update</Link></td>
                                             </tr>
                                         )

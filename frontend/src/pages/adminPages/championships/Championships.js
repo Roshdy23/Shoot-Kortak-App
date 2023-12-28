@@ -8,11 +8,25 @@ function Championships() {
     { id: 6, name: "EGY tmptmp", noClubs: "18", noMatches: "643", startingAt: "2023-05-23", endDate: "2023-11-07" },
     { id: 5, name: "tmptmp Cup", noClubs: "18", noMatches: "643", startingAt: "2023-05-23", endDate: "2023-11-07" }]);
     useEffect(() => {
-        fetch(`${baseUrl}/Championships/Get`)
+        fetch(`${baseUrl}/Championships/GetCurrent`)
             .then((res) => res.json())
             .then((data) => setChampionships(data))
             .catch((ex) => console.log(ex))
     }, [])
+    const HandelFinished = (f) => {
+        if (f) {
+            fetch(`${baseUrl}/Championships/GetCurrent`)
+                .then((res) => res.json())
+                .then((data) => setChampionships(data))
+                .catch((ex) => console.log(ex))
+        }
+        else {
+            fetch(`${baseUrl}/Championships/GetFinished`)
+                .then((res) => res.json())
+                .then((data) => setChampionships(data))
+                .catch((ex) => console.log(ex))
+        }
+    }
     return (
         <>
             <div className="container">
@@ -21,13 +35,20 @@ function Championships() {
                     <Link className="btn btn-success col col-lg-2" to="/championships/add">Add Championship</Link>
                 </div>
                 <h3 className="row mt-4">Championships</h3>
+                <div className="row mt-2">
+                    <button class="btn btn-secondary col col-lg-2 " onClick={() => {
+                        HandelFinished(1);
+                    }}>Current</button>
+                    <button class="btn btn-secondary col col-lg-2 ms-3" onClick={() => {
+                        HandelFinished(0);
+                    }}>Finished</button>
+                </div>
                 <div className="row mt-3">
                     <div className="col col-lg-10">
                         <table className="table">
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">Name</th>
-                                    <th scope="col">Number of Clubs</th>
                                     <th scope="col">Number of Matches</th>
                                     <th scope="col">Start Date</th>
                                     <th scope="col">End Date</th>
@@ -39,7 +60,6 @@ function Championships() {
                                     return (
                                         <tr>
                                             <td>{champ.name}</td>
-                                            <td>{champ.noClubs}</td>
                                             <td>{champ.noMatches}</td>
                                             <td>{champ.startingAt}</td>
                                             <td>{champ.endingAt}</td>

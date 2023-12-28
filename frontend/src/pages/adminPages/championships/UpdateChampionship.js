@@ -40,7 +40,7 @@ function UpdateChampionship() {
             setCheck(0);
         }
         else {
-            console.log(champ[0]);
+            let lgo = (champ[0].logo == null) ? "i_have_no_time_to_get_reaql_url" : champ[0].logo;
             fetch(`${baseUrl}/Championships/update/${champID}`, {
                 method: 'POST',
                 headers: {
@@ -49,7 +49,7 @@ function UpdateChampionship() {
                 body: JSON.stringify({
                     Id: champ[0].id,
                     Name: champ[0].name,
-                    Logo: champ[0].logo,
+                    Logo: lgo,
                     StartingAt: startDate,
                     EndingAt: endDate,
                     NoMatches: champ[0].noMatches,
@@ -74,16 +74,13 @@ function UpdateChampionship() {
                             <input className="form-control" type="text" value={"Name: " + champ[0].name} aria-label="readonly input example" readonly />
                         </div>
                         <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                            <input className="form-control" type="text" value={`Number of clubs: ${champ[0].noClubs}`} aria-label="readonly input example" readonly />
-                        </div>
-                        <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
                             <input className="form-control" type="text" value={`Number of Matches: ${champ[0].noMatches}`} aria-label="readonly input example" readonly />
                         </div>
                         <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                            <input className="form-control" type="text" value={`Start Date: ${champ[0].startingAt}`} aria-label="readonly input example" readonly />
+                            <input className="form-control" type="text" value={`Start Date: ${champ[0].startingAt.substring(0, 10)}`} aria-label="readonly input example" readonly />
                         </div>
                         <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                            <input className="form-control" type="text" value={`End Date: ${champ[0].endingAt}`} aria-label="readonly input example" readonly />
+                            <input className="form-control" type="text" value={`End Date: ${champ[0].endingAt.substring(0, 10)}`} aria-label="readonly input example" readonly />
                         </div>
                         <div className='row mt-3'>
                             <div className='col-2'><label >Update Start Date</label></div>
