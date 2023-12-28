@@ -1,8 +1,7 @@
 ﻿
 namespace Back_End.Models;
 
-public partial class Cup
+public partial class Cup:Championship
 {
-    public int ChampionshipId { get; set; }
 
 }
