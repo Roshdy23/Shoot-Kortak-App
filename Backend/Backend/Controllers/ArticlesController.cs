@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Back_End.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
 namespace Backend.Controllers
@@ -24,6 +25,24 @@ namespace Backend.Controllers
         public IEnumerable<Dictionary<Object,Object>> TopLikes()
         {
             return _dbmanager.TopLikes(_connection);
+        }
+
+        [HttpPost]
+        [Route("addArticle")]
+        public  async Task<IActionResult> addArticle([FromBody] Article article)
+        {
+            int temp=_dbmanager.addArticle(_connection, article);   
+            if(temp==0) { return BadRequest(); }
+            else return Ok();
+        }
+
+        [HttpDelete]
+        [Route("deleteArticle/{name}")]
+        public async Task<IActionResult> deleteArticle(string name)
+        {
+            int temp = _dbmanager.deleteArticle(_connection, name);
+            if (temp == 0) { return BadRequest(); }
+            else return Ok();
         }
     }
 }

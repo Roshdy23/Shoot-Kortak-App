@@ -10,4 +10,6 @@ public partial class Quiz
     public string Name { get; set; }    
 
     public bool? state { get; set; }  
+
+    public List<Question> questions { get; set; }   
 }

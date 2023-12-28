@@ -1698,6 +1698,8 @@ namespace Backend
                 champ.EndingAt = Convert.ToDateTime(dt.Rows[i]["EndingAt"]);
                 champ.Name = Convert.ToString(dt.Rows[i]["Name"]);
                 champ.NoMatches = Convert.ToInt32(dt.Rows[i]["no_matches"]);
+
+                champ.Logo = dt.Rows[i]["logo"].ToString();
                 list.Add(champ);
             }
             return list;
@@ -2146,6 +2148,125 @@ namespace Backend
 
             }
             return list;
+        }
+
+        public int createQuiz(SqlConnection conn,Quiz q)
+        {
+            string query1 = @$"insert into quizzes (journalist_ssn,Name) values({q.JournalistSsn},'{q.Name}')";
+            SqlCommand sqlCommand = new SqlCommand(query1, conn);
+            int res = -1;
+
+         
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                res = 200;
+            }
+            catch (Exception ex)
+            {
+                res = 0;
+                return res;
+            }
+           
+            string query2 = "select max(id) as quizID from quizzes ";
+
+            SqlDataAdapter sqlDataAdapter2 = new SqlDataAdapter(query2, conn);
+            DataTable dt2 = new DataTable();
+            sqlDataAdapter2.Fill(dt2);
+
+            int quizid = Convert.ToInt32(dt2.Rows[0]["quizID"]);
+           foreach(Question ques in q.questions)
+            {
+                string query3 = @$"  insert into Questions (question_content,answer1,answer2,answer3,answer4,the_correct_answer,quiz_id)
+                    values ('{ques.QuestionContent}','{ques.Answer1}','{ques.Answer2}','{ques.Answer3}','{ques.Answer4}','{ques.TheCorrectAnswer}',{quizid})";
+
+                SqlCommand sqlCommand2 = new SqlCommand(query3, conn);
+
+                try
+                {
+                    sqlCommand2.ExecuteNonQuery();
+                    res = 200;
+                }
+                catch (Exception ex)
+                {
+                    res = 0;
+                    return res;
+                }
+
+
+            }
+
+            return 200;
+                  
+        }
+
+
+        public int addArticle(SqlConnection conn, Article article)
+        {
+            string query = @$"insert into Articles (Name , Journalist_ssn,description,img)
+                         values ('{article.Name}',{article.JournalistSsn},'{article.description}','{article.description}')";
+
+            int res = -1;
+
+            SqlCommand sqlCommand2 = new SqlCommand(query, conn);
+
+            try
+            {
+                sqlCommand2.ExecuteNonQuery();
+                res = 200;
+            }
+            catch (Exception ex)
+            {
+                res = 0;
+                return res;
+            }
+            return res;
+        }
+
+        public int deleteQuiz(SqlConnection conn, int id)
+        {
+            string query = @$"delete from Questions where quiz_id = {id}";
+
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+
+            string query2 = @$"delete from quizzes where id ={id}";
+
+
+            SqlCommand sqlCommand2 = new SqlCommand(query2, conn);
+            try
+            {
+                sqlCommand2.ExecuteNonQuery();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        public int deleteArticle(SqlConnection conn, string name)
+        {
+            string query = @$"delete from Articles where Name = '{name}'";
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+
         }
 
     }

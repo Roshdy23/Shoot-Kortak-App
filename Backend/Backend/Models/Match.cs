@@ -15,13 +15,11 @@ public partial class Match
 
     public int Championshipid { get; set; }
 
-<<<<<<< HEAD
-    public int? StadiumId { get; set; }
 
     public string? result { get; set; }
-=======
-    public int StadiumId { get; set; }
->>>>>>> 769763413002945ba6a0e6b38b16e1b5132d7a0e
 
-    public int result { get; set; }
+    public int StadiumId { get; set; }
+
+
+ 
 }

@@ -9,4 +9,7 @@ public partial class Article
 
     public string articleDate { get; set; } = null!; 
 
+    public string img { get; set; }
+    
+    public string description { get; set; }
 }
