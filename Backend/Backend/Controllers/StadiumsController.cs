@@ -30,20 +30,20 @@ namespace Backend.Controllers
         [Route("Get/{location}")]
         public IEnumerable<Stadium> getAllStadiumsInLocation(string loc)
         {
-            return _appDbManager.getAllStadiumsInLocation(_sqlconn,loc);
+            return _appDbManager.getAllStadiumsInLocation(_sqlconn, loc);
         }
         [HttpGet]
-        [Route("GetStadium")]
-        public IEnumerable<Stadium> getStadium(int id)
+        [Route("GetStad/{id}")]
+        public IEnumerable<Stadium> getStadium(string id)
         {
             return _appDbManager.getStadium(_sqlconn, Convert.ToInt32(id));
         }
 
         [HttpPut()]
         [Route("UpdateStadium/{StadiumId}")]
-        public IActionResult updateStadiums( int StadiumId , [FromBody] Stadium stadium)
+        public IActionResult updateStadiums(int StadiumId, [FromBody] Stadium stadium)
         {
-            return Convert.ToBoolean(_appDbManager.updateStadium(_sqlconn, StadiumId , stadium)) ? Ok() : BadRequest();
+            return Convert.ToBoolean(_appDbManager.updateStadium(_sqlconn, StadiumId, stadium)) ? Ok() : BadRequest();
         }
 
         [HttpPost]

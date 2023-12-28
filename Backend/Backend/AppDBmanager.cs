@@ -108,6 +108,113 @@ namespace Backend
             
         }
 
+        public List<Fan> getCurrentUser(SqlConnection conn, int id)
+        {
+            string query = $@"select points,U.ssn,gender,birthdate,Username,password,Email,Fname,Lname from Fans F ,users U where F.ssn = {id} and F.ssn=U.ssn"; ;
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<Fan> list = new List<Fan>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Fan user = new Fan();
+                user.Ssn = Convert.ToInt16(dt.Rows[i]["ssn"]);
+                user.Gender = Convert.ToString(dt.Rows[i]["gender"]);
+                user.Birthdate = Convert.ToString(dt.Rows[i]["birthdate"]);
+                user.UserName = Convert.ToString(dt.Rows[i]["UserName"]);
+                user.Password = Convert.ToString(dt.Rows[i]["password"]);
+                user.Email = Convert.ToString(dt.Rows[i]["Email"]);
+                user.Fname = Convert.ToString(dt.Rows[i]["Fname"]);
+                user.Lname = Convert.ToString(dt.Rows[i]["Lname"]);
+                user.Points = Convert.ToInt32(dt.Rows[i]["points"]);
+                user.Role = "Fan";
+                list.Add(user);
+            }
+            return list;
+        }
+
+        public IEnumerable<User> getCurrentJournalist(SqlConnection conn, int id)
+        {
+            string query = $@"select agency,U.ssn,gender,birthdate,Username,password,Email,Fname,Lname from journalists j ,users U where j.ssn = {id} and j.ssn=U.ssn";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<Journalist> list = new List<Journalist>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Journalist user = new Journalist();
+                user.Ssn = Convert.ToInt16(dt.Rows[i]["ssn"]);
+                user.Gender = Convert.ToString(dt.Rows[i]["gender"]);
+                user.Birthdate = Convert.ToString(dt.Rows[i]["birthdate"]);
+                user.UserName = Convert.ToString(dt.Rows[i]["UserName"]);
+                user.Password = Convert.ToString(dt.Rows[i]["password"]);
+                user.Email = Convert.ToString(dt.Rows[i]["Email"]);
+                user.Fname = Convert.ToString(dt.Rows[i]["Fname"]);
+                user.Lname = Convert.ToString(dt.Rows[i]["Lname"]);
+                user.Agency = Convert.ToString(dt.Rows[i]["Agency"]);
+                user.Role = "Journalist";
+                list.Add(user);
+            }
+            return list;
+        }
+
+        public IEnumerable<Admin> getCurrentAdmin(SqlConnection conn, int id)
+        {
+            string query = $@"select U.ssn,gender,birthdate,Username,password,Email,Fname,Lname from admin a ,users U where a.ssn = {id} and a.ssn=U.ssn";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<Admin> list = new List<Admin>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Admin user = new Admin();
+                user.Ssn = Convert.ToInt16(dt.Rows[i]["ssn"]);
+                user.Gender = Convert.ToString(dt.Rows[i]["gender"]);
+                user.Birthdate = Convert.ToString(dt.Rows[i]["birthdate"]);
+                user.UserName = Convert.ToString(dt.Rows[i]["UserName"]);
+                user.Password = Convert.ToString(dt.Rows[i]["password"]);
+                user.Email = Convert.ToString(dt.Rows[i]["Email"]);
+                user.Fname = Convert.ToString(dt.Rows[i]["Fname"]);
+                user.Lname = Convert.ToString(dt.Rows[i]["Lname"]);
+                user.Role = "Admin";
+                list.Add(user);
+            }
+            return list;
+        }
+
+        public User CheckEmail(SqlConnection conn, string Email, string Pass)
+        {
+            string query = $@"Select * from Users where email = '{Email}'";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            if (dt.Rows.Count > 0)
+            {
+                dt.Clear();
+                query = $@"Select * from Users where email = '{Email}' and password = '{Pass}'";
+                sqlDataAdapter = new SqlDataAdapter(query, conn);
+                sqlDataAdapter.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    User user = new User();
+                    user.Ssn = Convert.ToInt16(dt.Rows[0]["ssn"]);
+                    user.Gender = Convert.ToString(dt.Rows[0]["gender"]);
+                    user.Birthdate = Convert.ToString(dt.Rows[0]["birthdate"]);
+                    user.UserName = Convert.ToString(dt.Rows[0]["UserName"]);
+                    user.Password = Convert.ToString(dt.Rows[0]["password"]);
+                    user.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                    user.Fname = Convert.ToString(dt.Rows[0]["Fname"]);
+                    user.Lname = Convert.ToString(dt.Rows[0]["Lname"]);
+                    return user;
+                }
+                else
+                    throw new Exception("Password Incorrect");
+            }
+            else
+                throw new Exception("Email not found");
+
+        }
+
         private int checkDate2(string datenow, string datematch)
         {
 

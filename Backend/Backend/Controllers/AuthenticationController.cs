@@ -1,4 +1,4 @@
-﻿using Backend.Models;
+﻿using Back_End.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +7,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Back_End.Models;
 using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.Text.Json;
