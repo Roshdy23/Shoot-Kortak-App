@@ -26,6 +26,7 @@ namespace Backend.Controllers
             return _appDbManager.getAllMatches(_sqlconn);
         }
         [HttpGet]
+
         [Route("inChampionship/{id}")]
         public IEnumerable<Match> getAllMatchesInChampionship(string id)
         {
@@ -37,13 +38,13 @@ namespace Backend.Controllers
         {
             return (Convert.ToBoolean(_appDbManager.addMatch(_sqlconn,m)))?  Ok():BadRequest();
         }
-
+        
         [HttpGet]
         [Route("GetMatch/{id}")]
         public IEnumerable<Match> getmatch(string id)
         {
             return _appDbManager.getMatchData(_sqlconn, Convert.ToInt32(id));
-        }
+        }   
 
         [HttpPost]
         [Route("update/{id}")]
@@ -60,27 +61,6 @@ namespace Backend.Controllers
             return _appDbManager.getMatchesByDate(_sqlconn, date);
         }
 
-        [HttpGet]
-        [Route("GetFinishedMatches")]
-
-        public IEnumerable<Match> getAllFinishedMatches()
-        {
-            return _appDbManager.getAllFinishedMatches(_sqlconn);
-        }
-
-        [HttpPost]
-        [Route("addResultTofinishedMatch/{id}")]
-
-        public async Task<IActionResult> addResultToFinishedMatch(string id,string res)
-        {
-            int state = _appDbManager.addResultToFinishedMatch(_sqlconn, Convert.ToInt32(id), res);
-            if (state !=0)
-            {
-                return Ok(Convert.ToInt32(id));
-            }
-            else
-                return BadRequest();
-        }
 
     }
 }

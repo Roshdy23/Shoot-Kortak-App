@@ -22,7 +22,7 @@ namespace Backend.Controllers
         }
         [HttpGet]
         [Route("GetInChamp/{id}")]
-        public IEnumerable<Dictionary<object,object>> getAllClubsInChamp(string id)
+        public IEnumerable<Club> getAllClubsInChamp(string id)
         {
             return _appDbManager.getAllClubsInChampionship(_sqlconn, Convert.ToInt32(id));
         }
@@ -31,19 +31,19 @@ namespace Backend.Controllers
         [Route("Add")]
         public  async Task<IActionResult> addClub(Club club)
         {
-            return (Convert.ToBoolean(_appDbManager.addClub(_sqlconn, club))) ? Ok(200) : BadRequest();
+            return (Convert.ToBoolean(_appDbManager.addClub(_sqlconn, club))) ? Ok() : BadRequest();
         }
 
         [HttpPost]
-        [Route("Update")]
-        public  async Task<IActionResult> updateClub( Club club)
+        [Route("update/{id}")]
+        public  async Task<IActionResult> updateClub(Club club)
         {
             return (Convert.ToBoolean(_appDbManager.updateClub(_sqlconn, club))) ? Ok() : BadRequest();
         }
  
         [HttpGet]
         [Route("AllClubs")]
-        public IEnumerable<Dictionary<object,object>> getClubs()
+        public IEnumerable<Club> getClubs()
         {
             return _appDbManager.getAllClubs(_sqlconn);
         }
@@ -54,19 +54,5 @@ namespace Backend.Controllers
         {
             return Convert.ToBoolean(_appDbManager.updateClubCoach(_sqlconn,clubId, newCoach))?Ok():BadRequest();
         }
-        [HttpGet]
-        [Route("getClubPlayers/{clubId}")]
-        public IEnumerable<Dictionary<object, object>> getClubPlayers(int clubId) 
-        {
-           return     _appDbManager.getClubPlayers(_sqlconn, clubId);
-        }
-
-        [HttpGet]
-        [Route("getOneClub/{clubId}")]
-        public IEnumerable<Dictionary<object, object>> getOneClub(int clubId)
-        { 
-            return _appDbManager.getOneClub(_sqlconn, clubId);
-        }
-
     }
 }

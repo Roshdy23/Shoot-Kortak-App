@@ -33,8 +33,8 @@ namespace Backend.Controllers
             return _appDbManager.getAllStadiumsInLocation(_sqlconn,loc);
         }
         [HttpGet]
-        [Route("GetStad/{id}")]
-        public IEnumerable<Stadium> getStadium(string id)
+        [Route("GetStadium")]
+        public IEnumerable<Stadium> getStadium(int id)
         {
             return _appDbManager.getStadium(_sqlconn, Convert.ToInt32(id));
         }

@@ -20,20 +20,11 @@ namespace Backend.Controllers
             _sqlconn.Open();
         }
 
-
         [HttpPost]
-        [Route("AddCoach/{clubID}")]
-        public IEnumerable<Coach> addCoach(int clubID, [FromBody] Coach coach)
+        [Route("Add")]
+        public async Task<IActionResult> addCoach([FromBody] Coach c)
         {
-            return _appDbManager.addCoach(_sqlconn, clubID, coach);
-        }
-
-        [HttpDelete]
-        [Route("DeleteCoach/{coachID}")]
-        public IActionResult deleteCoach(int coachID) 
-        {
-            return Convert.ToBoolean(_appDbManager.deletePlayer(_sqlconn, coachID)) ? Ok() : BadRequest();
-
+            return (Convert.ToBoolean(_appDbManager.addCoach(_sqlconn, c)) ? Ok() : BadRequest());
         }
     }
 }

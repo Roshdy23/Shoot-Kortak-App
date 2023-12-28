@@ -18,20 +18,18 @@ namespace Backend.Controllers
             _appDbManager = new AppDBmanager();
             _sqlConnection.Open();
         }
-
-        [HttpPost]
-        [Route("AddPlayerh/{clubID}")]
-
-        public IEnumerable<Player> addPlayer(int clubID, [FromBody] Player player)
+        [HttpPut]
+        [Route("UpdatePlayer/{playerID}")]
+        public IActionResult updatePlayer(int playerID, [FromBody] Player player)
         {
-            return _appDbManager.addPlayer(_sqlConnection, clubID, player);
+            return Convert.ToBoolean(_appDbManager.updatePlayer(_sqlConnection, playerID, player)) ? Ok() : BadRequest(); 
         }
 
-        [HttpDelete]
-        [Route("DeletePlayer/{playerID}")]
-        public IActionResult deletePlayer(int playerID)
+        [HttpPost]
+        [Route("Add")]
+        public async Task<IActionResult> addPlayer([FromBody] Player p)
         {
-            return Convert.ToBoolean(_appDbManager.deletePlayer(_sqlConnection, playerID))?Ok():BadRequest();
+            return (Convert.ToBoolean(_appDbManager.addPlayer(_sqlConnection, p))) ? Ok() : BadRequest();
         }
     }
 }
