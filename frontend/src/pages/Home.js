@@ -5,9 +5,9 @@ import Vote from "../components/votePOTM.js";
 import POTMWinner from "../components/POTMWinner.js";
 import MatchesToday from "../components/Match/MatchesToday.js";
 import { Link } from "react-router-dom"
-function Home() {
-    let role = "admin"
-    if (role === "admin")
+function Home({user}) {
+    let role = (user.role==="Admin"||user.role==="Journalist")?user.role:"Fan";
+    if (role === "Admin")
         return (
             <section class="jumbotron text-center mt-5">
                 <div class="container">
@@ -17,7 +17,7 @@ function Home() {
                 </div>
             </section>
         )
-    else if (role === "user") {
+    else if (role === "Fan") {
         return (
             <div className="homeGrid">
                 <TrendingArts />

@@ -1,9 +1,38 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import { Link } from "react-router-dom";
-function Navbar() {
-    let role = "admin";
-    if (role === "admin")
+import Cookies from "js-cookie";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { baseUrl } from "../constants/url.constants";
+import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+function Navbar({rfshr,user,setUser}) {
+    const navigate = useNavigate();
+    const [status,setStatus] = useState("loggedout");
+    
+    useEffect(()=>{
+            let enc = Cookies.get("jwt")
+            if(enc)
+            {
+                const dec = jwtDecode(enc);
+                console.log(dec.id);
+                setStatus("loggedin");
+                fetch(`${baseUrl}/User/Get/${dec.id}`).then(res=>res.json()).then(data=>{setUser(data[0]);;
+                }).catch(ex=>console.log(ex));
+            }
+    }
+            ,[rfshr]);
+        useEffect(()=>{
+            console.log(user.role);
+            if(Cookies.get("jwt"))
+            {
+                setStatus("loggedin");
+            }
+            else
+            setStatus("loggedout");
+        },[user])
+            let role = "Fan";
+    if (user?.role==='Admin')
         return (
             <nav className="navbar navbar-expand-lg bg-black">
                 <div className="container-fluid">
@@ -42,17 +71,18 @@ function Navbar() {
                             <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
                             <label className="form-check-label text-light" for="flexSwitchCheckDefault">Dark Mode</label>
                         </div>
-                        <button type="button" className="btn btn-danger btn-sm ms-4">Log out</button>
+                        <button type="button" onClick={()=>{
+                                    Cookies.remove("jwt");
+                                    setStatus("loggedout");
+                                    setUser({});
+                                    navigate("/login/");
+                                }} className="btn btn-danger btn-sm ms-4">Log out</button>
                     </div>
                 </div>
             </nav>
         )
-    else if (role === "user") {
-        let status = "loggedin";
-        let user = {
-            username: "testuser",
-            points: 50,
-        }
+    else if ((!(user?.role))||user.role==="Fan") {
+        
         return (
             <nav style={{ color: "white", position: "sticky", height: "10vh", top: "0", zIndex: "5" }} className="navbar navbar-expand-lg bg-black">
                 <div className="container-fluid">
@@ -85,10 +115,15 @@ function Navbar() {
                                     <label className="form-check-label text-light" htmlFor="flexSwitchCheckDefault">Dark Mode</label>
                                 </div>
                                 <div>
-                                    <p className="h5">Hello, {user.username}</p>
+                                    <p className="h5">Hello, {user.userName}</p>
                                     <p className="h6">You have {user.points} pts!</p>
                                 </div>
-                                <button type="button" style={{ color: "white" }} className="btn btn-danger btn-sm ms-4">Log out</button>
+                                <div type="button" onClick={()=>{
+                                    Cookies.remove("jwt");
+                                    setStatus("loggedout");
+                                    setUser({});
+                                    navigate("/login/");
+                                }} style={{ color: "white" }} className="btn btn-danger btn-sm ms-4">Log out</div>
                             </div>
                             :
                             <>
@@ -96,8 +131,10 @@ function Navbar() {
                                     <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
                                     <label className="form-check-label text-light" for="flexSwitchCheckDefault">Dark Mode</label>
                                 </div>
-                                <button type="button" className="btn btn-outline-light btn-sm ms-4">Log in</button>
-                                <button type="button" className="btn btn-light btn-sm ms-4">Sign up</button>
+                                <button type="button" onClick={()=>{
+                                    navigate("/login/");
+                                }} className="btn btn-outline-light btn-sm ms-4">Log in</button>
+                                <button type="button" onClick={()=>{navigate("/register/");}} className="btn btn-light btn-sm ms-4">Sign up</button>
                             </>
                         }
 
@@ -107,11 +144,6 @@ function Navbar() {
         )
     }
     else {
-        let status = "loggedin";
-        let user = {
-            username: "testuser",
-            points: 50,
-        }
         return (
             <nav style={{ color: "white", position: "sticky", height: "10vh", top: "0", zIndex: "5" }} className="navbar navbar-expand-lg bg-black">
                 <div className="container-fluid">
@@ -138,10 +170,14 @@ function Navbar() {
                                     <label className="form-check-label text-light" htmlFor="flexSwitchCheckDefault">Dark Mode</label>
                                 </div>
                                 <div>
-                                    <p className="h5">Hello, {user.username}</p>
-                                    <p className="h6">You have {user.points} pts!</p>
+                                    <p className="h5">Hello, {user.userName}</p>
                                 </div>
-                                <button type="button" style={{ color: "white" }} className="btn btn-danger btn-sm ms-4">Log out</button>
+                                <button type="button" onClick={()=>{
+                                    Cookies.remove("jwt");
+                                    setStatus("loggedout");
+                                    setUser({});
+                                    navigate("/login/");
+                                }} style={{ color: "white" }} className="btn btn-danger btn-sm ms-4">Log out</button>
                             </div>
                             :
                             <>

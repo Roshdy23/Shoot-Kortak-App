@@ -63,8 +63,8 @@ function Matches(props) {
             }).catch((ex) => console.log(ex));
         }
     }
-    let role = "admin";
-    if (role === "admin")
+    let role = (props.user?.role==="Admin"||props.user?.role==="Fan")?props.user.role:"Fan";
+    if (role === "Admin")
         return (
             <>
                 <div className="container mt-5">

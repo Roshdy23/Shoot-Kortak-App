@@ -12,7 +12,7 @@ export default function Article(props){
     //         data=>setArticle(data)
     //     )
     // })
-const role = "user";
+    const role = (props.user.role==="Fan"||props.user.role==="Journalist")?props.user.role:"Fan";
     //for now
 useEffect(()=>{
         setArticle({
@@ -48,7 +48,7 @@ else
             <p>{article.details}</p>
             <div style={{display:"flex"}}>
 
-                {(role==="user")?((liked===0)?(
+                {(role==="Fan")?((liked===0)?(
             <button type="button" onClick={like} style={{display:"flex",justifyContent:"space-between",width:"60px",alignItems:"center",textAlign:"center"}} className="btn btn-outline-danger btn-sm ms-4"> <img src={"https://upload.wikimedia.org/wikipedia/commons/5/54/Bot%C3%B3n_Me_gusta.svg"} style={{height:"20px"}}  alt="article pic"/>
             <div style={{display:"flex",height:"100%",flexDirection:"column",justifyContent:"center"}}>{(article.likes)?.toString()}</div>
             </button>
