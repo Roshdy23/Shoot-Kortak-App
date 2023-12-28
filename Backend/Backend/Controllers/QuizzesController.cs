@@ -52,5 +52,20 @@ namespace Backend.Controllers
                 return Ok();
             return BadRequest();
         }
+
+        [HttpGet]
+        [Route("getPendingQuizzes")]
+        public IEnumerable<Quiz> getAllPendingQuizzes()
+        {
+            return _dbmanager.getAllPendingQuizzes(_connection);    
+        }
+
+        [HttpGet]
+        [Route("getPendingQuizzesOfJour/{id}")]
+
+        public IEnumerable<Quiz> getAllPendingQuizzesOfJour(string id)
+        {
+            return _dbmanager.getAllPendingQuizzesOfJour(_connection,Convert.ToInt32(id));
+        }
     }
 }

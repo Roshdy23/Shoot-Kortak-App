@@ -17,6 +17,6 @@ public partial class Match
 
     public int? StadiumId { get; set; }
 
-    public int? result { get; set; }
+    public string? result { get; set; }
 
 }
