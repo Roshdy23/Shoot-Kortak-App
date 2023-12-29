@@ -1664,7 +1664,7 @@ where club_id=c.id and championship_id=1 and player_id = p.id group by c.id,c.na
 
         public IEnumerable<Dictionary<Object, Object>> TopLikes(SqlConnection sqlConnection)
         {
-            string query = $@"Select article_id,Count(article_id) as total from likes group by article_id order by total desc";
+            string query = $@"Select article_id,Count(article_id) as total,Name  from likes,Articles where article_id = id group by article_id,Name order by total desc";
             DataTable dt = new DataTable();
             SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
             adapter.Fill(dt);
@@ -1672,7 +1672,7 @@ where club_id=c.id and championship_id=1 and player_id = p.id group by c.id,c.na
             for (int i = 0; i < 5 && i < dt.Rows.Count; i++)
             {
                 Dictionary<Object, Object> row = new Dictionary<Object, Object>();
-                row["ArticleName"] = dt.Rows[i]["article_name"];
+                row["ArticleName"] = dt.Rows[i]["Name"];
                 row["Likes"] = dt.Rows[i]["total"];
                 likes.Add(row);
             }
