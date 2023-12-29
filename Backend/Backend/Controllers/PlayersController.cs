@@ -22,9 +22,14 @@ namespace Backend.Controllers
         [HttpPost]
         [Route("AddPlayerh/{clubID}")]
 
-        public IEnumerable<Player> addPlayer(int clubID, [FromBody] Player player)
-        {
-            return _appDbManager.addPlayer(_sqlConnection, clubID, player);
+        public IActionResult addPlayer(int clubID, [FromBody] Player player)
+       {
+            IEnumerable<Player> result = new List<Player>();
+            result = _appDbManager.addPlayer(_sqlConnection, clubID, player);
+            if (result.Count() == 0)
+                return BadRequest();
+            else
+                return Ok(result);
         }
 
         [HttpDelete]

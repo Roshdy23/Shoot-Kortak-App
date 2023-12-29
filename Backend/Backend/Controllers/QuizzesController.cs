@@ -53,6 +53,13 @@ namespace Backend.Controllers
             return BadRequest();
         }
 
+        [HttpPost]
+        [Route("AnswerQuiz/{FanSSN} /{questionId}")]
+        public IActionResult AnswerQuestion(int FanSSN, int questionId, [FromBody] string answer)
+        {
+            return _dbmanager.AnswerQuiz(_connection, FanSSN, questionId, answer) ? Ok() : BadRequest();
+        }
+
         [HttpGet]
         [Route("getPendingQuizzes")]
         public IEnumerable<Quiz> getAllPendingQuizzes()

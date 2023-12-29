@@ -27,6 +27,25 @@ namespace Backend.Controllers
             return _dbmanager.TopLikes(_connection);
         }
 
+        [HttpGet]
+        [Route("GetArticles/{journalistID}")]
+        public IActionResult getArticles(int journalistID)
+        {
+            IEnumerable<Article> list = new List<Article>();
+            list = _dbmanager.getArticles(_connection, journalistID);
+            if(list.Count() > 0) 
+            {
+                return Ok(list);
+            }
+            else
+                return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("AddLikeDislike/{fanSSN}/{ArticleID}")]
+        public bool addLike(int fanSSN , int ArticleID)
+        {
+            return _dbmanager.addLike(_connection, fanSSN , ArticleID);
         [HttpPost]
         [Route("addArticle")]
         public  async Task<IActionResult> addArticle([FromBody] Article article)
@@ -43,6 +62,6 @@ namespace Backend.Controllers
             int temp = _dbmanager.deleteArticle(_connection, name);
             if (temp == 0) { return BadRequest(); }
             else return Ok();
-        }
+       }
     }
 }
