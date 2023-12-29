@@ -21,7 +21,7 @@ namespace Backend.Controllers
         }
         [HttpGet]
         [Route("Get")]
-        public IEnumerable<Journalist> getAllJournalists()
+        public IEnumerable<Dictionary<object,object>> getAllJournalists()
         {
             return _appDbManager.getAllJournalists(_sqlconn);
         }

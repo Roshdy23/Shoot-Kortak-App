@@ -38,12 +38,16 @@ function UpdateClubPlayers() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: {}
+                body: JSON.stringify({})
             })
-                .then((res) => res.json())
+                .then((res) => res)
                 .catch((ex) => console.log(ex));
             setCheck(3);
-            setPlayer({})
+            setPlayer({});
+            fetch(`${baseUrl}/Clubs/getClubPlayers/${clubID}`)
+                .then((res) => res.json())
+                .then((data) => setPlayers(data))
+                .catch((ex) => console.log(ex));
         }
         setTimeout(() => {
             setCheck(-1);
@@ -68,25 +72,22 @@ function UpdateClubPlayers() {
                             {players.map((pl, index) => (
                                 <li><button key={index + 1} className="dropdown-item" onClick={() => {
                                     setPlayer(pl);
-                                }}>{pl.Fname} {pl.Lname}</button></li>
+                                }}>{pl.Name}</button></li>
                             ))}
                         </ul>
                     </div>
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Player first name: ${player.Fullname}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Player name: ${player.Name}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Player nickname: ${player.nickName}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Player market value: ${player.marketValue}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Player birth date: ${player.bdate}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Player main position: ${player.mainPosition}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Player nationallity: ${player.nationallity}`} aria-label="readonly input example" readonly />
-                </div>
-                <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Player Height: ${player.height}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Player Height: ${player.Height}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
                     <input className="form-control" type="text" value={`Player Foot: ${player.foot}`} aria-label="readonly input example" readonly />

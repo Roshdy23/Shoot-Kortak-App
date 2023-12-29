@@ -26,7 +26,7 @@ function AddMatch() {
     const [stadiums, setStadiums] = useState([]);
     const [stadium, setStadium] = useState('Stadiums');
     useEffect(() => {
-        fetch(`${baseUrl}/Championships/Get`)
+        fetch(`${baseUrl}/Championships/GetCurrent`)
             .then((res) => res.json())
             .then((data) => {
                 setChampionships(data);
@@ -62,7 +62,7 @@ function AddMatch() {
         let tmp = dateValue.toLocaleDateString();
         let x = new Date();
         x = x.toLocaleDateString();
-        if (club1 == "" || club2 == "" || stadium == "Stadiums" || champ == "Championships" || weekno == "" || tmp == x) { setCheck(0) }
+        if (club1 == "" || club2 == "" || stadium == "Stadiums" || champ == "Championships" || weekno == "" || tmp == x || isNaN(weekno)) { setCheck(0) }
         else {
             fetch(`${baseUrl}/Matches/Add`, {
                 method: 'POST',
@@ -114,7 +114,7 @@ function AddMatch() {
                             <select className="form-select" id="inputGroupSelect01" onChange={HandelSecondClubs}>
                                 <option defaultValue>Choose...</option>
                                 {clubs1.map((c, index) => (
-                                    <option key={index + 1} >{c.name}</option>
+                                    <option key={index + 1} >{c.Name}</option>
                                 ))}
                             </select>
                         </div>
@@ -127,7 +127,7 @@ function AddMatch() {
                             <select className="form-select" id="inputGroupSelect01" onChange={HandelsecondClub}>
                                 <option defaultValue>Choose...</option>
                                 {clubs2.map((c, index) => (
-                                    <option key={index + 1} >{c.name}</option>
+                                    <option key={index + 1} >{c.Name}</option>
                                 ))}
                             </select>
                         </div>

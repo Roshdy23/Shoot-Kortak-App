@@ -30,10 +30,17 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        [Route("Get/{stadiumid}")]
-        public IEnumerable<Store> getOneStore(string stad_id)
+        [Route("Get/{stad_id}")]
+        public IEnumerable<Dictionary<object, object>> getOneStore(string stad_id)
         {
             return _appDbManager.getOneStore(_sqlconn,Convert.ToInt32(stad_id));
+        }
+        
+        [HttpPost]
+        [Route("AddItem/{stad_id}/{itemId}/{qty}")]
+        public async Task<IActionResult> addItemToStore(string stad_id,string itemId,string qty)
+        {
+            return _appDbManager.addItemToStore(_sqlconn, Convert.ToInt32(stad_id), Convert.ToInt32(itemId), Convert.ToInt32(qty)) !=0? Ok() : BadRequest();
         }
 
     }

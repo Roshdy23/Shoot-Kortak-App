@@ -28,13 +28,13 @@ function UpdateStadium() {
             .catch((ex) => console.log(ex));
     }, [])
     const HandelUpdate = () => {
-        if (newName == "" && newImage == "" && newCapacity == "") {
+        if ((newName == "" && newImage == "" && newCapacity == "") || (newCapacity != "" && isNaN(newCapacity))) {
             setCheck(0);
         }
         else {
             let myname = (newName === "") ? stadData[0].name : newName;
             let myimg = (newImage === "") ? stadData[0].image : newImage;
-            let mycap = (newCapacity === "") ? stadData[0].capacity : newCapacity;
+            let mycap = (newCapacity == "") ? stadData[0].capacity : newCapacity;
             fetch(`${baseUrl}/Stadiums/UpdateStadium/${updatestadiumID}`, {
                 method: 'PUT',
                 headers: {
@@ -125,13 +125,15 @@ function UpdateStadium() {
                         </div>
                     </div>
                 </div>
-                <button className="btn btn-info col col-lg-1 mt-4" onClick={() => {
-                    HandelUpdate();
-                }}>Update</button>
-                <Link className="btn btn-danger col col-lg-1 mt-4 ms-5" to={"/stadiums"} >Cancel</Link>
-            </div>
-            <div className='container mt-3'>
-                {check == 0 ? <h6 style={{ color: "red" }}>Please Insert Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Updated Successfully</h6> : <p></p>}
+                <div className='row mb-3'>
+                    <button className="btn btn-info col col-lg-1 mt-4" onClick={() => {
+                        HandelUpdate();
+                    }}>Update</button>
+                    <Link className="btn btn-danger col col-lg-1 mt-4 ms-5" to={"/stadiums"} >Cancel</Link>
+                    <div className='col mt-4'>
+                        {check == 0 ? <h6 style={{ color: "red" }}>Please Insert Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Updated Successfully</h6> : <p></p>}
+                    </div>
+                </div>
             </div>
         </>
     )

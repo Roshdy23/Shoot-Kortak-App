@@ -40,7 +40,9 @@ function AddStadium() {
         setCreatedAt(event.target.value);
     }
     const HandelAdd = () => {
-        if (createdAt == "" || nme == "" || cap == "" || loc == "" || image == "" || length == "" || width == "") {
+        if (createdAt == "" || nme == "" || cap == "" || loc == "" || image == "" || length == "" || width == "" ||
+            (cap != "" && isNaN(cap)) || (length != "" && isNaN(length)) || (width != "" && isNaN(width)) || (createdAt != "" && isNaN(createdAt))
+            || (parseInt(createdAt) < 1850 || parseInt(createdAt) > 2023)) {
             setCheck(0);
         }
         else {

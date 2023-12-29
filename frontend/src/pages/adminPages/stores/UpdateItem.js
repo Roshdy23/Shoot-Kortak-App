@@ -6,21 +6,27 @@ import { baseUrl } from "../../../constants/url.constants";
 function UpdateItem() {
     const [check, setCheck] = useState(-1);
     let { storeID } = useParams();
-    let { itemID } = useParams();
+    let { itemid } = useParams();
     let history = useNavigate();
     const [pr, setPr] = useState("");
     const [nme, setNme] = useState("");
     const [qtty, setQtty] = useState("");
     const [mge, setMge] = useState("");
+    const [store, setStore] = useState([{}]);
+
     const navback = () => {
         history(`/stores/view/${storeID}`);
     }
-    const [item, setItem] = useState({ itemid: 1, price: 100, quantity: 2000, name: "ITEM NAME PLACEHOLDER", imag: "https://image.info.url" });
+    const [item, setItem] = useState([{}]);
     useEffect(() => {
-        fetch(`${baseUrl}/Stores/GetItem/${storeID}/${itemID}`)
+        fetch(`${baseUrl}/Stores/Get/${storeID}`)
+            .then((res) => res.json())
+            .then((data) => setStore(data))
+            .catch((ex) => console.log(ex));
+        fetch(`${baseUrl}/StoreItems/Getiteminstore/${itemid}/${storeID}`)
             .then((res) => res.json())
             .then((data) => setItem(data))
-            .catch((ex) => ex)
+            .catch((ex) => console.log(ex))
     }, [])
     const Handelname = (e) => {
         setNme(e.target.value);
@@ -35,25 +41,15 @@ function UpdateItem() {
         setMge(e.target.value);
     }
     const HandelUpdate = () => {
-        if (pr != "" || nme != "" || qtty != "" || mge != "") {
-            let p = pr == "" ? item.price : pr;
-            let n = nme == "" ? item.name : nme;
-            let q = qtty == "" ? item.quantity : qtty;
-            let m = mge == "" ? item.imag : mge;
-            fetch(`${baseUrl}/Stores/Update/${storeID}`, {
+        if (qtty != "" && !isNaN(qtty)) {
+            fetch(`${baseUrl}/StoreItems/UpdateItemQty/${storeID}/${itemid}/${qtty}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: {
-                    id: itemID,
-                    price: p,
-                    quantity: q,
-                    name: n,
-                    image: m,
-                }
+                body: JSON.stringify({})
             }).then((res) => res)
-                .catch((ex) => ex);
+                .catch((ex) => console.log(ex));
             setCheck(1);
         }
         else {
@@ -68,29 +64,13 @@ function UpdateItem() {
         <>
             <div className="container">
                 <div className='row mt-4'>
-                    <h3>Update Item: </h3>
+                    <h3>Update Item In: {store[0].Name} Store</h3>
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Item Name: ${item.name}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Item Name: ${item[0].Name}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Item Quantity: ${item.quantity}`} aria-label="readonly input example" readonly />
-                </div>
-                <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Item Price: ${item.price}`} aria-label="readonly input example" readonly />
-                </div>
-                <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Item Image URL: ${item.imag}`} aria-label="readonly input example" readonly />
-                </div>
-                <div className='row mt-3'>
-                    <div className='col col-lg-9'>
-                        <div className="row mb-3">
-                            <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Update Name</label>
-                            <div class="col-sm-10 col-lg-6">
-                                <input type="text" className="form-control" id="colFormLabel" placeholder="insert new item name" onChange={Handelname} />
-                            </div>
-                        </div>
-                    </div>
+                    <input className="form-control" type="text" value={`Item Current Quantity: ${item[0].qty}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className='row mt-3'>
                     <div className='col col-lg-9'>
@@ -98,26 +78,6 @@ function UpdateItem() {
                             <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Update Quantity</label>
                             <div class="col-sm-10 col-lg-6">
                                 <input type="text" className="form-control" id="colFormLabel" placeholder="insert new stadium name" onChange={Handelqty} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='row mt-3'>
-                    <div className='col col-lg-9'>
-                        <div className="row mb-3">
-                            <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Update Price</label>
-                            <div class="col-sm-10 col-lg-6">
-                                <input type="text" className="form-control" id="colFormLabel" placeholder="insert new stadium name" onChange={Handelprice} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='row mt-3'>
-                    <div className='col col-lg-9'>
-                        <div className="row mb-3">
-                            <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Update Image URL</label>
-                            <div class="col-sm-10 col-lg-6">
-                                <input type="text" className="form-control" id="colFormLabel" placeholder="insert new stadium name" onChange={Handelimage} />
                             </div>
                         </div>
                     </div>

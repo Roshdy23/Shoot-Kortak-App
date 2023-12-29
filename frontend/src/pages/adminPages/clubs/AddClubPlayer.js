@@ -60,6 +60,7 @@ function AddClubPlayer() {
         if (pos == "Positions" || frstName == "" || scndName == "" || tshirt == -1 || brthDate == "" || national == "" || hei == -1 || foot == -1 || photo == "" || Mv == -1) {
             setCheck(0);
         }
+        else if (!Date.parse(brthDate) || isNaN(hei) || isNaN(Mv) || isNaN(tshirt)) { setCheck(0) }
         else {
             fetch(`${baseUrl}/Players/AddPlayerh/${clubID}`, {
                 method: 'POST',

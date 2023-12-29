@@ -36,10 +36,22 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        [Route("Getiteminstore")]
+        [Route("Getiteminstore/{itemid}/{stadid}")]
         public IEnumerable<Dictionary<object, object>> getItemInStore(string itemid, string stadid)
         {
             return _appDbManager.getItemInStore(_sqlconn, Convert.ToInt32(itemid), Convert.ToInt32(stadid));
+        }
+        [HttpGet]
+        [Route("GetItemsNotInStore/{stadid}")]
+        public IEnumerable<Dictionary<object, object>> getItemsNotInStore(string stadid)
+        {
+            return _appDbManager.getItemsNotInStore(_sqlconn, Convert.ToInt32(stadid));
+        }
+        [HttpPut]
+        [Route("UpdateItemQty/{stadid}/{itemid}/{qty}")]
+        public IActionResult updateItemQty(string itemid, string stadid, string qty)
+        {
+            return _appDbManager.updateItemQty(_sqlconn, Convert.ToInt32(itemid), Convert.ToInt32(stadid), Convert.ToInt32(qty)) !=0?Ok():BadRequest();
         }
     }
 }
