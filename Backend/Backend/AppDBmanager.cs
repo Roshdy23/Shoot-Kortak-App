@@ -1,4 +1,5 @@
 using Back_End.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
@@ -133,6 +134,73 @@ namespace Backend
             return list;
         }
 
+        public Player getPlayer(SqlConnection conn, int id)
+        {
+            string query = $@"select Fname,Lname,Photo from match_staff where id ={id}";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query,conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            Player player = new Player();
+            player.Fname = Convert.ToString(dt.Rows[0]["Fname"]);
+            player.Lname = Convert.ToString(dt.Rows[0]["Lname"]);
+            player.Photo = Convert.ToString(dt.Rows[0]["Photo"]);
+            return player;
+        }
+
+        public int RatePlayer(SqlConnection conn, int matchId, int userId,int playerId,double rate)
+        {
+            try
+            {
+
+            string query = $@"Insert Into Rating (fan_ssn,match_id,match_staff_ssn,rate)
+values ({userId},{matchId},{playerId},{rate})";
+             SqlCommand sqlCommand= new SqlCommand(query,conn);
+            sqlCommand.ExecuteNonQuery();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+                return 0;
+            }
+            
+        }
+
+        public IEnumerable<Article> getAllByDate(SqlConnection conn,string date)
+        {
+            string query = $@"select * from Articles where posted = '{date}'";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query,conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<Article> list = new List<Article>();
+            for(int i = 0; i < dt.Rows.Count; i++)
+            {
+                Article article = new Article();
+                article.img = Convert.ToString(dt.Rows[i]["picture"]);
+                article.title = Convert.ToString(dt.Rows[i]["title"]);
+                article.description = Convert.ToString(dt.Rows[i]["description"]);
+                article.Name = Convert.ToString(dt.Rows[i]["Name"]);
+                list.Add(article);
+            }
+            return list;
+
+        }
+        public Article articlebyId(SqlConnection conn , string id)
+        {
+            string query = $@"Select * from Articles,likes where name = '{id}'";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query,conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            Article article = new Article();
+            article.img = Convert.ToString(dt.Rows[0]["picture"]);
+            article.title = Convert.ToString(dt.Rows[0]["title"]);
+            article.description = Convert.ToString(dt.Rows[0]["description"]);
+            article.Name = Convert.ToString(dt.Rows[0]["Name"]);
+            query = $@"select Count(fan_ssn) from likes where article_name = '{id}'";
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            article.likes = Convert.ToInt32(sqlCommand.ExecuteScalar());
+            return article;
+        }
         public IEnumerable<User> getCurrentJournalist(SqlConnection conn, int id)
         {
             string query = $@"select agency,U.ssn,gender,birthdate,Username,password,Email,Fname,Lname from journalists j ,users U where j.ssn = {id} and j.ssn=U.ssn";
@@ -344,7 +412,7 @@ namespace Backend
 
         public IEnumerable<Dictionary<object,object>> getAllMatches(SqlConnection conn)
         {
-            string query = @"select * from matches";
+            string query = @"Exec GetAllMatches";   
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
             sqlDataAdapter.Fill(dt);
@@ -400,7 +468,7 @@ namespace Backend
         }
         public IEnumerable<Dictionary<object,object>> getAllMatchesInChampionship(SqlConnection conn, int Id)
         {
-            string query = @"select * from matches where Championshipid=" + Id;
+            string query = $@"Exec getAllMatchesInChampionship {Id}";
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
             sqlDataAdapter.Fill(dt);
@@ -471,10 +539,11 @@ namespace Backend
             {
                 Championship champ = new Championship();
                 champ.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
-                champ.StartingAt = Convert.ToString(dt.Rows[i]["StartingAt"]);
+
+                champ.StartingAt = dt.Rows[i]["StartingAt"].ToString()!;
                 string checkdate = Convert.ToString(dt.Rows[i]["EndingAt"]);
                 if (checkDate(date, checkdate)==0||checkDate(date,checkdate)==-1)continue;
-                champ.EndingAt = Convert.ToString(dt.Rows[i]["EndingAt"]);
+                champ.EndingAt = dt.Rows[i]["EndingAt"].ToString()!;
                 champ.Name = Convert.ToString(dt.Rows[i]["Name"]);
                 champ.NoMatches = Convert.ToInt32(dt.Rows[i]["no_matches"]);
                 list.Add(champ);
@@ -510,16 +579,7 @@ namespace Backend
         }
         public IEnumerable<Dictionary<object,object>> getAllClubsInChampionship(SqlConnection conn, int champ_id)
         {
-            string query = $@"select * from clubs
-                                where clubs.Id in(
-                                select c.Id from clubs c,Club_cup cl
-                                where cl.championship_id={champ_id} and cl.club_id=c.Id
-
-                                union 
-
-                                select c.Id from clubs c,Club_league cl
-                                where cl.championship_id={champ_id} and cl.club_id=c.Id
-                                )";
+            string query = $@"Exec getAllClubsInChamp {champ_id}";
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
             sqlDataAdapter.Fill(dt);
@@ -537,7 +597,7 @@ namespace Backend
                 dob.Add("ID", dt.Rows[i]["id"]);
 
 
-                string query2 = @$"select sum(Market_value) as marketValue from Players where club_id = {Convert.ToInt64(dt.Rows[i]["id"])}";
+                string query2 = @$"Exec TotalClubValue {Convert.ToInt32(dt.Rows[i]["id"])}";
 
                 SqlDataAdapter sqlDataAdapter2 = new SqlDataAdapter(query2, conn);
                 DataTable dt2 = new DataTable();
@@ -548,7 +608,7 @@ namespace Backend
                 dob.Add("marketValue", mval);
 
 
-                query2 = @$"select Name from Stadium  where id = {dt.Rows[i]["stadium_home"]}";
+                query2 = @$"Exec StadiumNameID {dt.Rows[i]["stadium_home"]}";
                 SqlDataAdapter sqlDataAdapter22 = new SqlDataAdapter(query2, conn);
                 DataTable dt22 = new DataTable();
                 sqlDataAdapter22.Fill(dt22);
@@ -563,7 +623,7 @@ namespace Backend
         }
         public IEnumerable<Stadium> getAllStadiums(SqlConnection conn)
         {
-            string query = $@"select * from Stadium";
+            string query = $@"Exec AllStadiums";
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
             sqlDataAdapter.Fill(dt);
@@ -621,64 +681,116 @@ namespace Backend
             return res;
         }
 
-        public IEnumerable<Dictionary<object,object>> getMatchData(SqlConnection conn, int id)
+        public BigMatch getMatchData(SqlConnection conn, int id,int usrid)
         {
-            
-            string query = "select * from matches where id = " + id + "";
+            string query = $@"select m.id,c1.id as id1,c2.id as id2,c1.name as Home,c2.name as Away,c1.logo as homepic,c2.logo as awaypic ,result,c.name
+from matches m, clubs c1,clubs c2,Stadium  s,championship c
+where m.id={id} and c1.name=club1 and c2.name = club2 and s.id = stadium_id and c.id = championshipid";
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
             sqlDataAdapter.Fill(dt);
-            List<Dictionary<object, object>> list = new List<Dictionary<object, object>>();
+            if(dt.Rows.Count==0)
+            return null;
+            BigMatch bigMatch = new BigMatch();
+            bigMatch.Id = id;
+            bigMatch.awaypic = Convert.ToString(dt.Rows[0]["awaypic"]);
+            bigMatch.homepic = Convert.ToString(dt.Rows[0]["homepic"]);
+            bigMatch.Away= Convert.ToString(dt.Rows[0]["Away"]);
+            bigMatch.Home = Convert.ToString(dt.Rows[0]["Home"]);
+            bigMatch.result = Convert.ToString(dt.Rows[0]["result"]);
+            bigMatch.championship = Convert.ToString(dt.Rows[0]["name"]);
+            int id1 = Convert.ToInt32(dt.Rows[0]["id1"]);
+                int id2 = Convert.ToInt32(dt.Rows[0]["id2"]);
+            List<RatedPlayer> Players1 = new List<RatedPlayer>();
+            List < RatedPlayer > Players2 = new List<RatedPlayer>(); 
+            query = $@"select m.Fname,m.Lname,m.Photo,P.main_position,r.rate,m.id
+from match_staff m, Players P,Rating r 
+where p.club_id = {id1} and m.id = p.id and r.fan_ssn={usrid} and match_id={id} and r.match_staff_ssn = m.id";
+            sqlDataAdapter = new SqlDataAdapter(query, conn);
+            dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {    RatedPlayer ratedPlayer = new RatedPlayer();
+                ratedPlayer.playerpic = Convert.ToString(dt.Rows[i]["Photo"]);
+                ratedPlayer.Fname = Convert.ToString(dt.Rows[i]["Fname"]);
+                ratedPlayer.Id = Convert.ToInt32(dt.Rows[i]["id"]);
+                ratedPlayer.Lname = Convert.ToString(dt.Rows[i]["Lname"]);
+                string pos = Convert.ToString(dt.Rows[i]["main_position"]);
+                ratedPlayer.Position = ((pos[0] == 'G') ? "GoalKeeper" : (pos[pos.Length - 1] == 'k') ? "Defender" : ((pos[pos.Length-1]=='d')?"midfielder":"attacker"));
+                ratedPlayer.rated = true;
+                ratedPlayer.rating = Convert.ToDouble(dt.Rows[i]["rate"]);
+                Players1.Add(ratedPlayer);
+            }
+            query = $@"select m.Fname,m.Lname,m.Photo,P.main_position,r.rate,m.id
+from match_staff m, Players P,Rating r 
+where p.club_id = {id2} and m.id = p.id and r.fan_ssn={usrid} and match_id={id} and r.match_staff_ssn = m.id";
+            sqlDataAdapter = new SqlDataAdapter(query, conn);
+            dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                Dictionary<object, object> match = new Dictionary<object, object>();
-                match.Add("id", Convert.ToInt32(dt.Rows[i]["id"]));
-
-
-                match.Add("matchDate", Convert.ToString(dt.Rows[i]["matchDate"]));
-
-                match.Add("club1", Convert.ToString(dt.Rows[i]["club1"]));
-
-
-                match.Add("club2", Convert.ToString(dt.Rows[i]["club2"]));
-                if (dt.Rows[i]["weekno"].ToString() != "")
-                    match.Add("weekno", Convert.ToInt32(dt.Rows[i]["weekno"]));
-                else
-                    match.Add("weekno", "NULL");
-
-                match.Add("stadium_id", Convert.ToInt32(dt.Rows[i]["stadium_id"]));
-
-                match.Add("championshipid", Convert.ToInt32(dt.Rows[i]["championshipid"]));
-
-                match.Add("result", Convert.ToString(dt.Rows[i]["result"]));
-
-                int stid = Convert.ToInt32(dt.Rows[i]["stadium_id"]);
-
-                int chmpid = Convert.ToInt32(dt.Rows[i]["championshipid"]);
-
-                string query1 = @$"select Name from Stadium where id ={stid}";
-
-                string query2 = $@"select name from championship where id ={chmpid}";
-
-                SqlDataAdapter sqlDataAdapter2 = new SqlDataAdapter(query1, conn);
-                DataTable dt2 = new DataTable();
-                sqlDataAdapter2.Fill(dt2);
-
-                match.Add("stadiumName", dt2.Rows[0]["Name"].ToString());
-
-
-                SqlDataAdapter sqlDataAdapter3 = new SqlDataAdapter(query2, conn);
-                DataTable dt3 = new DataTable();
-                sqlDataAdapter3.Fill(dt3);
-
-
-                match.Add("championshipName", dt3.Rows[0]["name"].ToString());
-
-                list.Add(match);
+                RatedPlayer ratedPlayer = new RatedPlayer();
+                ratedPlayer.playerpic = Convert.ToString(dt.Rows[i]["Photo"]);
+                ratedPlayer.Fname = Convert.ToString(dt.Rows[i]["Fname"]);
+                ratedPlayer.Id = Convert.ToInt32(dt.Rows[i]["id"]);
+                ratedPlayer.Lname = Convert.ToString(dt.Rows[i]["Lname"]);
+                string pos = Convert.ToString(dt.Rows[i]["main_position"]);
+                ratedPlayer.Position = ((pos[0] == 'G') ? "GoalKeeper" : (pos[pos.Length - 1] == 'k') ? "Defender" : ((pos[pos.Length - 1] == 'd') ? "midfielder" : "attacker"));
+                ratedPlayer.rated = true;
+                ratedPlayer.rating = Convert.ToDouble(dt.Rows[i]["rate"]);
+                Players2.Add(ratedPlayer);
             }
-            return list;
+            query = $@"select m.Fname,m.Lname,m.Photo,P.main_position ,m.id
+from match_staff m, Players P
+where p.club_id = {id1} and m.id = p.id and m.id 
+not in
+(select m.id
+from match_staff m, Players P,Rating r 
+where p.club_id = {id1} and m.id = p.id and r.fan_ssn={usrid} and match_id={id} and r.match_staff_ssn = m.id);";
+            sqlDataAdapter = new SqlDataAdapter(query, conn);
+            dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                RatedPlayer ratedPlayer = new RatedPlayer();
+                ratedPlayer.playerpic = Convert.ToString(dt.Rows[i]["Photo"]);
+                ratedPlayer.Fname = Convert.ToString(dt.Rows[i]["Fname"]);
+                ratedPlayer.Id = Convert.ToInt32(dt.Rows[i]["id"]);
+                ratedPlayer.Lname = Convert.ToString(dt.Rows[i]["Lname"]);
+                string pos = Convert.ToString(dt.Rows[i]["main_position"]);
+                ratedPlayer.Position = ((pos[0]== 'G') ? "GoalKeeper" : (pos[pos.Length - 1] == 'k') ? "Defender" : ((pos[pos.Length - 1] == 'd') ? "midfielder" : "attacker"));
+                ratedPlayer.rated = false;
+                ratedPlayer.rating = 0;
+                Players1.Add(ratedPlayer);
+            }
+            query = $@"select m.Fname,m.Lname,m.Photo,P.main_position ,m.id
+from match_staff m, Players P
+where p.club_id = {id2} and m.id = p.id and m.id 
+not in
+(select m.id
+from match_staff m, Players P,Rating r 
+where p.club_id = {id2} and m.id = p.id and r.fan_ssn={usrid} and match_id={id} and r.match_staff_ssn = m.id);";
+            sqlDataAdapter = new SqlDataAdapter(query, conn);
+            dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                RatedPlayer ratedPlayer = new RatedPlayer();
+                ratedPlayer.playerpic = Convert.ToString(dt.Rows[i]["Photo"]);
+                ratedPlayer.Fname = Convert.ToString(dt.Rows[i]["Fname"]);
+                ratedPlayer.Id = Convert.ToInt32(dt.Rows[i]["id"]);
+                ratedPlayer.Lname = Convert.ToString(dt.Rows[i]["Lname"]);
+                string pos = Convert.ToString(dt.Rows[i]["main_position"]);
+                ratedPlayer.Position = ((pos[0] == 'G') ? "GoalKeeper" : (pos[pos.Length - 1] == 'k') ? "Defender" : ((pos[pos.Length - 1] == 'd') ? "midfielder" : "attacker"));
+                ratedPlayer.rated = false;
+                ratedPlayer.rating = 0;
+                Players2.Add(ratedPlayer);
+            }
+            bigMatch.homeplayers = Players1;
+            bigMatch.awayplayers = Players2;
+            
+            return bigMatch;
         }
-
 
         public int updateMatch(SqlConnection conn, Match match, int id)
         {
@@ -703,7 +815,6 @@ namespace Backend
             }
             return res;
         }
-
 
         public int updateClub(SqlConnection conn, Club clubs)
         {
@@ -792,7 +903,6 @@ namespace Backend
             return res;
         }
 
-
         public IEnumerable<Player> addPlayer(SqlConnection conn,int clubID, Player player)
         {
             bool nationalityValid = checkWord(player.Nationality);
@@ -804,57 +914,17 @@ namespace Backend
 
             if (nationalityValid && FnameValid && LnameValid && positionValid && footValid)
             {
-                string query = $@"Select * from Match_staff m,Players p where p.id = m.id and m.Fname='{player.Fname}'and m.Lname ='{player.Lname}' and m.Birthdate = '{player.Birthdate}' and p.Main_Position = '{player.MainPosition}'";
-                SqlDataAdapter sqlDataAdapter= new SqlDataAdapter(query,conn);
+                string query = @$"Exec AddPlayer '{player.Birthdate}','{player.Nationality}','{player.Photo}','{player.Fname}','{player.Lname}',{clubID},{Convert.ToDecimal(player.Height)},{player.MarketValue},'{player.MainPosition}',{player.TShirtNumber},'{player.Foot}'";
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
                 DataTable dataTable = new();
                 sqlDataAdapter.Fill(dataTable);
-    
-                if (dataTable.Rows.Count == 0)
-                {
-                
-                    player.ClubId = clubID;
-                    query = $@"insert into Match_Staff(Birthdate,Nationality,Fname,Lname";
-                    string values = $@" values('{player.Birthdate}' ,'{player.Nationality}','{player.Fname}','{player.Lname}' ";
-                    if (player.Photo != null)
-                    {
-                        query += ",Photo";
-                        values += @$",'{player.Photo}'";
-                    }
-                    query += ") " + values + ");";
-
-
-                    SqlCommand sqlCommand = new SqlCommand(query, conn);
-
-                    sqlCommand.ExecuteNonQuery();
-
-                    query = "Select max(id) from Match_staff";
-                    sqlCommand.CommandText = query;
-                    int id = Convert.ToInt32(sqlCommand.ExecuteScalar());
-
-                    player.Id = id;
-
-                    query = $@"insert into players 
-                    Values ({player.Id},{player.ClubId},{player.Height},{player.MarketValue},'{player.MainPosition}',{player.TShirtNumber},'{player.Foot}')";
-
-
-                    sqlCommand.CommandText = query;
-
-                    sqlCommand.ExecuteNonQuery();
-
-                    list.Add(player);
-                    return list;
-                }
-                else
-                {
-                    player.Id = Convert.ToInt32(dataTable.Rows[0]["id"]);
-                    list.Add(player);
-                    return list;
-                }
-
+                player.Id = Convert.ToInt32(dataTable.Rows[0]["id"]);
+                player.ClubId = Convert.ToInt32(dataTable.Rows[0]["club_id"]);
+                list.Add(player);
+                return list;
             }
             else
                 return list;
-            
         }
         public int deletePlayer(SqlConnection conn,int playerId)
         {
@@ -870,7 +940,6 @@ namespace Backend
                 return 0;
             }
         }
-
 
         public IEnumerable<Journalist> getAllJournalists(SqlConnection conn)
         {
@@ -1110,13 +1179,12 @@ namespace Backend
             return list;
         }
 
-
         public int updateItem(SqlConnection conn, Item item, int id)
         {
             bool ok = checkItem(conn, id);
             if (!ok) return 0;
             string query = @$"update items set item_price ={item.ItemPrice} , item_name ='{item.ItemName}'
-                     , item_image = '{item.ItemImage}' where id = {item.Id}";
+                     , item_image = '{item.ItemImage}' where id = {id}";
 
             int res = -1;
             SqlCommand sqlCommand = new SqlCommand(query, conn);
@@ -1145,8 +1213,9 @@ namespace Backend
             {
                 Championship champ = new Championship();
                 champ.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
-                champ.StartingAt = Convert.ToString(dt.Rows[i]["StartingAt"]);
-                champ.EndingAt = Convert.ToString(dt.Rows[i]["EndingAt"]);
+
+                champ.StartingAt = dt.Rows[i]["StartingAt"].ToString()!;
+                champ.EndingAt = dt.Rows[i]["EndingAt"].ToString()!;
                 champ.Name = Convert.ToString(dt.Rows[i]["Name"]);
                 champ.NoMatches = Convert.ToInt32(dt.Rows[i]["no_matches"]);
                 list.Add(champ);
@@ -1154,58 +1223,35 @@ namespace Backend
             return list;
         }
 
-        public IEnumerable<Dictionary<object,object>> getMatchesByDate(SqlConnection conn, string date)
+        public IEnumerable<MiniMatch> getMatchesByDate(SqlConnection conn, string date)
         {
-            string query = $@"select * from matches where matchDate = '{date}'";
+            string query = @$"select m.id,c1.name as Home,c2.name as Away,c1.logo as homepic,c2.logo as awaypic ,result,c.name
+from matches m, clubs c1,clubs c2,Stadium  s,championship c
+where matchDate = '{date}' and c1.name=club1 and c2.name = club2 and s.id = stadium_id and c.id = championshipid";
 
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
             sqlDataAdapter.Fill(dt);
-            List<Dictionary<object, object>> list = new List<Dictionary<object, object>>();
+            List<MiniMatch> list = new List<MiniMatch>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                Dictionary<object, object> match = new Dictionary<object, object>();
-                match.Add("id", Convert.ToInt32(dt.Rows[i]["id"]));
+                MiniMatch match = new MiniMatch();
+                match.Id = Convert.ToInt32(dt.Rows[i]["id"]);
 
 
-                match.Add("matchDate", Convert.ToString(dt.Rows[i]["matchDate"]));
+                match.Home = Convert.ToString(dt.Rows[i]["Home"]);
+                match.Away = Convert.ToString(dt.Rows[i]["Away"]);
 
-                match.Add("club1", Convert.ToString(dt.Rows[i]["club1"]));
+                match.homepic = Convert.ToString(dt.Rows[i]["homepic"]);
+                match.awaypic = Convert.ToString(dt.Rows[i]["awaypic"]);
 
 
-                match.Add("club2", Convert.ToString(dt.Rows[i]["club2"]));
-                if (dt.Rows[i]["weekno"].ToString() != "")
-                    match.Add("weekno", Convert.ToInt32(dt.Rows[i]["weekno"]));
+                match.Championship = Convert.ToString(dt.Rows[i]["name"]);
+
+                if (dt.Rows[i]["result"].ToString() != "")
+                    match.result = dt.Rows[i]["result"].ToString();
                 else
-                    match.Add("weekno", "NULL");
-
-                match.Add("stadium_id", Convert.ToInt32(dt.Rows[i]["stadium_id"]));
-
-                match.Add("championshipid", Convert.ToInt32(dt.Rows[i]["championshipid"]));
-
-                match.Add("result", Convert.ToString(dt.Rows[i]["result"]));
-
-                int stid = Convert.ToInt32(dt.Rows[i]["stadium_id"]);
-
-                int chmpid = Convert.ToInt32(dt.Rows[i]["championshipid"]);
-
-                string query1 = @$"select Name from Stadium where id ={stid}";
-
-                string query2 = $@"select name from championship where id ={chmpid}";
-
-                SqlDataAdapter sqlDataAdapter2 = new SqlDataAdapter(query1, conn);
-                DataTable dt2 = new DataTable();
-                sqlDataAdapter2.Fill(dt2);
-
-                match.Add("stadiumName", dt2.Rows[0]["Name"].ToString());
-
-
-                SqlDataAdapter sqlDataAdapter3 = new SqlDataAdapter(query2, conn);
-                DataTable dt3 = new DataTable();
-                sqlDataAdapter3.Fill(dt3);
-
-
-                match.Add("championshipName", dt3.Rows[0]["name"].ToString());
+                    match.result = " - ";
 
                 list.Add(match);
             }
@@ -1364,37 +1410,6 @@ namespace Backend
             return 0;
         }
 
-        public int updatePlayer(SqlConnection sqlConnection, int playerID, Player player)
-        {
-            string query = $@"UPDATE MATCH_STAFF
-                            SET FNAME = '{player.Fname}',LNAME = '{player.Lname}',Photo = '{player.Photo}',Nationality = '{player.Nationality}'
-                            where id = {playerID};";
-
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
-            query = $@"UPDATE PLAYERS 
-                        SET Height = {player.Height},foot = '{player.Foot}',MARKET_VALUE = {player.MarketValue}
-                        WHERE ID = {playerID}";
-            sqlCommand.CommandText = query;
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                return 1;
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
-        }
-
         public IEnumerable<Item> getAllItems(SqlConnection sqlConnection)
         {
             string query = $@"SELECT * FROM ITEMS ; ";
@@ -1432,20 +1447,20 @@ namespace Backend
             List<Question> questions = new List<Question>();
             Question question = new Question();
             question.Id = Convert.ToInt32(dt.Rows[0]["ID"]);
-            question.QuestionContent = dt.Rows[0]["Question_content"].ToString();
-            question.Answer1 = dt.Rows[0]["answer1"].ToString();
-            question.Answer2 = dt.Rows[0]["answer2"].ToString();
-            question.Answer3 = dt.Rows[0]["answer3"].ToString();
-            question.Answer4 = dt.Rows[0]["answer4"].ToString();
+            question.title = dt.Rows[0]["Question_content"].ToString();
+            question.choices[0] = dt.Rows[0]["answer1"].ToString();
+            question.choices[1] = dt.Rows[0]["answer2"].ToString();
+            question.choices[2] = dt.Rows[0]["answer3"].ToString();
+            question.choices[3] = dt.Rows[0]["answer4"].ToString();
             question.TheCorrectAnswer = dt.Rows[0]["the_correct_answer"].ToString();
             question.QuizId = Convert.ToInt32(dt.Rows[0]["quiz_id"]);
             questions.Add(question);
             return questions;
         }
 
-        public IEnumerable<Dictionary<Object, Object>> TopGoals(SqlConnection sqlConnection)
+        public IEnumerable<Dictionary<Object, Object>> TopGoals(SqlConnection sqlConnection,int champId)
         {
-            string query = $@"SELECT * FROM STATS ORDER BY GOALS DESC ";
+            string query = $@"SELECT * FROM STATS where championship_id={champId} ORDER BY GOALS DESC";
             SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
             DataTable dt = new();
             adapter.Fill(dt);
@@ -1457,6 +1472,7 @@ namespace Backend
                 string playerName = sqlCommand.ExecuteScalar().ToString()!;
                 Dictionary<Object, Object> row = new();
                 row["ChampionshipId"] = dt.Rows[i]["Championship_ID"];
+                row["PlayerId"] = dt.Rows[i]["Player_id"];
                 row["PlayerName"] = playerName;
                 row["Saves"] = dt.Rows[i]["saves"];
                 row["Assists"] = dt.Rows[i]["Assists"];
@@ -1470,9 +1486,9 @@ namespace Backend
             return stats;
         }
 
-        public IEnumerable<Dictionary<Object, Object>> TopAssists(SqlConnection sqlConnection)
+        public IEnumerable<Dictionary<Object, Object>> TopAssists(SqlConnection sqlConnection,int champId)
         {
-            string query = $@"SELECT * FROM STATS ORDER BY ASSISTS DESC ";
+            string query = $@"SELECT * FROM STATS where championship_id={champId} ORDER BY ASSISTS DESC ";
             SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
             DataTable dt = new();
             adapter.Fill(dt);
@@ -1484,6 +1500,7 @@ namespace Backend
                 string playerName = sqlCommand.ExecuteScalar().ToString()!;
                 Dictionary<Object, Object> row = new();
                 row["ChampionshipId"] = dt.Rows[i]["Championship_ID"];
+                row["PlayerId"] = dt.Rows[i]["Player_id"];
                 row["PlayerName"] = playerName;
                 row["Saves"] = dt.Rows[i]["saves"];
                 row["Assists"] = dt.Rows[i]["Assists"];
@@ -1497,20 +1514,85 @@ namespace Backend
             return stats;
         }
 
-        public IEnumerable<Dictionary<Object, Object>> TopSaves(SqlConnection sqlConnection)
+        public IEnumerable<StatPlayer> getstatplayers(SqlConnection conn,int clubId)
         {
-            string query = $@"SELECT * FROM STATS ORDER BY SAVES DESC ";
-            SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
+            string query = $@"(
+SELECT  c.name,p.id,m.Fname,m.Lname,sum(goals) as goals,sum(assists) as assists,sum(tackles) as tackles,sum(clean_sheets) as cleansheets,sum(saves) as saves , avg(r.rate) as rating
+FROM players p,STATS,clubs c,match_staff m ,Rating r
+where  club_id={clubId} and club_id=c.id and r.match_staff_ssn=p.id and m.id = p.id and championship_id=1 and player_id = p.id group by c.name,p.id,m.Fname,m.Lname 
+ 
+ )
+ UNION
+ (
+SELECT  c.name,p.id,m.Fname,m.Lname,sum(goals) as goals,sum(assists) as assists,sum(tackles) as tackles,sum(clean_sheets) as cleansheets,sum(saves) as saves , 0 as rating
+FROM players p,STATS,clubs c,match_staff m ,Rating r
+where  club_id={clubId} and club_id=c.id and  m.id = p.id and championship_id=1 and player_id = p.id  and p.id not in(SELECT  p.id FROM players p,STATS,clubs c,match_staff m ,Rating r
+where  club_id={clubId} and club_id=c.id and r.match_staff_ssn=p.id and m.id = p.id and championship_id=1 and player_id = p.id 
+ ) group by c.name,p.id,m.Fname,m.Lname
+)
+ORDER BY rating DESC";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query,conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<StatPlayer> list = new List<StatPlayer>();
+            for(int i=0;i<dt.Rows.Count;i++)
+            {
+                StatPlayer statPlayer = new StatPlayer();
+                statPlayer.Name = Convert.ToString(dt.Rows[i]["name"]);
+                statPlayer.Fname = Convert.ToString(dt.Rows[i]["Fname"]);
+                statPlayer.Lname = Convert.ToString(dt.Rows[i]["Lname"]);
+                statPlayer.Id = Convert.ToInt32(dt.Rows[i]["id"]);
+                statPlayer.goals = Convert.ToInt32(dt.Rows[i]["goals"]);
+                statPlayer.assists = Convert.ToInt32(dt.Rows[i]["assists"]);
+                statPlayer.tackles = Convert.ToInt32(dt.Rows[i]["tackles"]);
+                statPlayer.cleansheets = Convert.ToInt32(dt.Rows[i]["cleansheets"]);
+                statPlayer.saves = Convert.ToInt32(dt.Rows[i]["saves"]);
+                statPlayer.rating = Convert.ToDouble(dt.Rows[i]["rating"]);
+                list.Add(statPlayer);
+            }
+            return list;
+        }
+
+        public IEnumerable<StatClub> getstatclubs(SqlConnection conn)
+        {
+
+           string query = $@"SELECT  c.name,c.id,sum(goals) as goals,sum(assists) as assists,sum(tackles) as tackles,sum(clean_sheets) as cleansheets,sum(saves) as saves 
+FROM players p,STATS,clubs c 
+where club_id=c.id and championship_id=1 and player_id = p.id group by c.id,c.name ORDER BY sum(GOALS) DESC";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query,conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<StatClub> list = new List<StatClub>();
+            for(int i=0;i<dt.Rows.Count;i++)
+            {
+                StatClub statClub = new StatClub();
+                statClub.Name = Convert.ToString(dt.Rows[i]["Name"]);
+                statClub.Id = Convert.ToInt32(dt.Rows[i]["id"]);
+                statClub.goals = Convert.ToInt32(dt.Rows[i]["goals"]);
+                statClub.assists = Convert.ToInt32(dt.Rows[i]["assists"]);
+                statClub.tackles = Convert.ToInt32(dt.Rows[i]["tackles"]);
+                statClub.Cleansheets = Convert.ToInt32(dt.Rows[i]["cleansheets"]);
+                statClub.Saves = Convert.ToInt32(dt.Rows[i]["saves"]);
+                list.Add(statClub);
+            }
+            return list;
+        }
+
+        public IEnumerable<Dictionary<Object, Object>> TopSaves(SqlConnection sqlConnection,int champId)
+        {
+             string query = $@"Exec TopSaves";
+           SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
             DataTable dt = new();
             adapter.Fill(dt);
             List<Dictionary<Object, Object>> stats = new List<Dictionary<Object, Object>>();
             for (int i = 0; i < 10 && i < dt.Rows.Count; i++)
             {
-                query = $@"SELECT FNAME + ' ' + LNAME FROM MATCH_STAFF WHERE ID = {Convert.ToInt32(dt.Rows[i]["Player_id"])}";
+                query = $@"Exec FullName {Convert.ToInt32(dt.Rows[i]["Player_id"])}";
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                 string playerName = sqlCommand.ExecuteScalar().ToString()!;
                 Dictionary<Object, Object> row = new();
                 row["ChampionshipId"] = dt.Rows[i]["Championship_ID"];
+                row["PlayerId"] = dt.Rows[i]["Player_id"];
                 row["PlayerName"] = playerName;
                 row["Saves"] = dt.Rows[i]["saves"];
                 row["Assists"] = dt.Rows[i]["Assists"];
@@ -1524,20 +1606,21 @@ namespace Backend
             return stats;
         }
 
-        public IEnumerable<Dictionary<Object, Object>> TopTackles(SqlConnection sqlConnection)
+        public IEnumerable<Dictionary<Object, Object>> TopTackles(SqlConnection sqlConnection,int champId)
         {
-            string query = $@"SELECT * FROM STATS ORDER BY TACKLES DESC ";
+            string query = $@"Exec TopTackles";
             SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
             DataTable dt = new();
             adapter.Fill(dt);
             List<Dictionary<Object, Object>> stats = new List<Dictionary<Object, Object>>();
             for (int i = 0; i < 10 && i < dt.Rows.Count; i++)
             {
-                query = $@"SELECT FNAME + ' ' + LNAME FROM MATCH_STAFF WHERE ID = {Convert.ToInt32(dt.Rows[i]["Player_id"])}";
+                query = $@"Exec FullName {Convert.ToInt32(dt.Rows[i]["Player_id"])}";
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                 string playerName = sqlCommand.ExecuteScalar().ToString()!;
                 Dictionary<Object, Object> row = new();
                 row["ChampionshipId"] = dt.Rows[i]["Championship_ID"];
+                row["PlayerId"] = dt.Rows[i]["Player_id"];
                 row["PlayerName"] = playerName;
                 row["Saves"] = dt.Rows[i]["saves"];
                 row["Assists"] = dt.Rows[i]["Assists"];
@@ -1551,9 +1634,9 @@ namespace Backend
             return stats;
         }
 
-        public IEnumerable<Dictionary<Object, Object>> TopCleanSheets(SqlConnection sqlConnection)
+        public IEnumerable<Dictionary<Object, Object>> TopCleanSheets(SqlConnection sqlConnection,int champId)
         {
-            string query = $@"SELECT * FROM STATS ORDER BY CLEAN_SHEETS DESC ";
+            string query = $@"SELECT * FROM STATS where championship_id={champId} ORDER BY CLEAN_SHEETS DESC ";
             SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
             DataTable dt = new();
             adapter.Fill(dt);
@@ -1565,6 +1648,7 @@ namespace Backend
                 string playerName = sqlCommand.ExecuteScalar().ToString()!;
                 Dictionary<Object, Object> row = new();
                 row["ChampionshipId"] = dt.Rows[i]["Championship_ID"];
+                row["PlayerId"] = dt.Rows[i]["Player_id"];
                 row["PlayerName"] = playerName;
                 row["Saves"] = dt.Rows[i]["saves"];
                 row["Assists"] = dt.Rows[i]["Assists"];
@@ -1580,7 +1664,7 @@ namespace Backend
 
         public IEnumerable<Dictionary<Object, Object>> TopLikes(SqlConnection sqlConnection)
         {
-            string query = $@"Select article_name,Count(article_name) as total from likes group by article_name order by total desc";
+            string query = $@"Select article_id,Count(article_id) as total from likes group by article_id order by total desc";
             DataTable dt = new DataTable();
             SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
             adapter.Fill(dt);
@@ -1595,24 +1679,26 @@ namespace Backend
             return likes;
         }
 
-        public IEnumerable<Quiz> AllQuizzes(SqlConnection sqlConnection)
+        public IEnumerable<OutQuiz> AllQuizzes(SqlConnection sqlConnection)
         {
-            string query = $@"Select * from Quizzes";
+            string query = $@"select qu.id,u.Fname+' '+u.Lname as journalist, qu.name,count(quests.id) as qno
+from journalists j ,quizzes qu,Users u,Questions quests
+where j.ssn = qu.journalist_ssn and u.ssn = j.ssn group by qu.id,u.Fname,u.lname,qu.name";
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, sqlConnection);
             DataTable dt = new DataTable();
             sqlDataAdapter.Fill(dt);
-            List<Quiz> list = new List<Quiz>();
+            List<OutQuiz> list = new List<OutQuiz>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                Quiz quiz = new();
-                quiz.Id = Convert.ToInt32(dt.Rows[i]["ID"]);
-                quiz.JournalistSsn = Convert.ToInt32(dt.Rows[i]["journalist_ssn"]);
+                OutQuiz quiz = new OutQuiz();
+                quiz.Id = Convert.ToInt32(dt.Rows[i]["id"]);
+                quiz.Name = Convert.ToString(dt.Rows[i]["name"]);
+                quiz.qno = Convert.ToInt32(dt.Rows[i]["qno"]);
+                quiz.maxp = quiz.qno * 10;
                 list.Add(quiz);
-
             }
             return list;
         }
-
 
         public IEnumerable<Dictionary<object, object>> getPlayersStat(SqlConnection conn, int clubid, int champid)
         {
@@ -1781,7 +1867,6 @@ namespace Backend
 
         }
 
-
         public IEnumerable<Championship> getAllCurrentChampiopnship(SqlConnection conn)
         {
             DateTime d = DateTime.Now;
@@ -1799,10 +1884,11 @@ namespace Backend
             {
                 Championship champ = new Championship();
                 champ.Id = Convert.ToInt32(dt.Rows[i]["Id"]);
-                champ.StartingAt = Convert.ToString(dt.Rows[i]["StartingAt"]);
+
+                champ.StartingAt = dt.Rows[i]["StartingAt"].ToString()!;
                 string checkdate = Convert.ToString(dt.Rows[i]["EndingAt"]);
                 if (checkDate(checkdate,date)==0) continue;
-                champ.EndingAt = Convert.ToString(dt.Rows[i]["EndingAt"]);
+                champ.EndingAt = dt.Rows[i]["EndingAt"].ToString()!;
                 champ.Name = Convert.ToString(dt.Rows[i]["Name"]);
                 champ.NoMatches = Convert.ToInt32(dt.Rows[i]["no_matches"]);
 
@@ -1876,22 +1962,38 @@ namespace Backend
             return list;
         }
 
-        public IEnumerable<Quiz> getQuizById(SqlConnection conn, int id)
+        public AnsweringQuiz getQuizById(SqlConnection conn, int id)
         {
-            string query = @$"select * from quizzes where id = {id}";
+            string query = @$"select name
+from quizzes
+where id = {id}";
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
             sqlDataAdapter.Fill(dt);
-            List<Quiz> list = new List<Quiz>();
-            for (int i = 0; i < dt.Rows.Count; i++)
+            List<AnsweringQuiz> list = new List<AnsweringQuiz>();
+            
+                AnsweringQuiz quiz = new AnsweringQuiz();
+                quiz.Id = id;
+                quiz.Name = Convert.ToString(dt.Rows[0]["name"]);
+            query = $@"select q.question_content,q.answer1,q.answer2,q.answer3,q.answer4
+from Questions q, quizzes qui
+where qui.id=q.quiz_id and qui.id = {id}";
+            dt = new DataTable();
+            sqlDataAdapter = new SqlDataAdapter(query, conn);
+            sqlDataAdapter.Fill(dt);
+                List<ExamQuestion> examQuestions = new List<ExamQuestion>();
+            for(int i=0;i<dt.Rows.Count; i++)
             {
-                Quiz quiz = new();
-                quiz.Id = Convert.ToInt32(dt.Rows[i]["ID"]);
-                quiz.JournalistSsn = Convert.ToInt32(dt.Rows[i]["journalist_ssn"]);
-                list.Add(quiz);
-
+                ExamQuestion examQuestion = new ExamQuestion();
+                examQuestion.title = Convert.ToString(dt.Rows[i]["question_content"]);
+                examQuestion.choices.Add(Convert.ToString(dt.Rows[i]["answer1"]));
+                examQuestion.choices.Add(Convert.ToString(dt.Rows[i]["answer2"]));
+                examQuestion.choices.Add(Convert.ToString(dt.Rows[i]["answer3"]));
+                examQuestion.choices.Add(Convert.ToString(dt.Rows[i]["answer4"]));
+                examQuestions.Add(examQuestion);
             }
-            return list;
+            quiz.questions = examQuestions;
+            return quiz;
         }
 
         public int addResultToFinishedMatch(SqlConnection conn, int id, string result)
@@ -1914,8 +2016,28 @@ namespace Backend
 
         }
 
+        public IEnumerable<Article> artsbyssn(SqlConnection conn,int ssn)
+        {
+            string query = $@"select Name as id,title,picture as img from Articles where Journalist_ssn = {ssn}";
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query,conn);
+            DataTable dt = new DataTable();
+            sqlDataAdapter.Fill(dt);
+            List<Article> list = new List<Article>();
+            for(int i=0;i<dt.Rows.Count;i++)
+            {
+                Article article = new Article();
+                article.Name = Convert.ToString(dt.Rows[i]["id"]);
+                article.title = Convert.ToString(dt.Rows[i]["title"]);
+                article.img = Convert.ToString(dt.Rows[i]["img"]);
+                list.Add(article);
+            }
+            return list;
+
+        }
+
         public int setQuizState(SqlConnection conn, int id, int state)
         {
+
             int s = state == 1 ? 1 : 0;
             string query = @$"update quizzes set state = {s} where id ={id}";
 
@@ -1936,67 +2058,146 @@ namespace Backend
 
         }
 
-       public IEnumerable<Dictionary<object,object>> getMatchesToday(SqlConnection conn)
+        public IEnumerable<Article> getArticles(SqlConnection conn, int jourID)
         {
+            string query = $@"Select count(ssn) from journalists where ssn ={jourID}";
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            int x = Convert.ToInt32(sqlCommand.ExecuteScalar());
+            List<Article> list = new List<Article>();
+            if (x == 1)
+            {
+                query = $@"Select * from Articles where journalist_ssn = {jourID}";
+                sqlCommand.CommandText = query;
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+                DataTable dt = new();
+                sqlDataAdapter.Fill(dt);
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Article article = new Article();
+                    article.Name = dt.Rows[i]["Name"].ToString()!;
+                    article.JournalistSsn = jourID;
+                    article.articleDate = dt.Rows[i]["ArticlesDate"].ToString()!;
+                    list.Add(article);
+                }
+            }
+            return list;
+        }
+
+       public IEnumerable<MiniMatch> getMatchesToday(SqlConnection conn)
+       {
             DateTime date = DateTime.Now;
             string d=Convert.ToString(date);
 
-            string query = @$"select * from matches where matchDate='{d}'";
+            string query = @$"select m.id,c1.name as Home,c2.name as Away,c1.logo as homepic,c2.logo as awaypic ,result,c.name
+from matches m, clubs c1,clubs c2,Stadium  s,championship c
+where matchDate = '{d}' and c1.name=club1 and c2.name = club2 and s.id = stadium_id and c.id = championshipid";
 
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
             sqlDataAdapter.Fill(dt);
-            List<Dictionary<object, object>> list = new List<Dictionary<object, object>>();
+            List<MiniMatch> list = new List<MiniMatch>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                Dictionary<object, object> match = new Dictionary<object, object>();
-                match.Add("id", Convert.ToInt32(dt.Rows[i]["id"]));
+                MiniMatch match = new MiniMatch();
+                match.Id=  Convert.ToInt32(dt.Rows[i]["id"]);
 
 
-                match.Add("matchDate", Convert.ToString(dt.Rows[i]["matchDate"]));
+                match.Home =  Convert.ToString(dt.Rows[i]["Home"]);
+                match.Away = Convert.ToString(dt.Rows[i]["Away"]);
 
-                match.Add("club1", Convert.ToString(dt.Rows[i]["club1"]));
+                match.homepic = Convert.ToString(dt.Rows[i]["homepic"]);
+                match.awaypic = Convert.ToString(dt.Rows[i]["awaypic"]);
 
 
-                match.Add("club2", Convert.ToString(dt.Rows[i]["club2"]));
-                if (dt.Rows[i]["weekno"].ToString() != "")
-                    match.Add("weekno", Convert.ToInt32(dt.Rows[i]["weekno"]));
+                match.Championship = Convert.ToString(dt.Rows[i]["name"]);
+
+                if (dt.Rows[i]["result"].ToString() != "")
+                    match.result = dt.Rows[i]["result"].ToString();
                 else
-                    match.Add("weekno", "NULL");
-
-                match.Add("stadium_id", Convert.ToInt32(dt.Rows[i]["stadium_id"]));
-
-                match.Add("championshipid", Convert.ToInt32(dt.Rows[i]["championshipid"]));
-
-                match.Add("result", Convert.ToString(dt.Rows[i]["result"]));
-
-                int stid = Convert.ToInt32(dt.Rows[i]["stadium_id"]);
-
-                int chmpid = Convert.ToInt32(dt.Rows[i]["championshipid"]);
-
-                string query1 = @$"select Name from Stadium where id ={stid}";
-
-                string query2 = $@"select name from championship where id ={chmpid}";
-
-                SqlDataAdapter sqlDataAdapter2 = new SqlDataAdapter(query1, conn);
-                DataTable dt2 = new DataTable();
-                sqlDataAdapter2.Fill(dt2);
-
-                match.Add("stadiumName", dt2.Rows[0]["Name"].ToString());
-
-
-                SqlDataAdapter sqlDataAdapter3 = new SqlDataAdapter(query2, conn);
-                DataTable dt3 = new DataTable();
-                sqlDataAdapter3.Fill(dt3);
-
-
-                match.Add("championshipName", dt3.Rows[0]["name"].ToString());
+                    match.result = " - ";
 
                 list.Add(match);
             }
             return list;
 
+       }
+
+
+        public bool addLike(SqlConnection conn , int fanSSN,int ArticleID)
+        {
+            string query = $@"select Count(*) from likes where fan_ssn={fanSSN} and article_Id = {ArticleID} ";
+            SqlCommand sqlCommand= new SqlCommand(query,conn);
+            int x = Convert.ToInt32( sqlCommand.ExecuteScalar());
+            if(x==1)
+            {
+                query = @$"Delete from likes where fan_ssn={fanSSN} and article_Id = {ArticleID} ";
+                sqlCommand.CommandText = query;
+                sqlCommand.ExecuteNonQuery();
+                return false;
+            }
+            else
+            {
+                query = @$"Insert into likes values ({fanSSN},{ArticleID}); ";
+                sqlCommand.CommandText = query;
+                sqlCommand.ExecuteNonQuery();
+                return true;
+            }
         }
+
+        public ReservingMatch reserveMatch(SqlConnection conn,int FanSSN,int MatchId)
+        {
+            string query = $@"insert into Reserving_Matches values({FanSSN},{MatchId});";
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            sqlCommand.ExecuteNonQuery();
+            ReservingMatch reserve = new();
+            reserve.FanSsn = FanSSN;
+            reserve.MatchId = MatchId;
+            return reserve;
+        }
+
+        public bool AnswerQuiz(SqlConnection conn, int FanSSN, int QuestionID,string answer)
+        {
+            string query = @$"insert into Answers Values({FanSSN},{QuestionID},'{answer}')";
+            string CorrectAnswer;
+            SqlCommand sqlCommand = new(query, conn);
+          
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+            try
+            {
+                query = $@"Select the_correct_answer from questions where id ={QuestionID}";
+                sqlCommand.CommandText = query;
+                CorrectAnswer = sqlCommand.ExecuteScalar().ToString()!;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+            try
+            {
+                if (CorrectAnswer == answer)
+                {
+                    query = $@"Update Fans set points = points+1 where ssn ={FanSSN} ";
+                    sqlCommand.CommandText = query;
+                    sqlCommand.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
         
         public IEnumerable<Dictionary<object,object>> getMatchesInDate(SqlConnection conn, string date)
         {
@@ -2279,9 +2480,9 @@ and (c.id not in (select club_id from Club_cup as cp where cp.championship_id ={
 
             int quizid = Convert.ToInt32(dt2.Rows[0]["quizID"]);
            foreach(Question ques in q.questions)
-            {
+           {
                 string query3 = @$"  insert into Questions (question_content,answer1,answer2,answer3,answer4,the_correct_answer,quiz_id)
-                    values ('{ques.QuestionContent}','{ques.Answer1}','{ques.Answer2}','{ques.Answer3}','{ques.Answer4}','{ques.TheCorrectAnswer}',{quizid})";
+                    values ('{ques.title}','{ques.choices[0]}','{ques.choices[1]}','{ques.choices[2]}','{ques.choices[3]}','{ques.TheCorrectAnswer}',{quizid})";
 
                 SqlCommand sqlCommand2 = new SqlCommand(query3, conn);
 
@@ -2297,7 +2498,7 @@ and (c.id not in (select club_id from Club_cup as cp where cp.championship_id ={
                 }
 
 
-            }
+           }
 
             return 200;
                   
@@ -2306,8 +2507,11 @@ and (c.id not in (select club_id from Club_cup as cp where cp.championship_id ={
 
         public int addArticle(SqlConnection conn, Article article)
         {
-            string query = @$"insert into Articles (Name , Journalist_ssn,description,img)
-                         values ('{article.Name}',{article.JournalistSsn},'{article.description}','{article.description}')";
+            DateTime date = DateTime.Now;
+            string d = Convert.ToString(date);
+            string query = @$"insert into Articles (Name,title, Journalist_ssn,description,picture,posted)
+                         values ('{article.Name}','{article.title}',{article.JournalistSsn},'{article.description}','{article.img}','{d}')";
+
 
             int res = -1;
 
@@ -2356,9 +2560,9 @@ and (c.id not in (select club_id from Club_cup as cp where cp.championship_id ={
             }
         }
 
-        public int deleteArticle(SqlConnection conn, string name)
+        public int deleteArticle(SqlConnection conn, int id)
         {
-            string query = @$"delete from Articles where Name = '{name}'";
+            string query = @$"delete from Articles where id = {id}";
             SqlCommand sqlCommand = new SqlCommand(query, conn);
             try
             {

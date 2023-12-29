@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "./quiz.css"
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../../constants/url.constants";
 export default function QuizDetail() {
 
     const navigate = useNavigate();
@@ -17,7 +18,8 @@ export default function QuizDetail() {
     console.log(currQuestion?.title);
     console.log(quiz)
     useEffect(()=>{
-        setQuiz(quizzes.find((qu)=>qu.id===parseInt(quizId)));
+        fetch(`${baseUrl}/Quizzes/GetQuiz/${quizId}`).then(res=>res.json()).then(data=>{console.log(data); setQuiz(data); refresh(s?0:1)})
+        //setQuiz(quizzes.find((qu)=>qu.id===parseInt(quizId)));
     },[quizId])
     
     useEffect(()=>{

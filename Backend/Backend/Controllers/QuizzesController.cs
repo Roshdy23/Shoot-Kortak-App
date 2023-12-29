@@ -24,7 +24,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("AllQuizzes")]
-        public IEnumerable<Quiz> quizzes()
+        public IEnumerable<OutQuiz> quizzes()
         {
             return _dbmanager.AllQuizzes(_connection);
         }
@@ -38,10 +38,11 @@ namespace Backend.Controllers
         }
         [HttpGet]
         [Route("GetQuiz/{id}")]
-        public IEnumerable<Quiz> getQuizById(string id)
+        public AnsweringQuiz getQuizById(string id)
         {
             return _dbmanager.getQuizById(_connection, Convert.ToInt32(id));
         }
+
 
         [HttpPost]
         [Route("AcceptOrRefuse")]
@@ -51,6 +52,13 @@ namespace Backend.Controllers
             if (temp != 0)
                 return Ok();
             return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("AnswerQuiz/{FanSSN} /{questionId}")]
+        public IActionResult AnswerQuestion(int FanSSN, int questionId, [FromBody] string answer)
+        {
+            return _dbmanager.AnswerQuiz(_connection, FanSSN, questionId, answer) ? Ok() : BadRequest();
         }
 
         [HttpGet]

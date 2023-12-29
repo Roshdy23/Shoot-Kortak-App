@@ -9,9 +9,9 @@ public partial class Championship
 
     public string? Logo { get; set; }
 
-    public string StartingAt { get; set; }
+    public string StartingAt { get; set; } = null!;
 
-    public string EndingAt { get; set; }
+    public string EndingAt { get; set; } = null!;
 
     public int NoMatches { get; set; }
 

@@ -3,44 +3,46 @@ import "../stats.css"
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "react-bootstrap";
+import { baseUrl } from "../../../constants/url.constants";
 
 export default function SelectClub(){
 
     const [clubList,setClubList] = useState([]);
     const navigate = useNavigate();
     useEffect(()=>{
-        setClubList([
-            {
-                name:"Al Ahly",
-                id:1,
-                goals:30,
-                assists:25,
-                saves:50,
-                cleansheets:15,
-                tackles:60
-            },
-            {
-                name:"Zamalek SC",
-                id:2,
-                goals:20,
-                assists:23,
-                saves:52,
-                cleansheets:12,
-                tackles:48
+        fetch(`${baseUrl}/Stats/GetStatClubs`).then(res=>res.json()).then(data=>setClubList(data));
+        // setClubList([
+        //     {
+        //         name:"Al Ahly",
+        //         id:1,
+        //         goals:30,
+        //         assists:25,
+        //         saves:50,
+        //         cleansheets:15,
+        //         tackles:60
+        //     },
+        //     {
+        //         name:"Zamalek SC",
+        //         id:2,
+        //         goals:20,
+        //         assists:23,
+        //         saves:52,
+        //         cleansheets:12,
+        //         tackles:48
                 
-            },
-            {
-                name:"Pyramids",
-                id:3,
-                goals:25,
-                assists:30,
-                saves:60,
-                cleansheets:10,
-                tackles:50
+        //     },
+        //     {
+        //         name:"Pyramids",
+        //         id:3,
+        //         goals:25,
+        //         assists:30,
+        //         saves:60,
+        //         cleansheets:10,
+        //         tackles:50
                 
-            },
+        //     },
 
-        ])
+        // ])
     },[])
 
     return(
