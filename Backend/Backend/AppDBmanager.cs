@@ -800,7 +800,6 @@ where p.club_id = {id2} and m.id = p.id and r.fan_ssn={usrid} and match_id={id} 
             return bigMatch;
         }
 
-
         public int updateMatch(SqlConnection conn, Match match, int id)
         {
             int res = -1;
@@ -824,7 +823,6 @@ where p.club_id = {id2} and m.id = p.id and r.fan_ssn={usrid} and match_id={id} 
             }
             return res;
         }
-
 
         public int updateClub(SqlConnection conn, Club clubs)
         {
@@ -913,7 +911,6 @@ where p.club_id = {id2} and m.id = p.id and r.fan_ssn={usrid} and match_id={id} 
             return res;
         }
 
-
         public IEnumerable<Player> addPlayer(SqlConnection conn,int clubID, Player player)
         {
             bool nationalityValid = checkWord(player.Nationality);
@@ -991,7 +988,6 @@ where p.club_id = {id2} and m.id = p.id and r.fan_ssn={usrid} and match_id={id} 
                 return 0;
             }
         }
-
 
         public IEnumerable<Journalist> getAllJournalists(SqlConnection conn)
         {
@@ -1231,13 +1227,12 @@ where p.club_id = {id2} and m.id = p.id and r.fan_ssn={usrid} and match_id={id} 
             return list;
         }
 
-
         public int updateItem(SqlConnection conn, Item item, int id)
         {
             bool ok = checkItem(conn, id);
             if (!ok) return 0;
             string query = @$"update items set item_price ={item.ItemPrice} , item_name ='{item.ItemName}'
-                     , item_image = '{item.ItemImage}' where id = {item.Id}";
+                     , item_image = '{item.ItemImage}' where id = {id}";
 
             int res = -1;
             SqlCommand sqlCommand = new SqlCommand(query, conn);
@@ -1460,37 +1455,6 @@ where matchDate = '{date}' and c1.name=club1 and c2.name = club2 and s.id = stad
 
             }
             return 0;
-        }
-
-        public int updatePlayer(SqlConnection sqlConnection, int playerID, Player player)
-        {
-            string query = $@"UPDATE MATCH_STAFF
-                            SET FNAME = '{player.Fname}',LNAME = '{player.Lname}',Photo = '{player.Photo}',Nationality = '{player.Nationality}'
-                            where id = {playerID};";
-
-            SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
-            query = $@"UPDATE PLAYERS 
-                        SET Height = {player.Height},foot = '{player.Foot}',MARKET_VALUE = {player.MarketValue}
-                        WHERE ID = {playerID}";
-            sqlCommand.CommandText = query;
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                return 1;
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
         }
 
         public IEnumerable<Item> getAllItems(SqlConnection sqlConnection)
@@ -1741,7 +1705,7 @@ where club_id=c.id and championship_id=1 and player_id = p.id group by c.id,c.na
 
         public IEnumerable<Dictionary<Object, Object>> TopLikes(SqlConnection sqlConnection)
         {
-            string query = $@"Select article_name,Count(article_name) as total from likes group by article_name order by total desc";
+            string query = $@"Select article_id,Count(article_id) as total from likes group by article_id order by total desc";
             DataTable dt = new DataTable();
             SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
             adapter.Fill(dt);
@@ -1776,7 +1740,6 @@ where j.ssn = qu.journalist_ssn and u.ssn = j.ssn group by qu.id,u.Fname,u.lname
             }
             return list;
         }
-
 
         public IEnumerable<Dictionary<object, object>> getPlayersStat(SqlConnection conn, int clubid, int champid)
         {
@@ -1944,7 +1907,6 @@ where j.ssn = qu.journalist_ssn and u.ssn = j.ssn group by qu.id,u.Fname,u.lname
             return d;
 
         }
-
 
         public IEnumerable<Championship> getAllCurrentChampiopnship(SqlConnection conn)
         {
@@ -2135,8 +2097,34 @@ where qui.id=q.quiz_id and qui.id = {id}";
 
         }
 
-       public IEnumerable<MiniMatch> getMatchesToday(SqlConnection conn)
+        public IEnumerable<Article> getArticles(SqlConnection conn, int jourID)
         {
+            string query = $@"Select count(ssn) from journalists where ssn ={jourID}";
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            int x = Convert.ToInt32(sqlCommand.ExecuteScalar());
+            List<Article> list = new List<Article>();
+            if (x == 1)
+            {
+                query = $@"Select * from Articles where journalist_ssn = {jourID}";
+                sqlCommand.CommandText = query;
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+                DataTable dt = new();
+                sqlDataAdapter.Fill(dt);
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Article article = new Article();
+                    article.Name = dt.Rows[i]["Name"].ToString()!;
+                    article.JournalistSsn = jourID;
+                    article.articleDate = dt.Rows[i]["ArticlesDate"].ToString()!;
+                    list.Add(article);
+                }
+            }
+            return list;
+        }
+
+       public IEnumerable<Dictionary<object,object>> getMatchesToday(SqlConnection conn)
+       {
             DateTime date = DateTime.Now;
             string d=Convert.ToString(date);
 
@@ -2172,7 +2160,83 @@ where matchDate = '{d}' and c1.name=club1 and c2.name = club2 and s.id = stadium
             }
             return list;
 
+       }
+
+
+        public bool addLike(SqlConnection conn , int fanSSN,int ArticleID)
+        {
+            string query = $@"select Count(*) from likes where fan_ssn={fanSSN} and article_Id = {ArticleID} ";
+            SqlCommand sqlCommand= new SqlCommand(query,conn);
+            int x = Convert.ToInt32( sqlCommand.ExecuteScalar());
+            if(x==1)
+            {
+                query = @$"Delete from likes where fan_ssn={fanSSN} and article_Id = {ArticleID} ";
+                sqlCommand.CommandText = query;
+                sqlCommand.ExecuteNonQuery();
+                return false;
+            }
+            else
+            {
+                query = @$"Insert into likes values ({fanSSN},{ArticleID}); ";
+                sqlCommand.CommandText = query;
+                sqlCommand.ExecuteNonQuery();
+                return true;
+            }
         }
+
+        public ReservingMatch reserveMatch(SqlConnection conn,int FanSSN,int MatchId)
+        {
+            string query = $@"insert into Reserving_Matches values({FanSSN},{MatchId});";
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            sqlCommand.ExecuteNonQuery();
+            ReservingMatch reserve = new();
+            reserve.FanSsn = FanSSN;
+            reserve.MatchId = MatchId;
+            return reserve;
+        }
+
+        public bool AnswerQuiz(SqlConnection conn, int FanSSN, int QuestionID,string answer)
+        {
+            string query = @$"insert into Answers Values({FanSSN},{QuestionID},'{answer}')";
+            string CorrectAnswer;
+            SqlCommand sqlCommand = new(query, conn);
+          
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+            try
+            {
+                query = $@"Select the_correct_answer from questions where id ={QuestionID}";
+                sqlCommand.CommandText = query;
+                CorrectAnswer = sqlCommand.ExecuteScalar().ToString()!;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+            try
+            {
+                if (CorrectAnswer == answer)
+                {
+                    query = $@"Update Fans set points = points+1 where ssn ={FanSSN} ";
+                    sqlCommand.CommandText = query;
+                    sqlCommand.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
         
         public IEnumerable<Dictionary<object,object>> getMatchesInDate(SqlConnection conn, string date)
         {
@@ -2460,7 +2524,7 @@ where matchDate = '{d}' and c1.name=club1 and c2.name = club2 and s.id = stadium
 
             int quizid = Convert.ToInt32(dt2.Rows[0]["quizID"]);
            foreach(Question ques in q.questions)
-            {
+           {
                 string query3 = @$"  insert into Questions (question_content,answer1,answer2,answer3,answer4,the_correct_answer,quiz_id)
                     values ('{ques.title}','{ques.choices[0]}','{ques.choices[1]}','{ques.choices[2]}','{ques.choices[3]}','{ques.TheCorrectAnswer}',{quizid})";
 
@@ -2478,7 +2542,7 @@ where matchDate = '{d}' and c1.name=club1 and c2.name = club2 and s.id = stadium
                 }
 
 
-            }
+           }
 
             return 200;
                   
@@ -2540,9 +2604,9 @@ where matchDate = '{d}' and c1.name=club1 and c2.name = club2 and s.id = stadium
             }
         }
 
-        public int deleteArticle(SqlConnection conn, string name)
+        public int deleteArticle(SqlConnection conn, int id)
         {
-            string query = @$"delete from Articles where Name = '{name}'";
+            string query = @$"delete from Articles where id = {id}";
             SqlCommand sqlCommand = new SqlCommand(query, conn);
             try
             {

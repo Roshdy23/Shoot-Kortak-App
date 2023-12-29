@@ -51,6 +51,26 @@ namespace Backend.Controllers
             catch (Exception ex) {  return _dbmanager.artsbyssn(_connection, Convert.ToInt32(2)); }
         }
 
+        [HttpGet]
+        [Route("GetArticles/{journalistID}")]
+        public IActionResult getArticles(int journalistID)
+        {
+            IEnumerable<Article> list = new List<Article>();
+            list = _dbmanager.getArticles(_connection, journalistID);
+            if(list.Count() > 0) 
+            {
+                return Ok(list);
+            }
+            else
+                return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("AddLikeDislike/{fanSSN}/{ArticleID}")]
+        public bool addLike(int fanSSN, int ArticleID)
+        {
+            return _dbmanager.addLike(_connection, fanSSN, ArticleID);
+        }
         [HttpPost]
         [Route("addArticle")]
         public  async Task<IActionResult> addArticle([FromBody] Article article)
@@ -61,12 +81,12 @@ namespace Backend.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteArticle/{name}")]
-        public async Task<IActionResult> deleteArticle(string name)
+        [Route("deleteArticle/{id}")]
+        public async Task<IActionResult> deleteArticle(int id)
         {
-            int temp = _dbmanager.deleteArticle(_connection, name);
+            int temp = _dbmanager.deleteArticle(_connection, id);
             if (temp == 0) { return BadRequest(); }
             else return Ok();
-        }
+       }
     }
 }

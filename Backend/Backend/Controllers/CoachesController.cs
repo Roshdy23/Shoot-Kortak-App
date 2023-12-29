@@ -23,16 +23,21 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("AddCoach/{clubID}")]
-        public IEnumerable<Coach> addCoach(int clubID, [FromBody] Coach coach)
+        public IActionResult addCoach(int clubID, [FromBody] Coach coach)
         {
-            return _appDbManager.addCoach(_sqlconn, clubID, coach);
+            IEnumerable<Coach> result = new List<Coach>();
+            result = _appDbManager.addCoach(_sqlconn, clubID, coach);
+            if (result.Count() == 0)
+                return BadRequest();
+            else
+                return Ok(result);
         }
 
         [HttpDelete]
         [Route("DeleteCoach/{coachID}")]
         public IActionResult deleteCoach(int coachID)
         {
-            return Convert.ToBoolean(_appDbManager.deletePlayer(_sqlconn, coachID)) ? Ok() : BadRequest();
+            return Convert.ToBoolean(_appDbManager.deleteCoach (_sqlconn, coachID)) ? Ok() : BadRequest();
 
         }
     }
