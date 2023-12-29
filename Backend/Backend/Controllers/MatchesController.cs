@@ -124,7 +124,7 @@ namespace Backend.Controllers
             return _appDbManager.getAllCurrentMatches(_sqlconn);
         }
 
-
+        [HttpGet]
         [Route("getCountMatches")]
         public int getCountMatch()
         {
