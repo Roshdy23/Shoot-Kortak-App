@@ -82,6 +82,11 @@ namespace Backend.Controllers
             return _appDbManager.getAllClubsNotInChamp(_sqlconn, Convert.ToInt32(id));
         }
 
-           
+        [HttpGet]
+        [Route("getClubCount")]
+           public int getClubCount()
+        {
+            return _appDbManager.getCountClubs(_sqlconn);
+        }
     }
 }

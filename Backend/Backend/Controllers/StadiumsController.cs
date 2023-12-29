@@ -52,5 +52,12 @@ namespace Backend.Controllers
         {
             return Convert.ToBoolean(_appDbManager.addStadium(_sqlconn, stadium)) ? Ok() : BadRequest();
         }
+        [HttpGet]
+        [Route("getCountStadiums")]
+
+        public int getCountStadiums()
+        {
+            return _appDbManager.getCountStadiums(_sqlconn);   
+        }
     }
 }
