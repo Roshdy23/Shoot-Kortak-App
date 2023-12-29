@@ -37,5 +37,12 @@ namespace Backend.Controllers
                 return list;
         }
 
+        [HttpGet]
+        [Route("getCountUsers")]
+
+        public int getCountUsers()
+        {
+            return _dbmanager.getCountUsers(_connection);
+        }
     }
 }
