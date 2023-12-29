@@ -2123,7 +2123,7 @@ where qui.id=q.quiz_id and qui.id = {id}";
             return list;
         }
 
-       public IEnumerable<Dictionary<object,object>> getMatchesToday(SqlConnection conn)
+       public IEnumerable<MiniMatch> getMatchesToday(SqlConnection conn)
        {
             DateTime date = DateTime.Now;
             string d=Convert.ToString(date);

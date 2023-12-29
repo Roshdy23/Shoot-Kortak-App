@@ -25,7 +25,7 @@ export default function CreateQuiz({userssn}) {
     useEffect(()=>{
         setQuiz({
             name:"",
-            id:Math.abs(Math.random())+1,
+            id:1,
             journalistSsn:userssn,
             qno:1,
             maxp:10,
@@ -51,15 +51,18 @@ export default function CreateQuiz({userssn}) {
     },[currQuestion])
 
     const submit = () =>{
-        fetch(`${baseUrl}/Quizzes/CreateQuiz`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(
-                quiz
-              )
-        })
+        console.log("akked");
+        console.log(quiz);
+
+        // fetch(`${baseUrl}/Quizzes/CreateQuiz`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(
+        //         quiz
+        //       )
+        //})
         }
     
 
