@@ -1897,7 +1897,7 @@ namespace Backend
 
         }
 
-       public IEnumerable<Article> getArticles(SqlConnection conn, int jourID)
+        public IEnumerable<Article> getArticles(SqlConnection conn, int jourID)
         {
             string query = $@"Select count(ssn) from journalists where ssn ={jourID}";
             SqlCommand sqlCommand = new SqlCommand(query, conn);
@@ -1919,9 +1919,12 @@ namespace Backend
                     article.articleDate = dt.Rows[i]["ArticlesDate"].ToString()!;
                     list.Add(article);
                 }
+            }
+            return list;
+        }
 
        public IEnumerable<Dictionary<object,object>> getMatchesToday(SqlConnection conn)
-        {
+       {
             DateTime date = DateTime.Now;
             string d=Convert.ToString(date);
 
@@ -1977,10 +1980,10 @@ namespace Backend
                 match.Add("championshipName", dt3.Rows[0]["name"].ToString());
 
                 list.Add(match);
-          }
+            }
             return list;
 
-        }
+       }
 
 
         public bool addLike(SqlConnection conn , int fanSSN,int ArticleID)
@@ -2344,7 +2347,7 @@ namespace Backend
 
             int quizid = Convert.ToInt32(dt2.Rows[0]["quizID"]);
            foreach(Question ques in q.questions)
-            {
+           {
                 string query3 = @$"  insert into Questions (question_content,answer1,answer2,answer3,answer4,the_correct_answer,quiz_id)
                     values ('{ques.QuestionContent}','{ques.Answer1}','{ques.Answer2}','{ques.Answer3}','{ques.Answer4}','{ques.TheCorrectAnswer}',{quizid})";
 
@@ -2362,7 +2365,7 @@ namespace Backend
                 }
 
 
-            }
+           }
 
             return 200;
                   
@@ -2421,9 +2424,9 @@ namespace Backend
             }
         }
 
-        public int deleteArticle(SqlConnection conn, string name)
+        public int deleteArticle(SqlConnection conn, int id)
         {
-            string query = @$"delete from Articles where Name = '{name}'";
+            string query = @$"delete from Articles where id = {id}";
             SqlCommand sqlCommand = new SqlCommand(query, conn);
             try
             {
