@@ -43,6 +43,7 @@ import CreateQuiz from "./pages/journalistPages/CreateQuiz";
 import EditQuiz from "./pages/journalistPages/EditQuiz";
 import AddClubPlayer from "./pages/adminPages/clubs/AddClubPlayer";
 import { useState } from "react";
+import PlayerRated from "./components/Match/PlayerRated";
 function App() {
   const [user,setUser] = useState({});
   const [rfsh,setRfsh] = useState(0);
@@ -54,12 +55,12 @@ function App() {
         <Route path="/register" element={<Register />} /> */}
         <Route path="/" element={<Home user = {user} />} />
         <Route path="/matches" element={<Matches user = {user} ticket={false} />} />
-        <Route path="/match/:matchId" element={<Matches ticket={false} />} />
-        <Route path="/reservematch/:matchId" element={<Matches ticket={true} />} />
+        <Route path="/match/:matchId" element={<Matches user={user} ticket={false} />} />
+        <Route path="/reservematch/:matchId" element={<Matches user={user} ticket={true} />} />
         <Route path="/matches/update/:updatematchID" element={<UpdateMatch />} />
         <Route path="/matches/add" element={<AddMatch />} />
         <Route path="/stadiums" element={<Stadiums />} />
-        <Route path="/RatePlayers/:matchId/:playerId" element={<Matches />} />
+        <Route path="/RatePlayers/:matchId/:playerId" element={<PlayerRated user={user} />} />
         <Route path="/stadiums/update/:updatestadiumID" element={<UpdateStadium />} />
         <Route path="/stadiums/add" element={<AddStadium />} />
         <Route path="/stores" element={<Stores />} />
@@ -74,8 +75,8 @@ function App() {
         <Route path="/stores/view/:storeID/additem" element={<AddItems />} />
         <Route path="/stores/view/:storeID/update/:itemid" element={<UpdateItem />} />
         <Route path="/clubs" element={<Clubs />} />
-        <Route path="/articles" element={<Articles />} />
-        <Route path="/articles/create" element={<CreateArticle />} />
+        <Route path="/articles" element={<Articles user={user} />} />
+        <Route path="/articles/create" element={<CreateArticle userssn={user.ssn} />} />
         <Route path="/clubs/add" element={<AddClub />} />
         <Route path="/clubs/add/:clubID/addplayers" element={<AddClubPlayers />} />
         <Route path="/clubs/add/:clubID/addcoach" element={<AddClubCoach />} />
@@ -91,8 +92,8 @@ function App() {
         <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/quiz" element={(user?.role==="Fan")?<Quiz />:<Login refresh = {rfsh} setRefresh={setRfsh} />} />
-        <Route path="/EditQuiz/:quizId" element={<EditQuiz />} />
-        <Route path="/CreateQuiz" element={<CreateQuiz />} />
+        <Route path="/EditQuiz/:quizId" element={<EditQuiz userssn={user.ssn} />} />
+        <Route path="/CreateQuiz" element={<CreateQuiz userssn={user.ssn} />} />
         <Route path="/PendingQuizzes" element={<PendingQuizzes />} />
         <Route path="/quiz/:quizId" element={<QuizDetail />} />
         <Route path="/quizzes/view" element={<ViewQuizzes />} />

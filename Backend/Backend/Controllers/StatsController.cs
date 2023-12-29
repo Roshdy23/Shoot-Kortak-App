@@ -21,34 +21,34 @@ namespace Backend.Controllers
 
 
         [HttpGet]
-        [Route("TopSaves")]
-        public IEnumerable<Dictionary<Object,Object>> TopSaves()
+        [Route("TopSaves/{champId}")]
+        public IEnumerable<Dictionary<Object,Object>> TopSaves(string champId)
         {
-            return _appDbManager.TopSaves(_sqlconn);
+            return _appDbManager.TopSaves(_sqlconn,Convert.ToInt32(champId));
         }
         [HttpGet]
-        [Route("TopAssists")]
-        public IEnumerable<Dictionary<Object, Object>> TopAssists()
+        [Route("TopAssists/{champId}")]
+        public IEnumerable<Dictionary<Object, Object>> TopAssists(string champId)
         {
-            return _appDbManager.TopAssists(_sqlconn);
+            return _appDbManager.TopAssists(_sqlconn, Convert.ToInt32(champId));
         }
         [HttpGet]
-        [Route("TopGoals")]
-        public IEnumerable<Dictionary<Object, Object>> TopGoals()
+        [Route("TopGoals/{champId}")]
+        public IEnumerable<Dictionary<Object, Object>> TopGoals(string champId)
         {
-            return _appDbManager.TopGoals(_sqlconn);
+            return _appDbManager.TopGoals(_sqlconn, Convert.ToInt32(champId));
         }
         [HttpGet]
-        [Route("TopTackles")]
-        public IEnumerable<Dictionary<Object, Object>> TopTackles()
+        [Route("TopTackles/{champId}")]
+        public IEnumerable<Dictionary<Object, Object>> TopTackles(string champId)
         {
-            return _appDbManager.TopTackles(_sqlconn);
+            return _appDbManager.TopTackles(_sqlconn, Convert.ToInt32(champId));
         }
         [HttpGet]
-        [Route("TopCleanSheets")]
-        public IEnumerable<Dictionary<Object, Object>> TopCleanSheets()
+        [Route("TopCleanSheets/{champId}")]
+        public IEnumerable<Dictionary<Object, Object>> TopCleanSheets(string champId)
         {
-            return _appDbManager.TopCleanSheets(_sqlconn);
+            return _appDbManager.TopCleanSheets(_sqlconn, Convert.ToInt32(champId));
         }
 
         [HttpPost]
@@ -64,6 +64,17 @@ namespace Backend.Controllers
         public IEnumerable<Dictionary<object, object>> getPlayersStats(string clubid, string champid)
         {
             return _appDbManager.getPlayersStat(_sqlconn, Convert.ToInt32(clubid), Convert.ToInt32(champid));
+        }
+        [HttpGet]
+        [Route("GetStatClubs")]
+        public IEnumerable<StatClub> statClubs() {
+            return _appDbManager.getstatclubs(_sqlconn);
+        }
+        [HttpGet]
+        [Route("GetStatPlayers/{clubId}")]
+        public IEnumerable<StatPlayer> statPlayers(string clubId)
+        {
+            return _appDbManager.getstatplayers(_sqlconn, Convert.ToInt32(clubId));
         }
     }
 }

@@ -1,81 +1,25 @@
+import { useEffect, useState } from "react";
 import MiniMatch from "./MiniMatch";
+import { baseUrl } from "../../constants/url.constants";
 
 export default function MatchesToday()
 {
-    let championships= ["Nile League","Egyptian Cup","Egyptian Super Cup"] // query championships that has matches today
-
+    const [matches,setMatches] = useState([{}]);
+    const [championships,setChampionships] = useState([]);
+    const [rfrsh,refresh] = useState(0);
+    useEffect(()=>{
+        fetch(`${baseUrl}/Matches/getMatchesToday`).then(res=>res.json()).then(data=>{setMatches(data);})
+    },[])
+    //let championships= ["Nile League","Egyptian Cup","Egyptian Super Cup"] // query championships that has matches today
+useEffect(()=>{
+    let champs = matches.map((match)=>match.championship);
+    champs = champs.filter((item,index) => champs.indexOf(item) === index);
+    console.log(champs);
+    setChampionships(champs);
+    refresh(rfrsh?0:1);
+},[matches])
     //query matches today
-let matches = [{
-    Status:"upcoming",
-    championship:"Nile League",
-    Home:{
-        name:"Al Ahly",
-        pic:"https://semedia.filgoal.com/photos/team/medium/1.png"
-    },
-    Away:{
-        name:"Zamalek",
-        pic:"https://semedia.filgoal.com/photos/team/medium/2.png"
-    },
-    score:{
-        home:0,
-        away:0
-    },
-    time:{
-        h: "09",
-        m:"00",
-        t:"PM"
-    },
-    stadium:"Borg al arab",
-    referee:"mahmoud nasef"
-},
-{
-    Status:"running",
-    championship:"Egyptian Cup",
-    Home:{
-        name:"Ismaily",
-        pic:"https://semedia.filgoal.com/photos/team/medium/5.png"
-    },
-    Away:{
-        name:"Ittihad sc",
-        pic:"https://semedia.filgoal.com/photos/team/medium/13.png"
-    },
-    score:{
-        home:"0",
-        away:"0"
-    },
-    time:{
-        h: "08",
-        m:"00",
-        t:"PM"
-    },
-    stadium:"Cairo stadium",
-    referee:"Gehad Gresha",
-    crntTime:"13"
-},
-{
-    Status:"over",
-    championship:"Egyptian Super Cup",
-    Home:{
-        name:"Zed FC",
-        pic:"https://semedia.filgoal.com/photos/team/medium/1683.png"
-    },
-    Away:{
-        name:"Somoha",
-        pic:"https://semedia.filgoal.com/photos/team/medium/860.png"
-    },
-    score:{
-        home:0,
-        away:0
-    },
-    time:{
-        h: "04",
-        m:"00",
-        t:"PM"
-    },
-    stadium:"Cairo stadium",
-    referee:"Mohamed Salama",
-    crntTime:0
-}];
+
 if(matches.length)
 {
     return(<div style={{display:"flex",flexDirection:"column",borderLeft:"solid rgb(0,0,0,0.1) 1px",borderBottom:"solid",height:"90vh",alignContent:"center",overflowY:"scroll"}}>
@@ -87,7 +31,10 @@ if(matches.length)
                         {
                             matches.map((match)=>{
                                 if(match.championship===championship)
-                                return <MiniMatch match={match} />
+                                {
+                                    console.log(match)
+                                    return <MiniMatch match={match} />
+                                }
                                 else
                                 return <></>
                             })

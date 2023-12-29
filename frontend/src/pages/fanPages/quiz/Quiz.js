@@ -1,35 +1,14 @@
 import { Link } from "react-router-dom";
 import Dropdown from "../../../components/Dropdown";
 import { useEffect, useState } from "react";
+import { baseUrl } from "../../../constants/url.constants";
 export default function Quiz() {
 
 
     const [quizList,setQuizList] = useState();
 
     useEffect(()=>{
-        setQuizList([
-            {
-                id:1,
-                journalist:"Reda abd-elal",
-                name:"yalhwyy yalhwyy",
-                maxp:10,
-                qno:5
-            },
-            {
-                id:2,
-                journalist:"Shobeir",
-                name:"Enta Btdhk 3la eh ya shobeir",
-                maxp:12,
-                qno:6
-            },
-            {
-                id:3,
-                journalist:"Tamer we Ezz",
-                name:"Mlook Eltahlel",
-                maxp:15,
-                qno:7
-            }
-        ])
+        fetch(`${baseUrl}/Quizzes/AllQuizzes`).then(res=>res.json()).then(data=>setQuizList(data));
     },[])
     
     return (
@@ -41,7 +20,6 @@ export default function Quiz() {
                         <table className="table">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col">Journalist</th>
                                     <th scope="col">Quiz Name</th>
                                     <th scope="col">Max Points</th>
                                     <th scope="col">Number of Questions</th>
@@ -53,7 +31,6 @@ export default function Quiz() {
                                     quizList?.map((quiz)=>{
                                         return(
                                             <tr>
-                                    <td>{quiz.journalist}</td>
                                     <td >{quiz.name}</td>
                                     <td >{quiz.maxp}</td>
                                     <td >{quiz.qno}</td>

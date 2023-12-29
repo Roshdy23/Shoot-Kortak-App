@@ -19,6 +19,28 @@ namespace Backend.Controllers
             _sqlConnection.Open();
         }
 
+        [HttpGet]
+        [Route("GetPlayer/{playerId}")]
+        public Player GetPlayer(string playerId)
+        {
+            return _appDbManager.getPlayer(_sqlConnection, Convert.ToInt32(playerId));
+        }
+
+        [HttpPost]
+        [Route("RatePlayer/{matchId}/{playerId}/{userId}")]
+        public async Task<IActionResult> RatePlayer(string matchId,string playerId,string userId,[FromBody] string rate)
+        {
+            try
+            {
+            _appDbManager.RatePlayer(_sqlConnection, Convert.ToInt32(matchId), Convert.ToInt32(userId), Convert.ToInt32(playerId), Convert.ToDouble(rate));
+                return Ok("success");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         [Route("AddPlayerh/{clubID}")]
 
