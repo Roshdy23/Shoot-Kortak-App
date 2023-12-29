@@ -16,8 +16,9 @@ namespace Backend.Controllers
         public JournalistController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn").ToString());
+            _sqlconn = new SqlConnection(_configuration.GetConnectionString("conn"));
             _appDbManager = new AppDBmanager();
+            _sqlconn.Open();
         }
         [HttpGet]
         [Route("Get")]

@@ -24,7 +24,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("AllQuizzes")]
-        public IEnumerable<Quiz> quizzes()
+        public IEnumerable<OutQuiz> quizzes()
         {
             return _dbmanager.AllQuizzes(_connection);
         }
@@ -38,10 +38,11 @@ namespace Backend.Controllers
         }
         [HttpGet]
         [Route("GetQuiz/{id}")]
-        public IEnumerable<Dictionary<object, object>> getQuizById(string id)
+        public AnsweringQuiz getQuizById(string id)
         {
             return _dbmanager.getQuizById(_connection, Convert.ToInt32(id));
         }
+
 
         [HttpGet]
         [Route("AcceptOrRefuse/{quizid}/{state}")]
@@ -51,6 +52,13 @@ namespace Backend.Controllers
             if (temp != 0)
                 return Ok();
             return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("AnswerQuiz/{FanSSN} /{questionId}")]
+        public IActionResult AnswerQuestion(int FanSSN, int questionId, [FromBody] string answer)
+        {
+            return _dbmanager.AnswerQuiz(_connection, FanSSN, questionId, answer) ? Ok() : BadRequest();
         }
 
         [HttpGet]
@@ -83,6 +91,22 @@ namespace Backend.Controllers
             int temp= (_dbmanager.deleteQuiz(_connection,Convert.ToInt32(id)));
             if (temp == 0) return BadRequest();
             else return Ok();
+        }
+
+        [HttpPost]
+        [Route("addAnswers")]
+        public async Task<IActionResult> addAnswers(string quizid,  List<string> answers,string ssn)
+        {
+            int temp = (_dbmanager.addAnswers(_connection, answers, Convert.ToInt32(quizid), Convert.ToInt32(ssn)));
+
+            if(temp==-1)return BadRequest(); 
+            else return Ok(temp);
+        }
+        [HttpGet]
+        [Route("getCountQuizzes")]
+        public int getCountQuizzes()
+        {
+            return _dbmanager.getCountQuizzes(_connection);
         }
     }
 }

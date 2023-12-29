@@ -39,10 +39,10 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        [Route("GetMatch/{id}")]
-        public IEnumerable<Dictionary<object,object>> getmatch(string id)
+        [Route("GetMatch/{id}/{usrid}")]
+        public BigMatch getmatch(string id,string usrid)
         {
-            return _appDbManager.getMatchData(_sqlconn, Convert.ToInt32(id));
+            return _appDbManager.getMatchData(_sqlconn, Convert.ToInt32(id), Convert.ToInt32(usrid));
         }
 
         [HttpPost]
@@ -55,7 +55,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("GetMatchesDate")]
-        public IEnumerable<Dictionary<object,object>> getMatchesByDate(string date)
+        public IEnumerable<MiniMatch> getMatchesByDate(string date)
         {
             return _appDbManager.getMatchesByDate(_sqlconn, date);
         }
@@ -84,7 +84,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("getMatchesToday")]
 
-       public IEnumerable<Dictionary<object,object>> getMatchesToday()
+       public IEnumerable<MiniMatch> getMatchesToday()
         {
             return _appDbManager.getMatchesToday(_sqlconn);
         }
@@ -104,6 +104,7 @@ namespace Backend.Controllers
             return _appDbManager.getFinishedMatchesInChamp(_sqlconn, Convert.ToInt32(id));
         }
         [HttpGet]
+
         [Route("GetClubPlayersFromMatId/{matid}/{y}")]
         public IEnumerable<Dictionary<object, object>> getClubsIds(string matid,string y)
         {
@@ -121,6 +122,13 @@ namespace Backend.Controllers
         public IEnumerable<Dictionary<object, object>> getAllCurrentMatches()
         {
             return _appDbManager.getAllCurrentMatches(_sqlconn);
+        }
+
+
+        [Route("getCountMatches")]
+        public int getCountMatch()
+        {
+            return _appDbManager.getCountMatches(_sqlconn);
         }
 
     }

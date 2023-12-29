@@ -11,5 +11,9 @@ public partial class Article
 
     public string img { get; set; }
     
+    public string? title { get; set; }
+
+    public int? likes { get; set; }
+
     public string description { get; set; }
 }

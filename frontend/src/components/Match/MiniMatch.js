@@ -6,34 +6,32 @@ export default function MiniMatch(props)
 const match = props.match;
 
 return(
-    <Link style={{color:"black",textDecoration:"none"}} to="/match/5">
+    (match)?
+    <Link style={{color:"black",textDecoration:"none"}} to={`/match/${props.match?.id}`}>
     <div>
         <hr/>
         <div className="match-container">
             <div className="team-identifier">
-                <img style={{width:"75px",height:"75px"}} src={match.Home.pic} alt="home team logo"/>
-                <h6>{match.Home.name}</h6>
+                <img style={{width:"75px",height:"75px"}} src={match?.homepic} alt="home team logo"/>
+                <h6>{match?.home}</h6>
             </div>
             <div className="score">
-                <h1>{match.score.home}</h1>
+                <h1>{(match.result?.length===3)?match?.result[0]:" "}</h1>
             </div>
-            <div className="info">
-                {
-                (match.Status==="upcoming")?
-                (<h5 style={{textAlign:"center"}}>{parseInt(match.time.h)}:{match.time.m} {match.time.t}</h5>):((match.Status==="running")?(<h5 style={{textAlign:"center",color:"red"}}>{match.crntTime}'</h5>):<h5 style={{textAlign:"center"}}>Over</h5>)
-                }
-                <h3 style={{textAlign:"center"}}>-</h3>
+            <div className="info" style={{justifyContent:"center"}}>
+                
+                <h3 style={{textAlign:"center",alignItems:"center"}}>-</h3>
             </div>
             <div className="score">
-                <h1>{match.score.away}</h1>
+                <h1>{(match.result?.length===3)?match?.result[2]:" "}</h1>
             </div>
             <div className="team-identifier">
-            <img style={{width:"75px",height:"75px"}} src={match.Away.pic} alt="away team logo"/>
-                <h6>{match.Away.name}</h6>
+            <img style={{width:"75px",height:"75px"}} src={match?.awaypic} alt="away team logo"/>
+                <h6>{match?.away}</h6>
             </div>
         </div>
         <hr/>
     </div>
-                </Link>
+                </Link>:<></>
 )
 }

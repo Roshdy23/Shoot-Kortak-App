@@ -90,5 +90,13 @@ namespace Backend.Controllers
         }
 
 
+
+        [HttpGet]
+        [Route("getClubCount")]
+           public int getClubCount()
+        {
+            return _appDbManager.getCountClubs(_sqlconn);
+        }
+
     }
 }

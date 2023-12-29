@@ -23,7 +23,6 @@ function Navbar({rfshr,user,setUser}) {
     }
             ,[rfshr]);
         useEffect(()=>{
-            console.log(user.role);
             if(Cookies.get("jwt"))
             {
                 setStatus("loggedin");

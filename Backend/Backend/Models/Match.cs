@@ -23,3 +23,36 @@ public partial class Match
 
  
 }
+
+public partial class MiniMatch
+{
+    public int Id { get; set; }
+
+    public string Home { get; set; } = null!;
+
+    public string Away { get; set; } = null!;
+    
+    public string homepic { get; set; } = null!;
+    public string awaypic { get; set; } = null!;
+
+    public string? Championship { get; set; }
+
+public string? result { get; set; }
+
+    public MiniMatch() { }
+
+}
+
+public partial class BigMatch
+{
+    public int Id { get; set; }
+    public string? Home { get; set; }
+    public string? Away { get; set; }
+    public string? homepic { get; set; }
+    public string? awaypic { get; set; }
+    public string? championship { get; set; }
+    public string? result { get; set; }
+    public List<RatedPlayer>? homeplayers { get; set; }
+    public List<RatedPlayer>? awayplayers {get; set; }
+    public BigMatch() {  }
+}

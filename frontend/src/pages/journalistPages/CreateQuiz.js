@@ -3,7 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "../fanPages/quiz/quiz.css"
 import { useNavigate } from "react-router-dom";
-export default function CreateQuiz() {
+import { baseUrl } from "../../constants/url.constants";
+export default function CreateQuiz({userssn}) {
     const navigate = useNavigate();
     const {quizId} = useParams();
     const [quiz,setQuiz] = useState({});
@@ -24,12 +25,18 @@ export default function CreateQuiz() {
     useEffect(()=>{
         setQuiz({
             name:"",
-            id:Math.abs(Math.random())+1,
+            id:1,
+            journalistSsn:userssn,
+            qno:1,
+            maxp:10,
+            state:false,
             questions:[
                 
-                {title:"",
+                { id:0,
+                    title:"",
                 choices:[],
-                answer:""
+                theCorrectAnswer:"",
+                quizId:0
             }
             ]
         });
@@ -44,19 +51,27 @@ export default function CreateQuiz() {
     },[currQuestion])
 
     const submit = () =>{
-        if(!answers.includes(-1))
-            navigate("/PendingQuizzes");
-        else{
-            setUnfinished(true);
+        console.log("akked");
+        console.log(quiz);
+
+        // fetch(`${baseUrl}/Quizzes/CreateQuiz`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(
+        //         quiz
+        //       )
+        //})
         }
-    }
+    
 
     return (
         <>
             <div style={{padding:"20px",display:"flex"}}>
                 <div style={{width:"30vw",padding:"5px"}}>
                     <label for="quizName">Quiz Name</label>
-                <input id="quizName" onChange={(e)=>{const tempq = quiz; tempq.name=e.target.value; setQuiz(tempq); if(s<1){refresh(s+1)}else{refresh(s-1)}}} style={{margin:"15px"}} className="row mt-4"/>
+                <input id="quizName" onChange={(e)=>{const tempq = quiz; tempq.name=e.target.value;  setQuiz(tempq); if(s<1){refresh(s+1)}else{refresh(s-1)}}} style={{margin:"15px"}} className="row mt-4"/>
                     <div >
                         <div id="list-example" class="list-group">
                             {  
@@ -68,9 +83,9 @@ export default function CreateQuiz() {
                         <div style={{display:"flex",flexDirection:"column"}}>
                             <div style={{display:"flex", width:"100%",justifyContent:"space-between"}}>
 
-                        <Button onClick={()=>{const tempq = quiz; tempq.questions?.push({title:"",choices:[],answer:""}); setQuiz(tempq); setCurrInd(currInd+1);}} style={{width:"1vw",marginTop:"2vh"}} className={"btn btn-success"}>+</Button>
+                        <Button onClick={()=>{const tempq = quiz; tempq.questions?.push({title:"",choices:[],theCorrectAnswer:"",quizId:0}); tempq.qno=tempq.qno+1; tempq.maxp = tempq.maxp+10; setQuiz(tempq); setCurrInd(currInd+1);}} style={{width:"1vw",marginTop:"2vh"}} className={"btn btn-success"}>+</Button>
 
-                        { (currInd!==0)?<Button onClick={()=>{const tempq = quiz; tempq.questions?.splice(currInd,1); setQuiz(tempq); setCurrInd(currInd-1);}} style={{width:"1vw",marginTop:"2vh"}} className={"btn btn-danger"}>-</Button>:<></>}
+                        { (currInd!==0)?<Button onClick={()=>{const tempq = quiz; tempq.questions?.splice(currInd,1); tempq.qno--; tempq.maxp-=10; setQuiz(tempq); setCurrInd(currInd-1);}} style={{width:"1vw",marginTop:"2vh"}} className={"btn btn-danger"}>-</Button>:<></>}
                             </div>
                         <Button onClick={submit} style={{width:"8vw",marginTop:"2vh"}} className={"btn btn-success"}>Submit</Button>
                         </div>
