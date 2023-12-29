@@ -29,9 +29,16 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("GetArticles/{journalistID}")]
-        public IEnumerable<Article> getArticles(int journalistID)
+        public IActionResult getArticles(int journalistID)
         {
-            return _dbmanager.getArticles(_connection, journalistID);
+            IEnumerable<Article> list = new List<Article>();
+            list = _dbmanager.getArticles(_connection, journalistID);
+            if(list.Count() > 0) 
+            {
+                return Ok(list);
+            }
+            else
+                return BadRequest();
         }
 
         [HttpPost]

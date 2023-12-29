@@ -897,7 +897,7 @@ namespace Backend
             bool ok = checkItem(conn, id);
             if (!ok) return 0;
             string query = @$"update items set item_price ={item.ItemPrice} , item_name ='{item.ItemName}'
-                     , item_image = '{item.ItemImage}' where id = {item.Id}";
+                     , item_image = '{item.ItemImage}' where id = {id}";
 
             int res = -1;
             SqlCommand sqlCommand = new SqlCommand(query, conn);
@@ -1295,7 +1295,7 @@ namespace Backend
 
         public IEnumerable<Dictionary<Object, Object>> TopLikes(SqlConnection sqlConnection)
         {
-            string query = $@"Select article_name,Count(article_name) as total from likes group by article_name order by total desc";
+            string query = $@"Select article_id,Count(article_id) as total from likes group by article_id order by total desc";
             DataTable dt = new DataTable();
             SqlDataAdapter adapter = new SqlDataAdapter(query, sqlConnection);
             adapter.Fill(dt);
@@ -1592,21 +1592,29 @@ namespace Backend
 
         public IEnumerable<Article> getArticles(SqlConnection conn, int jourID)
         {
-            string query = $@"Select * from Articles where journalist_ssn = {jourID}";
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
-            List<Article> list = new List<Article> ();
-            DataTable dt = new();
-            sqlDataAdapter.Fill(dt);
-
-            for(int i=0;i<dt.Rows.Count;i++)
+            string query = $@"Select count(ssn) from journalists where ssn ={jourID}";
+            SqlCommand sqlCommand = new SqlCommand(query, conn);
+            int x = Convert.ToInt32(sqlCommand.ExecuteScalar());
+            List<Article> list = new List<Article>();
+            if (x == 1)
             {
-                Article article = new Article();
-                article.Name = dt.Rows[i]["Name"].ToString()!;
-                article.JournalistSsn = jourID;
-                article.articleDate = dt.Rows[i]["ArticlesDate"].ToString()!;
-                list.Add(article);
+                query = $@"Select * from Articles where journalist_ssn = {jourID}";
+                sqlCommand.CommandText = query;
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, conn);
+                DataTable dt = new();
+                sqlDataAdapter.Fill(dt);
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Article article = new Article();
+                    article.Name = dt.Rows[i]["Name"].ToString()!;
+                    article.JournalistSsn = jourID;
+                    article.articleDate = dt.Rows[i]["ArticlesDate"].ToString()!;
+                    list.Add(article);
+                }
             }
             return list;
+
         }
 
         public bool addLike(SqlConnection conn , int fanSSN,int ArticleID)
@@ -1639,6 +1647,48 @@ namespace Backend
             reserve.FanSsn = FanSSN;
             reserve.MatchId = MatchId;
             return reserve;
+        }
+
+        public bool AnswerQuiz(SqlConnection conn, int FanSSN, int QuestionID,string answer)
+        {
+            string query = @$"insert into Answers Values({FanSSN},{QuestionID},'{answer}')";
+            string CorrectAnswer;
+            SqlCommand sqlCommand = new(query, conn);
+          
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+            try
+            {
+                query = $@"Select the_correct_answer from questions where id ={QuestionID}";
+                sqlCommand.CommandText = query;
+                CorrectAnswer = sqlCommand.ExecuteScalar().ToString()!;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+            try
+            {
+                if (CorrectAnswer == answer)
+                {
+                    query = $@"Update Fans set points = points+1 where ssn ={FanSSN} ";
+                    sqlCommand.CommandText = query;
+                    sqlCommand.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
         }
     }
 
