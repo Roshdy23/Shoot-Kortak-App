@@ -13,16 +13,18 @@ import Match from "../components/Match/Match";
 import { useNavigate } from "react-router-dom";
 import PlayerCard from "../components/PlayerCard";
 import { baseUrl } from "../constants/url.constants"
+import PlayerRated from "../components/Match/PlayerRated";
 
 function Matches(props) {
     const [s, setS] = useState(0);
-    const [rating, setRating] = useState(0);
     const [champid, setChampid] = useState(0);
     const [matches, setMatches] = useState([]);
     const [championships, setChampionships] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
         //init tooltip
+        console.log("abl")
+        console.log(props)
         Array.from(document.querySelectorAll('button[data-bs-toggle="tooltip"]'))
             .forEach(tooltipNode => new Tooltip(tooltipNode))
     });
@@ -139,7 +141,7 @@ function Matches(props) {
                         <div style={{ display: "flex" }}>
                             <div style={{ width: "70vw", borderRight: "solid black", height: "90vh", overflowY: "scroll" }}>
                                 {(matchId) ? (
-                                    <><Match id={matchId} /></>
+                                    <><Match id={matchId} user={props.user} /></>
                                 ) : (<></>)}
                             </div>
                             <div style={{ width: "30vw" }}>
@@ -152,42 +154,16 @@ function Matches(props) {
         }
         else if (window.location.pathname.includes("/RatePlayers")) {
             //query to find by playerid handled up with useeffect
-            let player = {
-                name: "Elhany Soliman",
-                pic: "https://egyptianproleague.com/players/3418.png", rating: -1
-            }
-            return (<>
-
-                <div style={{ width: "70vw", backgroundColor: "white", height: "78vh", position: "fixed", top: "15vh", left: "15vw", zIndex: "40", borderRadius: "25px", display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center" }}>
-                    <PlayerCard player={player} />
-                    <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
-                        <label for="customRange3">{rating} </label>
-                        <input type="range" value={rating} onChange={(e) => { setRating(e.target.value) }} class="custom-range" min="0" max="10" step="0.1" id="customRange3" />
-                    </div>
-                    {/* after clicking the button we should first process the rating change in backend then call navback */}
-                    <button type="button" style={{ margin: "10px", height: "6vh", width: "8vw" }} onClick={navback} className="btn btn-danger btn-sm ms-4">Rate Player</button>
-                </div>
-                <div style={{ backgroundColor: "rgb(0,0,0)", width: "100%", height: "100%", top: "0", opacity: "0.7", position: "fixed", zIndex: "30" }}></div>
-                <div>
-                    <div style={{ display: "flex" }}>
-                        <div style={{ width: "70vw", borderRight: "solid black", height: "90vh", overflowY: "scroll" }}>
-                            {(matchId) ? (
-                                <><Match id={matchId} /></>
-                            ) : (<></>)}
-                        </div>
-                        <div style={{ width: "30vw" }}>
-                            <MatchPerDay />
-                        </div>
-                    </div>
-                </div>
-            </>)
+            <PlayerRated matchId={matchId} playerId={playerId}/>
+            // return (<PlayerRated matchId={matchId} playerId={playerId} />)
+            return <></>
         }
         else {
             return (
                 <div style={{ display: "flex" }}>
                     <div style={{ width: "70vw", borderRight: "solid rgb(0,0,0,0.1) 1px", height: "90vh", overflowY: "scroll" }}>
                         {(matchId) ? (
-                            <><Match id={matchId} /></>
+                            <><Match user={props.user.ssn} id={matchId} /></>
                         ) : (<></>)}
                     </div>
                     <div style={{ width: "30vw" }}>

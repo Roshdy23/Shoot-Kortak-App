@@ -26,12 +26,36 @@ namespace Backend.Controllers
         {
             return _dbmanager.TopLikes(_connection);
         }
+        [HttpGet]
+        [Route("Getbydate")]
+        public IEnumerable<Article> ArtbyDate(string date)
+        {
+            return _dbmanager.getAllByDate(_connection, date);
+        }
+        [HttpGet]
+        [Route("Get/{id}")]
+        public Article GetArticle(string id) { 
+            return _dbmanager.articlebyId(_connection, id);
+        
+        }
+
+        [HttpGet]
+        [Route("GetArtsBySSN/{ssn}")]
+        public IEnumerable<Article> GetArticles(string ssn)
+        {
+            try
+            {
+
+            return _dbmanager.artsbyssn(_connection, Convert.ToInt32(ssn));
+            }
+            catch (Exception ex) {  return _dbmanager.artsbyssn(_connection, Convert.ToInt32(2)); }
+        }
 
         [HttpPost]
         [Route("addArticle")]
         public  async Task<IActionResult> addArticle([FromBody] Article article)
         {
-            int temp=_dbmanager.addArticle(_connection, article);   
+            int temp= _dbmanager.addArticle(_connection, article);   
             if(temp==0) { return BadRequest(); }
             else return Ok();
         }

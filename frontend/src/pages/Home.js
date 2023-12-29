@@ -4,7 +4,9 @@ import "./Home.css";
 import Vote from "../components/votePOTM.js";
 import POTMWinner from "../components/POTMWinner.js";
 import MatchesToday from "../components/Match/MatchesToday.js";
+import { baseUrl } from "../constants/url.constants.js";
 import { Link } from "react-router-dom"
+import { useEffect, useState } from "react";
 function Home({user}) {
     let role = (user.role==="Admin"||user.role==="Journalist")?user.role:"Fan";
     if (role === "Admin")
@@ -33,7 +35,7 @@ function Home({user}) {
         return (<div className="cont">
             <div className="rowcont">
                 <Link to={"/articles/create"} className="glass">New article</Link>
-                <Link to={"/ChampionshipStats"} className="glass">New quiz</Link>
+                <Link to={"/CreateQuiz"} className="glass">New quiz</Link>
             </div>
         </div>);
     }
