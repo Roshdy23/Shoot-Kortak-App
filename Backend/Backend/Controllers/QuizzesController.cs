@@ -84,5 +84,21 @@ namespace Backend.Controllers
             if (temp == 0) return BadRequest();
             else return Ok();
         }
+
+        [HttpPost]
+        [Route("addAnswers")]
+        public async Task<IActionResult> addAnswers(string quizid,  List<string> answers,string ssn)
+        {
+            int temp = (_dbmanager.addAnswers(_connection, answers, Convert.ToInt32(quizid), Convert.ToInt32(ssn)));
+
+            if(temp==-1)return BadRequest(); 
+            else return Ok(temp);
+        }
+        [HttpGet]
+        [Route("getCountQuizzes")]
+        public int getCountQuizzes()
+        {
+            return _dbmanager.getCountQuizzes(_connection);
+        }
     }
 }

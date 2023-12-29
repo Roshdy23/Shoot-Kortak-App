@@ -33,5 +33,12 @@ namespace Backend.Controllers
         {
             return Convert.ToBoolean(_appDbManager.deletePlayer(_sqlConnection, playerID)) ? Ok() : BadRequest();
         }
+
+        [HttpGet]
+        [Route("getCountPlayers")]
+        public int getCountPlayers()
+        {
+            return _appDbManager.getCountPlayers(_sqlConnection);
+        }
     }
 }

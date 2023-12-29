@@ -51,5 +51,12 @@ namespace Backend.Controllers
             return _appDbManager.getAllCurrentChampiopnship(_sqlconn);
         }
 
+        [HttpGet]
+        [Route("getCountChamp")]
+        public int getCountChamp()
+        {
+            return _appDbManager.getCountChamp(_sqlconn);   
+        }
+
     }
 }

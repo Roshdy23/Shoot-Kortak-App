@@ -9,9 +9,9 @@ public partial class Championship
 
     public string? Logo { get; set; }
 
-    public DateTime StartingAt { get; set; }
+    public string StartingAt { get; set; }
 
-    public DateTime EndingAt { get; set; }
+    public string EndingAt { get; set; }
 
     public int NoMatches { get; set; }
 

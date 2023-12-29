@@ -103,6 +103,11 @@ namespace Backend.Controllers
         {
             return _appDbManager.getFinishedMatchesInChamp(_sqlconn, Convert.ToInt32(id));
         }
-        
+        [HttpGet]
+        [Route("getCountMatches")]
+        public int getCountMatch()
+        {
+            return _appDbManager.getCountMatches(_sqlconn);
+        }
     }
 }
