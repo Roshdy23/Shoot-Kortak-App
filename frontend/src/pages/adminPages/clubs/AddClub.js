@@ -43,7 +43,7 @@ function AddClub() {
         setTrophiesCount(e.target.value);
     }
     const HandelAdd = () => {
-        if (clubName == "" || logo == "" || createdAt == "" || stadiumid == "") {
+        if (isNaN(parseInt(createdAt)) || clubName == "" || logo == "" || createdAt == "" || stadiumid == "" || parseInt(createdAt) >= 2023 || parseInt(createdAt) < 1850) {
             setCheck(0);
         }
         else {

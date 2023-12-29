@@ -15,7 +15,11 @@ public partial class Match
 
     public int Championshipid { get; set; }
 
+
+    public string? result { get; set; }
+
     public int StadiumId { get; set; }
 
-    public int result { get; set; }
+
+ 
 }

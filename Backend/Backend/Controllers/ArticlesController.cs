@@ -46,6 +46,22 @@ namespace Backend.Controllers
         public bool addLike(int fanSSN , int ArticleID)
         {
             return _dbmanager.addLike(_connection, fanSSN , ArticleID);
+        [HttpPost]
+        [Route("addArticle")]
+        public  async Task<IActionResult> addArticle([FromBody] Article article)
+        {
+            int temp=_dbmanager.addArticle(_connection, article);   
+            if(temp==0) { return BadRequest(); }
+            else return Ok();
         }
+
+        [HttpDelete]
+        [Route("deleteArticle/{name}")]
+        public async Task<IActionResult> deleteArticle(string name)
+        {
+            int temp = _dbmanager.deleteArticle(_connection, name);
+            if (temp == 0) { return BadRequest(); }
+            else return Ok();
+       }
     }
 }
