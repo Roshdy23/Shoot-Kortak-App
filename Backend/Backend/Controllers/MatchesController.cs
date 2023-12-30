@@ -69,7 +69,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        [Route("addResultTofinishedMatch/{id}")]
+        [Route("addResultTofinishedMatch/{id}/{res}")]
 
         public async Task<IActionResult> addResultToFinishedMatch(string id, string res)
         {
@@ -103,6 +103,33 @@ namespace Backend.Controllers
         {
             return _appDbManager.getFinishedMatchesInChamp(_sqlconn, Convert.ToInt32(id));
         }
-        
+        [HttpGet]
+
+        [Route("GetClubPlayersFromMatId/{matid}/{y}")]
+        public IEnumerable<Dictionary<object, object>> getClubsIds(string matid,string y)
+        {
+            return _appDbManager.getClubsIds(_sqlconn, Convert.ToInt32(matid), Convert.ToInt32(y));
+        }
+        [HttpGet]
+        [Route("GetSecondClubId/{matid}")]
+        public IEnumerable<Dictionary<object, object>> getSecondClubId(string matid)
+        {
+            return _appDbManager.getSecondClubId(_sqlconn, Convert.ToInt32(matid));
+        }
+        [HttpGet]
+        [Route("GetCurrentMatches")]
+
+        public IEnumerable<Dictionary<object, object>> getAllCurrentMatches()
+        {
+            return _appDbManager.getAllCurrentMatches(_sqlconn);
+        }
+
+        [HttpGet]
+        [Route("getCountMatches")]
+        public int getCountMatch()
+        {
+            return _appDbManager.getCountMatches(_sqlconn);
+        }
+
     }
 }

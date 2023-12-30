@@ -75,13 +75,28 @@ namespace Backend.Controllers
             return Convert.ToBoolean(_appDbManager.addClubToChampionship(_sqlconn, Convert.ToInt32(clubid), Convert.ToInt32(champid))) ? Ok() : BadRequest();
         }
         [HttpGet]
-        [Route("getClubsNotInChamp")]
+        [Route("getClubsNotInChamp/{id}")]
 
         public IEnumerable<Dictionary<object,object>> getAllClubsNotInChamp(string id)
         {
             return _appDbManager.getAllClubsNotInChamp(_sqlconn, Convert.ToInt32(id));
         }
+        [HttpGet]
+        [Route("GetClubCoach/{clubId}")]
 
-           
+        public IEnumerable<Dictionary<object, object>> getClubCoach(string clubId)
+        {
+            return _appDbManager.getClubCoach(_sqlconn, Convert.ToInt32(clubId));
+        }
+
+
+
+        [HttpGet]
+        [Route("getClubCount")]
+           public int getClubCount()
+        {
+            return _appDbManager.getCountClubs(_sqlconn);
+        }
+
     }
 }

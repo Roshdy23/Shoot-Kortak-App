@@ -87,6 +87,14 @@ namespace Backend.Controllers
             int temp = _dbmanager.deleteArticle(_connection, id);
             if (temp == 0) { return BadRequest(); }
             else return Ok();
-       }
+        }
+
+        [HttpGet]
+        [Route("getCountArticles")]
+        public int getCountArticles()
+        {
+            return _dbmanager.getCountArticles(_connection);
+        }
+
     }
 }

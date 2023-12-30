@@ -17,6 +17,7 @@ function AddChampionship() {
     const [name, setName] = useState("");
     const [logo, setLogo] = useState("");
     const [nomat, setNoMat] = useState("");
+    const [lorc, setlorc] = useState("");
 
     const [AddedChampID, setAddedChampID] = useState("0");
     let [show, setShow] = useState(false);
@@ -33,11 +34,12 @@ function AddChampionship() {
         let tmp = new Date();
         let strt = startDate.toLocaleDateString();
         let end = endDate.toLocaleDateString();
-        if (name == "" || logo == "" || strt == tmp.toLocaleDateString() || end == tmp.toLocaleDateString() || nomat == "") {
+        if (lorc == "" || name == "" || logo == "" || strt == tmp.toLocaleDateString() || end == tmp.toLocaleDateString() || nomat == "") {
             setCheck(0);
         }
+        else if (isNaN(nomat) || strt >= end || lorc > 1) { setCheck(0) }
         else {
-            fetch(`${baseUrl}/Championships/Add`, {
+            fetch(`${baseUrl}/Championships/AddChamp/${lorc}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,6 +62,9 @@ function AddChampionship() {
             setCheck(-1);
         }, 1000);
     }
+    const Handellorc = (e) => {
+        setlorc(e.target.value);
+    }
     return (
         <>
             <div className='container'>
@@ -72,6 +77,16 @@ function AddChampionship() {
                                     <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Name</label>
                                     <div class="col-sm-10 col-lg-6">
                                         <input type="text" className="form-control" id="colFormLabel" placeholder="insert name" onChange={HandelName} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='row mt-3'>
+                            <div className='col'>
+                                <div className="row mb-3">
+                                    <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Cup = 0 or league = 1</label>
+                                    <div class="col-sm-10 col-lg-6">
+                                        <input type="text" className="form-control" id="colFormLabel" placeholder="insert here" onChange={Handellorc} />
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +123,7 @@ function AddChampionship() {
                             HandelAdd();
                         }} >Add</button>
                     </div>
-                    <AddChampClubs toshow={show} name={name} champId={AddedChampID} />
+                    <AddChampClubs toshow={show} name={name} champ={name} />
                 </div>
                 <div className='row mt-3'>
                     {check == 0 ? <h6 style={{ color: "red" }}>Please Insert The Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Added Successfully</h6> : <p></p>}
@@ -121,8 +136,14 @@ function AddChampClubs(props) {
     const [clubs, setClubs] = useState([{}]);
     const [club, setClub] = useState({ id: -1, Name: "Choose", createdAt: "1000", marketValue: "1", trophiesCount: "1" });
     const [check, setCheck] = useState(-1);
+    const [myid, setid] = useState(0);
     useEffect(() => {
         // fetch(`${baseUrl}/Clubs/Get/notInChampionship/${props.champId}`)
+        ///api/Championships/GetChampId/{name}
+        fetch(`${baseUrl}/Championships/GetChampId/${props.champ}`)
+            .then((res) => res.json())
+            .then((data) => setid(data))
+            .catch((ex) => console.log(ex))
         fetch(`${baseUrl}/Clubs/Allclubs`)
             .then((res) => res.json())
             .then((data) => setClubs(data))
@@ -133,12 +154,12 @@ function AddChampClubs(props) {
             setCheck(0);
         }
         else {
-            fetch(`${baseUrl}/Championships/${props.champId}/AddClub`, {
-                method: 'PUT',
+            fetch(`${baseUrl}/Championships/AddClub/${myid}/${club.id}`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(club.id)
+                body: JSON.stringify({})
             })
                 .then((res) => res)
                 .catch((ex) => console.log(ex))

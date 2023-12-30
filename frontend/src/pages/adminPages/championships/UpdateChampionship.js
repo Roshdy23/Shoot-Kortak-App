@@ -36,7 +36,7 @@ function UpdateChampionship() {
         let tmp = new Date();
         let strt = startDate.toLocaleDateString();
         let end = endDate.toLocaleDateString();
-        if (strt == tmp.toLocaleDateString() || end == tmp.toLocaleDateString()) {
+        if (strt == tmp.toLocaleDateString() || end == tmp.toLocaleDateString() || strt >= end) {
             setCheck(0);
         }
         else {

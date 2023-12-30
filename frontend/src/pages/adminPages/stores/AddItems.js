@@ -12,81 +12,68 @@ import { baseUrl } from '../../../constants/url.constants';
 function AddItems() {
     let { storeID } = useParams();
     const [check, setCheck] = useState(-1);
-    const [storeName, setStoreName] = useState("Borj Alarab");
-    const [sysItems, setSysItems] = useState([{ id: 1, price: 100, name: "T-shirt11", imag: "https://image.info.url" },
-    { id: 1, price: 100, name: "T-shirt22", imag: "https://image.info.url" },
-    { id: 1, price: 100, name: "T-shirt33", imag: "https://image.info.url" },
-    { id: 1, price: 100, name: "T-shirt44", imag: "https://image.info.url" }]);
-    const [choosenItm, setChoosenItem] = useState({ id: -11, price: -1, name: "ALL ITEMS", imag: "/#" });
+    const [sysItems, setSysItems] = useState([{}]);
+    const [choosenItm, setChoosenItem] = useState({});
     const [qty, setQuantity] = useState("");
+    const [store, setStore] = useState([{}]);
+
     useEffect(() => {
-        fetch(`${baseUrl}/Stores/AddItem/${storeID}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: choosenItm.id,
-                quantity: qty,
-            })
-        }).then((res) => res)
-            .catch((ex) => ex);
-        fetch(`${baseUrl}/Stores/GetSysItems`)
+        fetch(`${baseUrl}/Stores/Get/${storeID}`)
+            .then((res) => res.json())
+            .then((data) => setStore(data))
+            .catch((ex) => console.log(ex));
+        fetch(`${baseUrl}/StoreItems/GetItemsNotInStore/${storeID}`)
             .then((res) => res.json())
             .then((data) => setSysItems(data))
-            .catch((ex) => ex)
-        fetch(`${baseUrl}/Stadiums/GetStadium/${storeID}`)
-            .then((res) => res.json())
-            .then((data) => setStoreName(data[0].name))
-            .catch((ex) => ex)
+            .catch((ex) => console.log(ex))
     }, [])
     const Handelquantity = (event) => {
         setQuantity(event.target.value);
     }
     const HandelAdd = () => {
-        if (qty == "" || choosenItm.name == "ALL ITEMS") setCheck(0);
+        if (qty == "" || !choosenItm.id || (qty != "" && isNaN(qty))) setCheck(0);
         else {
-            fetch(`${baseUrl}/Stores/Items/${storeID}/Add`, {
+            fetch(`${baseUrl}/Stores/AddItem/${storeID}/${choosenItm.id}/${qty}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    stadiumid: storeID,
-                    itemid: choosenItm.id,
-                    qty: qty,
-
-                })
+                body: JSON.stringify({})
             })
                 .then((res) => res)
-                .catch((ex) => ex)
+                .catch((ex) => console.log(ex))
             setCheck(1);
         }
         setTimeout(() => {
             // set a timer to hide the element after 3 seconds
             setCheck(-1);
-            setChoosenItem({ id: -11, price: -1, name: "ALL ITEMS", imag: "/#" });
+            setChoosenItem({});
         }, 1000);
     }
     return (
         <>
             <div className="container">
                 <div className='row mt-4'>
-                    <h3>Add New Item To {storeName}</h3>
+                    <h3>Add New Item To {store[0]?.Name}</h3>
                 </div>
-                <div className="dropdown col col-lg-1 mt-2">
-                    <button className="btn btn-secondary dropdown-toggle mt-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {choosenItm.name}
-                    </button>
-                    <ul className="dropdown-menu">
-                        {sysItems.map((value, index) => (
-                            <li><button key={index + 1} className="dropdown-item" onClick={() => {
-                                setChoosenItem(value);
-                            }}>{value.name}</button></li>
-                        ))}
-                    </ul>
+                <div className='row'>
+                    <div className="dropdown col col-lg-1 mt-2 mb-5">
+                        <button className="btn btn-secondary dropdown-toggle mt-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            All Items
+                        </button>
+                        <ul className="dropdown-menu">
+                            {sysItems.map((value, index) => (
+                                <li><button key={index + 1} className="dropdown-item" onClick={() => {
+                                    setChoosenItem(value);
+                                }}>{value.name}</button></li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="col mt-3 ms-5" style={{ maxWidth: "38%", marginLeft: "1px", color: "green" }}>
+                        <input className="form-control" type="text" value={choosenItm.name} aria-label="readonly input example" readonly />
+                    </div>
                 </div>
-                <div className='row mt-3'>
+                <div className='row mt-5'>
                     <div className='col col-lg-9'>
                         <div className="row mb-3">
                             <label for="colFormLabel" className="col-sm-2 col-form-label clo-lg-3">Item Quantity</label>

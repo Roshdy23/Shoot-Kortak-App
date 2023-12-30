@@ -7,31 +7,29 @@ import { useState } from "react";
 
 function ViewStore() {
     let { storeID } = useParams();
-    const [items, setItems] = useState([{ id: 1, name: "T-shirt", quantity: 2000, price: 300, image: "https://image.item.url" },
-    { id: 2, name: "Flag", quantity: 100, price: 100, image: "https://image.item.url" },
-    { id: 3, name: "FireWorks", quantity: 100, price: 400, image: "https://image.item.url" },
-    { id: 4, name: "Laser", quantity: 1000, price: 100, image: "https://image.item.url" }]);
-    const [storeName, setStoreName] = useState("Borj Alarab");
+    const [items, setItems] = useState([{}]);
+    const [store, setStore] = useState([{}]);
     useEffect(() => {
-        fetch(`${baseUrl}/Stores/Items/${storeID}`)
+        fetch(`${baseUrl}/StoreItems/AllItemsinStore/${storeID}`)
             .then((res) => res.json())
             .then((data) => {
                 setItems(data);
             }).catch((ex) => ex);
-        fetch(`${baseUrl}/Stadiums/GetStadium/${storeID}`)
+        fetch(`${baseUrl}/Stores/Get/${storeID}`)
             .then((res) => res.json())
-            .then((data) => setStoreName(data[0].name)).catch((ex) => ex);
+            .then((data) => setStore(data))
+            .catch((ex) => console.log(ex));
     }, [])
     return (
         <>
             <div className="container mt-5">
-                <h1>Store Name: {storeName}</h1>
+                <h3>Store Name: {store[0]?.Name} Store</h3>
                 <div className="row">
                     <div class="col-10"></div>
-                    <Link className="btn btn-success col col-lg-2" to={`/stores/view/${storeID}/additem`}>Add Items</Link>
+                    <Link className="btn btn-success col col-lg-2" to={`/stores/view/${storeID}/additem`}>Add Store Items</Link>
                 </div>
                 <div className="row">
-                    <h3 className="col col-lg-3">UPDATE ITEMS</h3>
+                    <h4 className="col col-lg-3">UPDATE ITEMS</h4>
                 </div>
                 <div className="row mt-3">
                     <div className="col col-lg-10">
@@ -49,11 +47,11 @@ function ViewStore() {
                                 {items.map((ele, ind) => {
                                     return (
                                         <tr>
-                                            <td>{ele.name}</td>
-                                            <td>{ele.quantity}</td>
-                                            <td>{ele.price}</td>
-                                            <td>{ele.image}</td>
-                                            <td><Link class="btn btn-info" to={`/stores/view/${storeID}/update/${ele.id}`}>Update</Link></td>
+                                            <td>{ele.ItemName}</td>
+                                            <td>{ele.Quantity}</td>
+                                            <td>{ele.ItemPrice}</td>
+                                            <td>{ele.ItemImage?.substring(0, 50)}</td>
+                                            <td><Link class="btn btn-info" to={`/stores/view/${storeID}/update/${ele.Id}`}>Update</Link></td>
                                         </tr>
                                     )
                                 })}

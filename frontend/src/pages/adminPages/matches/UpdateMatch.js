@@ -30,30 +30,6 @@ function UpdateMatch(props) {
             .then((res) => res.json())
             .then((data) => setStadiums(data)).catch((ex) => console.log(ex));
     }, [])
-    function ft() {
-        if (mdata[0].id) {
-            fetch(`${baseUrl}/Stadiums/GetStad/${mdata[0].stadiumId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    setTickts(data[0].capacity);
-                    setMatchStadium(data[0].name);
-                }
-                ).catch((ex) => console.log(ex));
-            fetch(`${baseUrl}/Championships/Getchamp/${mdata[0].championshipid}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
-                .then((res) => res.json())
-                .then((data) => setMatchChamp(data[0].name)).catch((ex) => console.log(ex));
-        }
-    }
     const HandelUpdate = () => {
         let comp = new Date().toLocaleDateString();
         let tmp = newDate.toLocaleDateString();
@@ -85,7 +61,7 @@ function UpdateMatch(props) {
             <div className="container">
                 <h3 className="row mt-5">UPDATE MATCH</h3>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Championship: ${matchChamp}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Championship: ${mdata[0].championshipName}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
                     <input className="form-control" type="text" value={`Team1: ${mdata[0].club1}`} aria-label="readonly input example" readonly />
@@ -103,7 +79,7 @@ function UpdateMatch(props) {
                     <input className="form-control" type="text" value={`Match Date: ${mdata[0].matchDate}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className="row mt-3" style={{ maxWidth: "49%", marginLeft: "1px" }}>
-                    <input className="form-control" type="text" value={`Match Stadium: ${matchStadium}`} aria-label="readonly input example" readonly />
+                    <input className="form-control" type="text" value={`Match Stadium: ${mdata[0].stadiumName}`} aria-label="readonly input example" readonly />
                 </div>
                 <div className='row mt-4'>
                     <label className='col col-lg-2'>Update The Match Date</label>
@@ -124,12 +100,14 @@ function UpdateMatch(props) {
                         </ul>
                     </div>
                 </div>
-                <button class="btn btn-info col col-lg-1 mt-3" onClick={() => {
-                    HandelUpdate();
-                }}>Update</button>
-            </div>
-            <div className='container mt-3'>
-                {check == 0 ? <h6 style={{ color: "red" }}>Please Insert Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Updated Successfully</h6> : <p></p>}
+                <div className='row mb-5'>
+                    <button class="btn btn-info col col-lg-1 mt-3" onClick={() => {
+                        HandelUpdate();
+                    }}>Update</button>
+                    <div className='col mt-3'>
+                        {check == 0 ? <h6 style={{ color: "red" }}>Please Insert Data Properly</h6> : check == 1 ? <h6 style={{ color: "green" }}>Updated Successfully</h6> : <p></p>}
+                    </div>
+                </div>
             </div>
         </>
     )

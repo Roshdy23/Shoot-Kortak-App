@@ -43,13 +43,18 @@ import CreateQuiz from "./pages/journalistPages/CreateQuiz";
 import EditQuiz from "./pages/journalistPages/EditQuiz";
 import AddClubPlayer from "./pages/adminPages/clubs/AddClubPlayer";
 import { useState } from "react";
+
+import UpdateSysItem from "./pages/adminPages/stores/UpdateSysItems";
+import AddSysItems from "./pages/adminPages/stores/AddSysItems";
+
 import PlayerRated from "./components/Match/PlayerRated";
+
 function App() {
-  const [user,setUser] = useState({});
-  const [rfsh,setRfsh] = useState(0);
+  const [user, setUser] = useState({});
+  const [rfsh, setRfsh] = useState(0);
   return (
     <div className="App">
-      <Navbar rfshr = {rfsh} user = {user} setUser={setUser} />
+      <Navbar rfshr={rfsh} user={user} setUser={setUser} />
       <Routes>
         {/* <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} /> */}
@@ -57,6 +62,7 @@ function App() {
         <Route path="/matches" element={<Matches user = {user} ticket={false} />} />
         <Route path="/match/:matchId" element={<Matches user={user} ticket={false} />} />
         <Route path="/reservematch/:matchId" element={<Matches user={user} ticket={true} />} />
+
         <Route path="/matches/update/:updatematchID" element={<UpdateMatch />} />
         <Route path="/matches/add" element={<AddMatch />} />
         <Route path="/stadiums" element={<Stadiums />} />
@@ -64,8 +70,8 @@ function App() {
         <Route path="/stadiums/update/:updatestadiumID" element={<UpdateStadium />} />
         <Route path="/stadiums/add" element={<AddStadium />} />
         <Route path="/stores" element={<Stores />} />
-        <Route path="/news" element={<News user = {user} />} />
-        <Route path="/article/:artId" element={<News user = {user} />} />
+        <Route path="/news" element={<News user={user} />} />
+        <Route path="/article/:artId" element={<News user={user} />} />
         <Route path="/stats" element={<Stats />} />
         <Route path="/ChampionshipStats" element={<SelectChamp />} />
         <Route path="/TeamStats" element={<SelectClub />} />
@@ -74,6 +80,8 @@ function App() {
         <Route path="/stores/view/:storeID" element={<ViewStore />} />
         <Route path="/stores/view/:storeID/additem" element={<AddItems />} />
         <Route path="/stores/view/:storeID/update/:itemid" element={<UpdateItem />} />
+        <Route path="/stores/updatesysitems" element={<UpdateSysItem />} />
+        <Route path="/stores/addsysitems" element={<AddSysItems />} />
         <Route path="/clubs" element={<Clubs />} />
         <Route path="/articles" element={<Articles user={user} />} />
         <Route path="/articles/create" element={<CreateArticle userssn={user.ssn} />} />
@@ -84,19 +92,21 @@ function App() {
         <Route path="/clubs/update/:clubID/players" element={<UpdateClubPlayers />} />
         <Route path="/clubs/update/:clubID/coach" element={<UpdateClubCoach />} />
         <Route path="/clubs/update/:clubID/addplayer" element={<AddClubPlayer />} />
-        <Route path="/login" element={<Login refresh = {rfsh} setRefresh={setRfsh} />}/>
-        <Route path="/register" element={<Register/>}/>
+        <Route path="/login" element={<Login refresh={rfsh} setRefresh={setRfsh} />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/results" element={<Results />} />
         <Route path="/results/addresults/:matchId" element={<MatchResult />} />
-        <Route path="/results/addresults/stats/team1" element={<AddStats nxt="1" />} />
-        <Route path="/results/addresults/stats/team2" element={<AddStats nxt="0" />} />
+        <Route path="/results/addresults/stats/team1/:matchId" element={<AddStats nxt="1" />} />
+        <Route path="/results/addresults/stats/team2/:matchId" element={<AddStats nxt="0" />} />
         <Route path="/quizzes" element={<Quizzes />} />
+
         <Route path="/quiz" element={(user?.role==="Fan")?<Quiz />:<Login refresh = {rfsh} setRefresh={setRfsh} />} />
         <Route path="/EditQuiz/:quizId" element={<EditQuiz userssn={user.ssn} />} />
         <Route path="/CreateQuiz" element={<CreateQuiz userssn={user.ssn} />} />
+
         <Route path="/PendingQuizzes" element={<PendingQuizzes />} />
         <Route path="/quiz/:quizId" element={<QuizDetail />} />
-        <Route path="/quizzes/view" element={<ViewQuizzes />} />
+        <Route path="/quizzes/view/:quizid" element={<ViewQuizzes />} />
         <Route path="/championships" element={<Championships />} />
         <Route path="championships/add" element={<AddChampionship />} />
         <Route path="/championships/update/:champID" element={<UpdateChampionship />} />

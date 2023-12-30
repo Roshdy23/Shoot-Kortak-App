@@ -39,6 +39,7 @@ function UpdateClub() {
         if (newName == "" && newLogo == "" && newCreatedAt == "") {
             setCheck(0);
         }
+        else if (newCreatedAt != "" && isNaN(newCreatedAt)) { setCheck(0) }
         else {
             let myname = (newName == "") ? clubData[0].Name : newName;
             let mylogo = (newLogo == "") ? clubData[0].Logo : newLogo;

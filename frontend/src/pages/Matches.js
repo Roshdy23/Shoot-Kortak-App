@@ -34,7 +34,7 @@ function Matches(props) {
         navigate(`/match/${matchId}`);
     }
     useEffect(() => {
-        fetch(`${baseUrl}/Matches/Get`)
+        fetch(`${baseUrl}/Matches/GetCurrentMatches`)
             .then((res) => res.json())
             .then((data) => {
                 setMatches(data);
@@ -47,7 +47,7 @@ function Matches(props) {
     }, [])
     const filterHandler = (ID) => {
         if (!ID) {
-            fetch(`${baseUrl}/Matches/Get`)
+            fetch(`${baseUrl}/Matches/GetCurrentMatches`)
                 .then((res) => res.json())
                 .then((data) => {
                     setMatches(data);
@@ -65,7 +65,7 @@ function Matches(props) {
             }).catch((ex) => console.log(ex));
         }
     }
-    let role = (props.user?.role==="Admin"||props.user?.role==="Fan")?props.user.role:"Fan";
+    let role = (props.user?.role === "Admin" || props.user?.role === "Fan") ? props.user.role : "Fan";
     if (role === "Admin")
         return (
             <>
@@ -97,8 +97,8 @@ function Matches(props) {
                                                 <td>{mtch.club1} VS {mtch.club2}</td>
                                                 <td>{mtch.weekno}</td>
                                                 <td>{mtch.matchDate}</td>
-                                                <td>{mtch.championshipid}</td>
-                                                <td>{mtch.stadiumId}</td>
+                                                <td>{mtch.championshipName}</td>
+                                                <td>{mtch.stadiumName}</td>
                                                 <td><Link class="btn btn-info" to={`/matches/update/${mtch.id}`}>Update</Link></td>
                                             </tr>
                                         )
